@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema(
     password: { type: String, req: true },
     cartData: { type: Object, default: {} },
   },
-  { minimaze: false }
+  { minimize: false }
 );
 
 const userModel = mongoose.models.user || mongoose.model('user',userSchema)
