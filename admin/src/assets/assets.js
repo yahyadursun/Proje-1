@@ -2,10 +2,12 @@ import logo from './logo.png'
 import add_logo from './add_logo.jpg'
 import order_logo from './order_logo.png'
 import list_logo from './list_logo.png'
+import upload_area from './upload_area.png'
 
 export const assets = {
     logo,
     add_logo,
     list_logo,
-    order_logo
+    order_logo,
+    upload_area
 }

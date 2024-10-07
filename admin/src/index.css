@@ -7,6 +7,11 @@
     font-family: Outfit;
 }
 
+select, input, textarea{
+    border: 1px solid rgb(87, 12, 12);
+    outline-color: #dbc5e0;
+    border-radius: 4px;
+}
 .active{
     background-color: #dbc5e0;
     border-color: rgb(87, 12, 12);
