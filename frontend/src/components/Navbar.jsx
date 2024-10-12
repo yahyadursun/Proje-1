@@ -3,7 +3,7 @@ import { Link, NavLink } from "react-router-dom";
 import logo from "../assets/logo.jpg";
 import search_icon from "../assets/search_icon.png";
 import profile_icon from "../assets/profile_icon.png";
-import cart_icon from "../assets/cart_icon.jpg";
+import cart_icon from "../assets/cart_icon.png";
 import menu_icon from "../assets/menu_icon.png";
 import dropdown_icon from "../assets/dropdown_icon.png"
 const Navbar = () => {
@@ -48,8 +48,8 @@ const Navbar = () => {
           </div>
         </div>
         <Link to="/cart" className="relative">
-          <img src={cart_icon} className="w-8 min-w-5" alt="" />
-          <p className="absolute right-[1px] bottom-[-1px] w-3 text-center leading-4 bg-black text-white aspect-square rounded-full text-[6px]">
+          <img src={cart_icon} className="w-6 min-w-5" alt="" />
+          <p className="absolute right-[1px] bottom-[-5px] w-3 text-center leading-4 bg-black text-white aspect-square rounded-full text-[6px]">
             10
           </p>
         </Link>
