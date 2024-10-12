@@ -15,8 +15,7 @@ import quality_icon from './quality_icon.png'
 import search_icon from './search_icon.png'
 import star_dull_icon from './star_dull_icon.png'
 import star_icon from './star_icon.png'
-import logo from './logo.png'
-
+import support_icon from './support.png'
 
 export const assets ={
     logo,
