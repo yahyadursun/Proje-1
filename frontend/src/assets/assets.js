@@ -1,4 +1,5 @@
-import p_img1 from './p_img1.jpeg'
+import p_img1 from './p_img1.png'
+import hero_img from './hero_img.jpg'
 
 
 
@@ -16,6 +17,7 @@ import search_icon from './search_icon.png'
 import star_dull_icon from './star_dull_icon.png'
 import star_icon from './star_icon.png'
 import support_icon from './support.png'
+import about_icon from './about.png'
 
 
 export const assets ={
@@ -32,7 +34,9 @@ export const assets ={
     bin_icon,
     support_icon,
     menu_icon,
-    //about_icon,
+    about_icon,
+    hero_img,
+    p_img1
     //contact_icon,
 // buraları açınca hata alıyoz
 
@@ -44,11 +48,120 @@ export const products =[
         name:'Nike shoe',
         description:'best shoe ever',
         price:100,
+        image:[p_img1],
+        category:'Unisex',
+        subCategory:'Daily',
+        sizes:['37','38','39','40'],
+        date: 1716634345448,
+        bestseller:true,
+    },
+    {
+        _id : "aaab",
+        name:'Nike shoe',
+        description:'best shoe ever',
+        price:100,
+        image:[p_img1],
+        category:'Unisex',
+        subCategory:'Daily',
+        sizes:['37','38','39','40'],
+        date: 1716634345448,
+        bestseller:true,
+    },
+    {
+        _id : "aaba",
+        name:'Nike shoe',
+        description:'best shoe ever',
+        price:100,
+        image:[p_img1],
+        category:'Unisex',
+        subCategory:'Daily',
+        sizes:['37','38','39','40'],
+        date: 1716634345448,
+        bestseller:true,
+    },
+    {
+        _id : "aaac",
+        name:'Nike shoe',
+        description:'best shoe ever',
+        price:100,
         Image:[p_img1],
         category:'Unisex',
         subCategory:'Daily',
         sizes:['37','38','39','40'],
         date: 1716634345448,
         bestseller:true,
-    }
+    },
+    {
+        _id : "aaad",
+        name:'Nike shoe',
+        description:'best shoe ever',
+        price:100,
+        image:[p_img1],
+        category:'Unisex',
+        subCategory:'Daily',
+        sizes:['37','38','39','40'],
+        date: 1716634345448,
+        bestseller:true,
+    },
+    {
+        _id : "aaae",
+        name:'Nike shoe',
+        description:'best shoe ever',
+        price:100,
+        image:[p_img1],
+        category:'Unisex',
+        subCategory:'Daily',
+        sizes:['37','38','39','40'],
+        date: 1716634345448,
+        bestseller:true,
+    },
+    {
+        _id : "aaaf",
+        name:'Nike shoe',
+        description:'best shoe ever',
+        price:100,
+        image:[p_img1],
+        category:'Unisex',
+        subCategory:'Daily',
+        sizes:['37','38','39','40'],
+        date: 1716634345448,
+        bestseller:true,
+    },
+    {
+        _id : "aaag",
+        name:'Nike shoe',
+        description:'best shoe ever',
+        price:100,
+       image:[p_img1],
+        category:'Unisex',
+        subCategory:'Daily',
+        sizes:['37','38','39','40'],
+        date: 1716634345448,
+        bestseller:true,
+    },
+    {
+        _id : "aaah",
+        name:'Nike shoe',
+        description:'best shoe ever',
+        price:100,
+        image:[p_img1],
+        category:'Unisex',
+        subCategory:'Daily',
+        sizes:['37','38','39','40'],
+        date: 1716634345448,
+        bestseller:true,
+    },
+    {
+        _id : "aaaj",
+        name:'Nike shoe',
+        description:'best shoe ever',
+        price:100,
+        image:[p_img1],
+        category:'Unisex',
+        subCategory:'Daily',
+        sizes:['37','38','39','40'],
+        date: 1716634345448,
+        bestseller:true,
+    },
+
 ]
