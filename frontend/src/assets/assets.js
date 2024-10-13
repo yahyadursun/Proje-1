@@ -4,10 +4,10 @@ import p_img1 from './p_img1.jpeg'
 
 
 import logo from './logo.jpg'
-import cart_icon from './cart_icon.jpg'
+import cart_icon from './cart_icon.png'
 import bin_icon from './bin_icon.png'
 import cross_icon from './cross_icon.jpg'
-import dropdown_icon from './dropdown_icon.jpg'
+import dropdown_icon from './dropdown_icon.png'
 import exchange_icon from './exchange_icon.png'
 import menu_icon from './menu_icon.png'
 import profile_icon from './profile_icon.png'
@@ -16,6 +16,7 @@ import search_icon from './search_icon.png'
 import star_dull_icon from './star_dull_icon.png'
 import star_icon from './star_icon.png'
 import support_icon from './support.png'
+
 
 export const assets ={
     logo,
@@ -31,8 +32,9 @@ export const assets ={
     bin_icon,
     support_icon,
     menu_icon,
-    about_icon,
-    contact_icon,
+    //about_icon,
+    //contact_icon,
+// buraları açınca hata alıyoz
 
 }
 
