@@ -12,12 +12,15 @@ const Add = ({ token }) => {
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+
   const [brand, setBrand] = useState("");
+
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("Men");
   const [subCategory, setsubCategory] = useState("Other");
   const [sizes, setSizes] = useState([]);
   const [bestseller, setBestseller] = useState(false);
+
 
   const availableSizes = Array.from({ length: 73 }, (_, i) =>
     (19 + i * 0.5).toFixed(1)
@@ -41,7 +44,9 @@ const Add = ({ token }) => {
 
       formData.append("name", name);
       formData.append("description", description);
+
       formData.append("brand", brand);
+
       formData.append("price", price);
       formData.append("category", category);
       formData.append("subCategory", subCategory);
@@ -63,7 +68,9 @@ const Add = ({ token }) => {
         toast.success(response.data.message);
         setName("");
         setDescription("");
+
         setBrand("Other");
+
         setPrice("");
         setCategory("Men");
         setsubCategory("Other");
@@ -171,6 +178,7 @@ const Add = ({ token }) => {
 
       <div className="flex flex-col sm:flex-row gap-2 w-full sm:gap-8">
         <div>
+
           <p className="mb-2">Product Brand</p>
           <select
             onChange={(e) => setBrand(e.target.value)}
@@ -201,6 +209,8 @@ const Add = ({ token }) => {
         </div>
 
         <div>
+
+
           <p className="mb-2">Product category</p>
           <select
             onChange={(e) => setCategory(e.target.value)}
