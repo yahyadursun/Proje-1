@@ -12,6 +12,9 @@ const Add = ({ token }) => {
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+
+  const [brand, setBrand] = useState("");
+
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("Men");
   const [subCategory, setsubCategory] = useState("Other");
@@ -41,6 +44,9 @@ const Add = ({ token }) => {
 
       formData.append("name", name);
       formData.append("description", description);
+
+      formData.append("brand", brand);
+
       formData.append("price", price);
       formData.append("category", category);
       formData.append("subCategory", subCategory);
@@ -62,6 +68,9 @@ const Add = ({ token }) => {
         toast.success(response.data.message);
         setName("");
         setDescription("");
+
+        setBrand("Other");
+
         setPrice("");
         setCategory("Men");
         setsubCategory("Other");
@@ -169,6 +178,39 @@ const Add = ({ token }) => {
 
       <div className="flex flex-col sm:flex-row gap-2 w-full sm:gap-8">
         <div>
+
+          <p className="mb-2">Product Brand</p>
+          <select
+            onChange={(e) => setBrand(e.target.value)}
+            className="w-full px-3 py-2"
+          >
+            <option value="adidas">Adidas</option>
+            <option value="Converse">Converse</option>
+            <option value="Greyder">Greyder</option>
+            <option value="Hummel">Hummel</option>
+            <option value="Kinetix">Kinetix</option>
+            <option value="Lacoste">Lacoste</option>
+            <option value="Lescon">Lescon</option>
+            <option value="Lumberjack">Lumberjack</option>
+            <option value="New Balance">New Balance</option>
+            <option value="Nike">Nike</option>
+            <option value="North Face">North Face</option>
+            <option value="Polaris">Polaris</option>
+            <option value="Puma">Puma</option>
+            <option value="Reebok">Reebok</option>
+            <option value="Skechers">Skechers</option>
+            <option value="Timberland">Timberland</option>
+            <option value="Tommy Hilfiger">Tommy Hilfiger</option>
+            <option value="U.S. Polo Assn.">U.S. Polo Assn.</option>
+            <option value="Under Armour">Under Armour</option>
+            <option value="Vans">Vans</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div>
+
+
           <p className="mb-2">Product category</p>
           <select
             onChange={(e) => setCategory(e.target.value)}
@@ -222,7 +264,6 @@ const Add = ({ token }) => {
                 onChange={handleSizeChange}
                 className="mr-2"
                 checked={sizes.includes(parseFloat(size))}
-                
               />
               {size}
             </label>

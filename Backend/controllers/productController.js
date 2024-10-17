@@ -7,6 +7,7 @@ const addProduct = async (req, res) => {
     const {
       name,
       description,
+      brand,
       price,
       category,
       subCategory,
@@ -35,6 +36,7 @@ const addProduct = async (req, res) => {
     const productData = {
       name,
       description,
+      brand,
       price: Number(price),
       category,
       subCategory,
