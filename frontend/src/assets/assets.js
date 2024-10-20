@@ -1,4 +1,8 @@
 import p_img1 from './p_img1.png'
+import p2_img1 from './p2_img1.png'
+import p2_img2 from './p2_img2.png'
+import p2_img3 from './p2_img3.png'
+import p2_img4 from './p2_img4.png'
 import hero_img from './hero_img.jpg'
 
 
@@ -7,7 +11,7 @@ import hero_img from './hero_img.jpg'
 import logo from './logo.jpg'
 import cart_icon from './cart_icon.png'
 import bin_icon from './bin_icon.png'
-import cross_icon from './cross_icon.jpg'
+import cross_icon from './cross_icon.png'
 import dropdown_icon from './dropdown_icon.png'
 import exchange_icon from './exchange_icon.png'
 import menu_icon from './menu_icon.png'
@@ -36,21 +40,24 @@ export const assets ={
     menu_icon,
     about_icon,
     hero_img,
-    p_img1
-    //contact_icon,
-// buraları açınca hata alıyoz
+    p_img1,
+    p2_img1,
+    p2_img2,
+    p2_img3,
+    p2_img4
+   
 
 }
 
 export const products =[
     {
-        _id : "aaaa",
-        name:'Nike shoe',
-        description:'best shoe ever',
-        price:100,
-        image:[p_img1],
-        category:'Unisex',
-        subCategory:'Daily',
+        _id : "aaaaa",
+        name:'New Balance',
+        description:'sport',
+        price:122,
+        image:[p2_img1,p2_img2,p2_img3,p2_img4],
+        category:'Men',
+        subCategory:'Sneaker',
         sizes:['37','38','39','40'],
         date: 1716634345448,
         bestseller:true,
@@ -59,8 +66,20 @@ export const products =[
         _id : "aaab",
         name:'Nike shoe',
         description:'best shoe ever',
-        price:100,
+        price:111,
         image:[p_img1],
+        category:'Women',
+        subCategory:'Basketball',
+        sizes:['37','38','39','40'],
+        date: 1716634345448,
+        bestseller:true,
+    },
+    {
+        _id : "aaac",
+        name:'Nike shoe',
+        description:'best shoe ever',
+        price:132,
+        image:[p2_img1],
         category:'Unisex',
         subCategory:'Daily',
         sizes:['37','38','39','40'],
@@ -71,20 +90,8 @@ export const products =[
         _id : "aaba",
         name:'Nike shoe',
         description:'best shoe ever',
-        price:100,
+        price:132,
         image:[p_img1],
-        category:'Unisex',
-        subCategory:'Daily',
-        sizes:['37','38','39','40'],
-        date: 1716634345448,
-        bestseller:true,
-    },
-    {
-        _id : "aaac",
-        name:'Nike shoe',
-        description:'best shoe ever',
-        price:100,
-        Image:[p_img1],
         category:'Unisex',
         subCategory:'Daily',
         sizes:['37','38','39','40'],
