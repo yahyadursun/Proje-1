@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
 
+import RelatedProduct from "../components/relatedProduct";
+
 const Product = () => {
   const { productId } = useParams();
   const { products, currency } = useContext(ShopContext);
@@ -109,7 +111,7 @@ const Product = () => {
       <div className="mt-20">
         <div className="flex ">
           <b className="border px-5 py-3 text-sm">Açıklama</b>
-          <p className="border px5 py3 text-sm">Reviews (122)</p>
+          <p className="border px-5 py-3 text-sm">Yorumlar(122)</p>
         </div>
         <div className="flex flex-col gap-4 border px-6 py-6 text-sm">
           <p>
@@ -118,6 +120,9 @@ const Product = () => {
           <p>açıklamaaçıklamaaçıklamaaçıklamaaçıklamaaçıklamaaçıklamaaçıklamaaçıklamaaçıklamaaçıklamaaçıklamaaçıklamaaçıklamaaçıklamaaçıklamaaçıklamaaçıklamaaçıklamaaçıklamaaçıklama</p>
         </div>
       </div>
+      {/*display related products */}
+      <RelatedProduct category={productData.category} subCategory={productData.subCategory}/>
+
     </div>
   ) : (
     <div>Product not found</div> // Eğer ürün bulunamazsa bir mesaj gösterebilirsin
