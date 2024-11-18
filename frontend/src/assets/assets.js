@@ -139,7 +139,7 @@ export const products =[
         name:'Nike shoe',
         description:'best shoe ever',
         price:100,
-       image:[p_img1],
+        image:[p_img1],
         category:'Unisex',
         subCategory:'Daily',
         sizes:['37','38','39','40'],
