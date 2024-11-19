@@ -103,7 +103,7 @@ const Product = () => {
           <div className="montserrat text-sm text-gray-400 flex flex-col gap-1">
             <p>Hayallerini Giyin</p>
             <p>7 gün içinde kolay iade seçenekleriyle</p>
-            <p>Dükkan sizin</p>
+            <p>$500 ve üstüne kargo ücreti yok !</p>
           </div>
         </div>
       </div>

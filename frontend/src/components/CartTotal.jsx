@@ -3,38 +3,42 @@ import { ShopContext } from "../context/ShopContext";
 import Title from "./Title";
 
 const CartTotal = () => {
-  const { currency, delivery_fee, getCartAmount } = useContext(ShopContext);
+  const { currency, deliveryFee, getCartAmount } = useContext(ShopContext);
+
+  const subtotal = getCartAmount() > 0 ? getCartAmount() : 0;
+  const isFreeDelivery = subtotal > 500; 
+  const finalDeliveryFee = isFreeDelivery ? 0 : deliveryFee;
 
   return (
     <div className="w-full">
-    <div className="text-2xl">
-      <Title text1={"CART"} text2={"TOTAL"} />
+      <div className="text-2xl">
+        <Title text1={"SEPET"} text2={"TUTARI"} />
+      </div>
+      <div className="flex flex-col gap-2 mt-2 text-sm">
+        <div className="flex justify-between">
+          <p>Subtotal</p>
+          <p>
+            {currency}
+            {subtotal}.00
+          </p>
+        </div>
+        <hr />
+        <div className="flex justify-between">
+          <p>Kargo ücreti</p>
+          <p>
+            {currency} {finalDeliveryFee.toFixed(2)}
+          </p>
+        </div>
+        <hr />
+        <div className="flex justify-between">
+          <b>Total</b>
+          <b>
+            {currency}
+            {(subtotal + finalDeliveryFee).toFixed(2)}
+          </b>
+        </div>
+      </div>
     </div>
-    <div className="flex flex-col gap-2 mt-2 text-sm">
-      <div className="flex justify-between">
-        <p>Subtotal</p>
-        <p>
-          {currency}
-          {getCartAmount() > 0 ? getCartAmount() : 0}.00
-        </p>
-      </div>
-      <hr />
-      <div className="flex justify-between">
-        <p>Kargo ücreti</p>
-        <p>
-          {currency} {delivery_fee}
-        </p>
-      </div>
-      <hr />
-      <div className="flex justify-between">
-        <b>Total</b>
-        <b>
-          {currency}
-          {getCartAmount() === 0 ? 0 : getCartAmount() + delivery_fee}
-        </b>
-      </div>
-    </div>
-  </div>
   );
 };
 

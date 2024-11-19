@@ -21,8 +21,9 @@ import search_icon from './search_icon.png'
 import star_dull_icon from './star_dull_icon.png'
 import star_icon from './star_icon.png'
 import support_icon from './support.png'
-import about_icon from './about.png'
-
+import about_icon from './about_icon.png'
+import stripe_icon from './stripe_icon.png'
+import kredikart_icon from './kredikart_icon.png'
 
 export const assets ={
     logo,
@@ -44,7 +45,9 @@ export const assets ={
     p2_img1,
     p2_img2,
     p2_img3,
-    p2_img4
+    p2_img4,
+    stripe_icon,
+    kredikart_icon
    
 
 }
