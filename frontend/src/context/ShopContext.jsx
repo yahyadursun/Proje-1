@@ -158,6 +158,7 @@ const ShopContextProvider = (props) => {
     backendUrl,
     setToken,
     token,
+    setCartItems,
   };
   return (
     <ShopContext.Provider value={value}>{props.children}</ShopContext.Provider>
