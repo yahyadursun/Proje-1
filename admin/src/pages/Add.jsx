@@ -20,7 +20,7 @@ const Add = ({ token }) => {
   const [subCategory, setsubCategory] = useState("Other");
   const [sizes, setSizes] = useState([]);
   const [bestseller, setBestseller] = useState(false);
-
+  const [stock, setStock] = useState("");
 
   const availableSizes = Array.from({ length: 73 }, (_, i) =>
     (19 + i * 0.5).toFixed(1)
@@ -52,6 +52,7 @@ const Add = ({ token }) => {
       formData.append("subCategory", subCategory);
       formData.append("bestseller", bestseller);
       formData.append("sizes", JSON.stringify(sizes));
+      formData.append("stock", stock);
 
       // for error about trying to read not existing image
       image1 && formData.append("image1", image1);
@@ -70,7 +71,7 @@ const Add = ({ token }) => {
         setDescription("");
 
         setBrand("Other");
-
+        setStock("");
         setPrice("");
         setCategory("Men");
         setsubCategory("Other");
@@ -279,6 +280,18 @@ const Add = ({ token }) => {
         </div>
       </div>
 
+      <div className="w-full">
+        <p className="mb-2">Stock Quantity</p>
+        <input
+          onChange={(e) => setStock(e.target.value)}
+          value={stock}
+          className="w-full max-w-[200px] px-3 py-2"
+          type="number"
+          placeholder="Enter stock quantity"
+          required
+        />
+      </div>
+      
       <div className="flex gap-2 mt-2 ">
         <input
           onChange={() => setBestseller((prev) => !prev)}
