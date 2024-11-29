@@ -13,6 +13,7 @@ const addProduct = async (req, res) => {
       subCategory,
       sizes,
       bestseller,
+      stock,
     } = req.body;
     // for an error about trying to read not existing image
     const image1 = req.files.image1 && req.files.image1[0];
@@ -44,6 +45,7 @@ const addProduct = async (req, res) => {
       bestseller: bestseller === "true" ? true : false,
       image: imagesUrl,
       date: Date.now(),
+      stock: Number(stock),
     };
     console.log(productData);
 
