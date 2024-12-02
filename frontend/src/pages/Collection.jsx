@@ -23,7 +23,7 @@ const Collection = () => {
     {
       id: "subCategory",
       label: "Ayakkabı Türü",
-      options: ["Daily", "Basketball", "Klasik", "Outdoor"],
+      options: ["Daily", "Basketball", "Klasik", "Outdoor", "Others"],
     },
     {
       id: "size",
@@ -33,7 +33,7 @@ const Collection = () => {
     {
       id: "brand",
       label: "Marka",
-      options: ["New Balance", "Adidas", "Puma", "Nike"],
+      options: ["New Balance", "Adidas", "Puma", "Nike",""],
     },
     {
       id: "color",
