@@ -11,7 +11,7 @@ const Collection = () => {
   const [filters, setFilters] = useState({
     category: [], // Unisex, Erkek, Kadın
     subCategory: [], // Daily, Spor, vb.
-    sizes: [], // 37, 38, 39, 40, vb.
+    size: [], // 37, 38, 39, 40, vb.
     brand: [], // Nike, Adidas, Puma, vb.
     color: [], // Kırmızı, Mavi, vb.
   });
@@ -20,10 +20,26 @@ const Collection = () => {
 
   const categories = [
     { id: "category", label: "Cinsiyet", options: ["Men", "Woman", "Unisex"] },
-    { id: "subCategory", label: "Ayakkabı Türü", options: ["Daily", "Spor", "Klasik", "Outdoor"] },
-    { id: "sizes", label: "Ayakkabı Numarası", options: ["36", "37", "38", "39", "40"] },
-    { id: "brand", label: "Marka", options: ["New Balance", "adidas", "Puma", "Nike"] },
-    { id: "color", label: "Renk", options: ["Kırmızı", "Mavi", "Siyah", "Beyaz"] },
+    {
+      id: "subCategory",
+      label: "Ayakkabı Türü",
+      options: ["Daily", "Basketball", "Klasik", "Outdoor"],
+    },
+    {
+      id: "size",
+      label: "Ayakkabı Numarası",
+      options: ["36", "37", "38", "39", "40"],
+    },
+    {
+      id: "brand",
+      label: "Marka",
+      options: ["New Balance", "adidas", "Puma", "Nike"],
+    },
+    {
+      id: "color",
+      label: "Renk",
+      options: ["Kırmızı", "Mavi", "Siyah", "Beyaz"],
+    },
   ];
 
   const toggleFilter = (category, option) => {
@@ -55,9 +71,9 @@ const Collection = () => {
     });
 
     // Apply size filters
-    if (filters.sizes.length > 0) {
+    if (filters.size.length > 0) {
       filtered = filtered.filter((item) =>
-        item.sizes.some((size) => filters.sizes.includes(size))
+        item.size.some((size) => filters.size.includes(size))
       );
     }
 
@@ -68,7 +84,7 @@ const Collection = () => {
     setFilters({
       category: [],
       subCategory: [],
-      sizes: [],
+      size: [],
       brand: [],
       color: [],
     });
@@ -104,7 +120,7 @@ const Collection = () => {
         <div className="flex items-center gap-4">
           <button
             onClick={() => setShowFilterModal(true)}
-            className="flex items-center px-4 py-2 text-sm bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full shadow-lg hover:opacity-90 transition-all duration-300"
+            className="flex items-center px-4 py-2 text-sm bg-gradient-to-r from-white to-gray-200 text-black rounded-full shadow-lg hover:opacity-90 transition-all duration-300"
           >
             Filtreler
           </button>
@@ -126,18 +142,20 @@ const Collection = () => {
 
       {/* Filter Modal */}
       {showFilterModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-end">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-end z-50">
           <div
             ref={modalRef}
             className="bg-white w-full max-w-lg h-full p-6 flex flex-col divide-y divide-gray-200"
           >
             {/* Header */}
             <div className="flex justify-between items-center py-4">
-              <h2 className="text-2xl font-semibold text-gray-900">FİLTRELER</h2>
+              <h2 className="montserrat text-2xl  text-gray-900">
+                FİLTRELER
+              </h2>
               <div className="flex gap-6">
-                <button 
+                <button
                   onClick={clearFilters}
-                  className="text-lg text-gray-500 hover:text-black"
+                  className="montserrat text-lg text-gray-500 hover:text-black"
                 >
                   Temizle
                 </button>
@@ -151,21 +169,21 @@ const Collection = () => {
             </div>
 
             {/* Body */}
-            <div className="flex flex-grow">
+            <div className=" flex flex-grow">
               {/* Left Side */}
-              <div className="w-1/3 border-r p-4">
+              <div className="w-2/4 border-r border-gray-200 p-4 ">
                 {categories.map((cat) => (
-                  <button
+                  <div className="montserrat border-b-transparent border-gray-400"><button
                     key={cat.id}
                     onClick={() => setSelectedCategory(cat)}
-                    className={`block w-full text-left py-3 px-6 text-lg font-medium ${
+                    className={`block w-full text-left py-3 px-6 text-lg font-medium rounded-md transition-all duration-300 ${
                       selectedCategory?.id === cat.id
-                        ? "bg-gray-100 text-gray-900"
-                        : "hover:bg-gray-50 text-gray-600"
+                        ? "bg-gray-200 text-gray-900 shadow-inner"
+                        : "hover:bg-gray-100 text-gray-600"
                     }`}
                   >
                     {cat.label}
-                  </button>
+                  </button></div>
                 ))}
               </div>
 
@@ -176,15 +194,18 @@ const Collection = () => {
                     {selectedCategory.options.map((option) => (
                       <label
                         key={option}
-                        className="flex items-center gap-3 py-3 text-lg text-gray-700"
+                        className="montserrat flex items-center gap-3 py-3 text-lg text-gray-700"
                       >
                         <input
                           type="checkbox"
-                          checked={filters[selectedCategory.id]?.includes(option)}
+                          
+                          checked={filters[selectedCategory.id]?.includes(
+                            option
+                          )}
                           onChange={() =>
                             toggleFilter(selectedCategory.id, option)
                           }
-                          className="text-gray-600"
+                          className="appearance-none w-5 h-5 rounded-full border border-gray-300 bg-gray-100 checked:bg-gray-600 checked:border-gray-500 focus:ring-2 focus:ring-gray-300 focus:outline-none transition-all duration-300"
                         />
                         {option}
                       </label>
@@ -201,7 +222,7 @@ const Collection = () => {
                   applyFilter();
                   setShowFilterModal(false);
                 }}
-                className="w-full py-3 bg-black text-white text-xl font-semibold rounded-md hover:bg-gray-800 transition-all duration-300"
+                className="w-full py-3 bg-black text-white text-xl montserrat rounded-md hover:bg-gray-800 transition-all duration-300"
               >
                 Filtreleri Uygula
               </button>
