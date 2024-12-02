@@ -6,23 +6,23 @@ import ProductItem from "../components/ProductItem";
 const Collection = () => {
   const { products, search, showSearch } = useContext(ShopContext);
   const [showFilterModal, setShowFilterModal] = useState(false);
-  const [filterProducts, setFilterProducts] = useState([]);
+  const [filterProducts, setFilterProducts] = useState(products);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [filters, setFilters] = useState({
-    gender: [],
-    shoeType: [],
-    shoeSize: [],
-    brand: [],
-    color: [],
+    category: [], // Unisex, Erkek, Kadın
+    subCategory: [], // Daily, Spor, vb.
+    sizes: [], // 37, 38, 39, 40, vb.
+    brand: [], // Nike, Adidas, Puma, vb.
+    color: [], // Kırmızı, Mavi, vb.
   });
   const [sortType, setSortType] = useState("relavent");
   const modalRef = useRef(null);
 
   const categories = [
-    { id: "gender", label: "Cinsiyet", options: ["Erkek", "Kadın", "Unisex"] },
-    { id: "shoeType", label: "Ayakkabı Türü", options: ["Spor", "Klasik", "Outdoor"] },
-    { id: "shoeSize", label: "Ayakkabı Numarası", options: ["36", "37", "38", "39", "40"] },
-    { id: "brand", label: "Marka", options: ["Nike", "Adidas", "Puma"] },
+    { id: "category", label: "Cinsiyet", options: ["Men", "Woman", "Unisex"] },
+    { id: "subCategory", label: "Ayakkabı Türü", options: ["Daily", "Spor", "Klasik", "Outdoor"] },
+    { id: "sizes", label: "Ayakkabı Numarası", options: ["36", "37", "38", "39", "40"] },
+    { id: "brand", label: "Marka", options: ["New Balance", "adidas", "Puma", "Nike"] },
     { id: "color", label: "Renk", options: ["Kırmızı", "Mavi", "Siyah", "Beyaz"] },
   ];
 
@@ -38,28 +38,37 @@ const Collection = () => {
   const applyFilter = () => {
     let filtered = products.slice();
 
+    // Apply search filter
     if (showSearch && search) {
       filtered = filtered.filter((item) =>
         item.name.toLowerCase().includes(search.toLowerCase())
       );
     }
 
+    // Apply category filters
     categories.forEach((cat) => {
-      if (filters[cat.id].length > 0) {
+      if (filters[cat.id] && filters[cat.id].length > 0) {
         filtered = filtered.filter((item) =>
           filters[cat.id].includes(item[cat.id])
         );
       }
     });
 
+    // Apply size filters
+    if (filters.sizes.length > 0) {
+      filtered = filtered.filter((item) =>
+        item.sizes.some((size) => filters.sizes.includes(size))
+      );
+    }
+
     setFilterProducts(filtered);
   };
 
   const clearFilters = () => {
     setFilters({
-      gender: [],
-      shoeType: [],
-      shoeSize: [],
+      category: [],
+      subCategory: [],
+      sizes: [],
       brand: [],
       color: [],
     });
@@ -120,21 +129,21 @@ const Collection = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-end">
           <div
             ref={modalRef}
-            className="bg-white w-full max-w-lg h-full p-4 flex flex-col divide-y divide-gray-200"
+            className="bg-white w-full max-w-lg h-full p-6 flex flex-col divide-y divide-gray-200"
           >
             {/* Header */}
             <div className="flex justify-between items-center py-4">
-              <h2 className="text-xl font-bold">FİLTRELER</h2>
-              <div className="flex gap-4">
+              <h2 className="text-2xl font-semibold text-gray-900">FİLTRELER</h2>
+              <div className="flex gap-6">
                 <button 
                   onClick={clearFilters}
-                  className="text-sm text-gray-500 hover:text-black"
+                  className="text-lg text-gray-500 hover:text-black"
                 >
                   Temizle
                 </button>
                 <button
                   onClick={() => setShowFilterModal(false)}
-                  className="text-lg font-bold text-gray-500 hover:text-black"
+                  className="text-2xl font-bold text-gray-500 hover:text-black"
                 >
                   ✕
                 </button>
@@ -149,10 +158,10 @@ const Collection = () => {
                   <button
                     key={cat.id}
                     onClick={() => setSelectedCategory(cat)}
-                    className={`block w-full text-left py-2 px-4 rounded-md text-sm ${
+                    className={`block w-full text-left py-3 px-6 text-lg font-medium ${
                       selectedCategory?.id === cat.id
-                        ? "bg-gray-200 font-semibold"
-                        : "hover:bg-gray-100"
+                        ? "bg-gray-100 text-gray-900"
+                        : "hover:bg-gray-50 text-gray-600"
                     }`}
                   >
                     {cat.label}
@@ -167,7 +176,7 @@ const Collection = () => {
                     {selectedCategory.options.map((option) => (
                       <label
                         key={option}
-                        className="flex items-center gap-2 py-2"
+                        className="flex items-center gap-3 py-3 text-lg text-gray-700"
                       >
                         <input
                           type="checkbox"
@@ -175,6 +184,7 @@ const Collection = () => {
                           onChange={() =>
                             toggleFilter(selectedCategory.id, option)
                           }
+                          className="text-gray-600"
                         />
                         {option}
                       </label>
@@ -191,7 +201,7 @@ const Collection = () => {
                   applyFilter();
                   setShowFilterModal(false);
                 }}
-                className="w-full py-2 bg-black text-white rounded-md"
+                className="w-full py-3 bg-black text-white text-xl font-semibold rounded-md hover:bg-gray-800 transition-all duration-300"
               >
                 Filtreleri Uygula
               </button>
