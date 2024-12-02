@@ -70,7 +70,7 @@ const listProduct = async (req, res) => {
     }
 };
 
-// function for add removing product
+// function for  removing product
 const removeProduct = async (req, res) => {
     try {
         await productModel.findByIdAndDelete(req.body.id);
@@ -80,6 +80,40 @@ const removeProduct = async (req, res) => {
         res.json({ success: false, error: error.message });
     }
 };
+ 
+// function for updating product
+const updateProduct = async (req, res) => {
+  try {
+    const { id, name, description, price, stock, sizes,} = req.body;
+
+    // Prepare the update object
+    const updateData = {
+      ...(name && { name }),
+      ...(description && { description }),
+      ...(price && { price: Number(price) }),
+      ...(stock && { stock: Number(stock) }),
+      ...(sizes && { sizes: JSON.parse(sizes) }), // Parse sizes if provided
+    };
+
+    const updatedProduct = await productModel.findByIdAndUpdate(id, updateData, {
+      new: true,
+    });
+
+    if (!updatedProduct) {
+      return res.status(404).json({ success: false, message: "Product not found" });
+    }
+
+    res.status(200).json({ 
+      success: true, 
+      message: "Product updated successfully", 
+      product: updatedProduct 
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Something went wrong", error: error.message });
+  }
+};
+
 
 // function for add single product info
 const singleProduct = async (req, res) => {
@@ -93,4 +127,4 @@ const singleProduct = async (req, res) => {
     }
 };
 
-export { listProduct, removeProduct, singleProduct, addProduct };
+export { listProduct, removeProduct, singleProduct, addProduct, updateProduct };
