@@ -6,34 +6,34 @@ import ProductItem from "../components/ProductItem";
 const Collection = () => {
   const { products, search, showSearch } = useContext(ShopContext);
   const [showFilterModal, setShowFilterModal] = useState(false);
-  const [filterProducts, setFilterProducts] = useState(products);
+  const [filterProducts, setFilterProducts] = useState(products || []);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [filters, setFilters] = useState({
     category: [],
     subCategory: [],
-    size: [],
+    sizes: [],
     brand: [],
     color: [],
   });
-  const [sortType, setSortType] = useState("relevant"); // Default sorting type
+  const [sortType, setSortType] = useState("relevant");
   const modalRef = useRef(null);
 
   const categories = [
-    { id: "category", label: "Cinsiyet", options: ["Men", "Woman", "Unisex"] },
+    { id: "category", label: "Cinsiyet", options: ["Men", "Women", "Unisex"] },
     {
       id: "subCategory",
       label: "Ayakkabı Türü",
       options: ["Daily", "Basketball", "Klasik", "Outdoor", "Others"],
     },
     {
-      id: "size",
+      id: "sizes",
       label: "Ayakkabı Numarası",
-      options: ["36", "37", "38", "39", "40"],
+      options: [36, 37, 38, 39, 40],
     },
     {
       id: "brand",
       label: "Marka",
-      options: ["New Balance", "Adidas", "Puma", "Nike",""],
+      options: ["New Balance", "Adidas", "Puma", "Nike"],
     },
     {
       id: "color",
@@ -52,7 +52,7 @@ const Collection = () => {
   };
 
   const applyFilter = useCallback(() => {
-    let filtered = products.slice();
+    let filtered = [...products];
 
     // Apply search filter
     if (showSearch && search) {
@@ -61,21 +61,14 @@ const Collection = () => {
       );
     }
 
-    // Apply category filters
+    // Apply category-based filters
     categories.forEach((cat) => {
-      if (filters[cat.id] && filters[cat.id].length > 0) {
+      if (filters[cat.id]?.length > 0) {
         filtered = filtered.filter((item) =>
           filters[cat.id].includes(item[cat.id])
         );
       }
     });
-
-    // Apply size filters
-    if (filters.size.length > 0) {
-      filtered = filtered.filter((item) =>
-        item.size.some((size) => filters.size.includes(size))
-      );
-    }
 
     // Apply sorting
     if (sortType === "price-asc") {
@@ -87,13 +80,13 @@ const Collection = () => {
     }
 
     setFilterProducts(filtered);
-  }, [filters, search, showSearch, products, sortType]);
+  }, [filters, search, showSearch, products, sortType, categories]);
 
   const clearFilters = () => {
     setFilters({
       category: [],
       subCategory: [],
-      size: [],
+      sizes: [],
       brand: [],
       color: [],
     });
@@ -123,30 +116,22 @@ const Collection = () => {
 
   return (
     <div className="flex flex-col pt-10 border-t">
-      {/* Title and sort options */}
+      {/* Title and Sort Options */}
       <div className="flex justify-between items-center mb-4">
-        <Title text1={"All"} text2={" Collections"} />
+        <Title text1="All" text2=" Collections" />
         <div className="flex items-center gap-4">
           <button
             onClick={() => setShowFilterModal(true)}
-            className="flex items-center px-4 py-2 montserrat text-sm bg-gradient-to-r from-white to-gray-200 text-black rounded-full shadow-lg hover:opacity-90 transition-all duration-300"
+            className="flex items-center px-4 py-2 text-sm bg-gradient-to-r from-white to-gray-200 text-black rounded-full shadow-lg hover:opacity-90 transition-all duration-300"
           >
             Filtreler
           </button>
           <select
             value={sortType}
             onChange={(e) => setSortType(e.target.value)}
-            className="px-4 py-2 text-sm border rounded-full shadow-md bg-gradient-to-r from-white to-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 hover:bg-gray-100 hover:shadow-lg transition-all duration-300 border-gray-300"
-            style={{
-              borderRadius: "9999px",
-              appearance: "none",
-              WebkitAppearance: "none",
-              MozAppearance: "none",
-            }}
+            className="px-4 py-2 text-sm border rounded-full shadow-md bg-gradient-to-r from-white to-gray-200"
           >
-            <option value="" hidden>
-              Sırala
-            </option>
+            <option value="relevant">Sırala</option>
             <option value="price-asc">Fiyat: Azdan Çoğa</option>
             <option value="price-desc">Fiyat: Çoktan Aza</option>
             <option value="bestseller">Best Seller</option>
@@ -163,7 +148,7 @@ const Collection = () => {
             id={item._id}
             price={item.price}
             image={item.image}
-            bestseller={item.bestseller} // Bestseller info passed
+            bestseller={item.bestseller}
           />
         ))}
       </div>
@@ -175,13 +160,12 @@ const Collection = () => {
             ref={modalRef}
             className="bg-white w-full max-w-lg h-full p-6 flex flex-col divide-y divide-gray-200"
           >
-            {/* Header */}
             <div className="flex justify-between items-center py-4">
-              <h2 className="montserrat text-2xl text-gray-900">FİLTRELER</h2>
+              <h2 className="text-2xl text-gray-900">FİLTRELER</h2>
               <div className="flex gap-6">
                 <button
                   onClick={clearFilters}
-                  className="montserrat text-lg text-gray-500 hover:text-black"
+                  className="text-lg text-gray-500 hover:text-black"
                 >
                   Temizle
                 </button>
@@ -193,62 +177,46 @@ const Collection = () => {
                 </button>
               </div>
             </div>
-
-            {/* Body */}
             <div className="flex flex-grow">
-              {/* Left Side */}
               <div className="w-2/4 border-r border-gray-200 p-4">
                 {categories.map((cat) => (
-                  <div key={cat.id} className="montserrat border-b-transparent border-gray-400">
-                    <button
-                      onClick={() => setSelectedCategory(cat)}
-                      className={`w-full text-left py-3 px-6 text-lg font-medium rounded-md transition-all duration-300 ${
-                        selectedCategory?.id === cat.id
-                          ? "bg-gray-200 text-gray-900 shadow-inner"
-                          : "hover:bg-gray-100 text-gray-600"
-                      }`}
-                    >
-                      {cat.label}
-                    </button>
-                  </div>
+                  <button
+                    key={cat.id}
+                    onClick={() => setSelectedCategory(cat)}
+                    className={`w-full text-left py-3 px-6 text-lg font-medium ${
+                      selectedCategory?.id === cat.id
+                        ? "bg-gray-200 text-gray-900"
+                        : "hover:bg-gray-100 text-gray-600"
+                    }`}
+                  >
+                    {cat.label}
+                  </button>
                 ))}
               </div>
-
-              {/* Right Side */}
               <div className="w-2/3 p-4">
-                {selectedCategory && (
-                  <div>
-                    {selectedCategory.options.map((option) => (
-                      <label
-                        key={option}
-                        className="montserrat flex items-center gap-3 py-3 text-lg text-gray-700"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={filters[selectedCategory.id]?.includes(option)}
-                          onChange={() => toggleFilter(selectedCategory.id, option)}
-                          className="appearance-none w-5 h-5 rounded-full border border-gray-300 bg-gray-100 checked:bg-gray-600 checked:border-gray-500 focus:ring-2 focus:ring-gray-300 focus:outline-none transition-all duration-300"
-                        />
-                        {option}
-                      </label>
-                    ))}
-                  </div>
-                )}
+                {selectedCategory &&
+                  selectedCategory.options.map((option) => (
+                    <label key={option} className="flex items-center gap-3 py-3">
+                      <input
+                        type="checkbox"
+                        checked={filters[selectedCategory.id]?.includes(option)}
+                        onChange={() => toggleFilter(selectedCategory.id, option)}
+                        className="w-5 h-5"
+                      />
+                      {option}
+                    </label>
+                  ))}
               </div>
             </div>
-
-            {/* Footer */}
-            <div className="py-4">
-              <button
-                onClick={() => {
-                  applyFilter();
-                  setShowFilterModal(false);
-                }}
-                className="w-full py-3 bg-black text-white text-xl montserrat rounded-md hover:bg-gray-800 transition-all duration-300"
-              >
-                Filtreleri Uygula
-              </button>
-            </div>
+            <button
+              onClick={() => {
+                applyFilter();
+                setShowFilterModal(false);
+              }}
+              className="w-full py-3 bg-black text-white text-xl rounded-md"
+            >
+              Filtreleri Uygula
+            </button>
           </div>
         </div>
       )}
