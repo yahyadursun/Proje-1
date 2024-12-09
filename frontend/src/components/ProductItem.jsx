@@ -29,8 +29,8 @@ const ProductItem = ({ id, image, name, price, bestseller }) => {
       <div className="flex flex-col items-center">
         <p className="montserrat pt-3 pb-1 text-sm">{name}</p>
         <p className="text-sm prompt-bold">
-          {currency}
           {price}
+          {currency}
         </p>
       </div>
     </Link>

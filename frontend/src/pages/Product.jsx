@@ -76,8 +76,8 @@ const Product = () => {
             <p className="pl-2">(122)</p>
           </div>
           <p className="mt-5 text-3x1 prompt-bold font-medium">
-            {currency}
             {productData.price}
+            {currency}
           </p>
           <p className="mt-5 text-gray-500">{productData.description}</p>
           <div className="flex flex-col gap-4 my-8">

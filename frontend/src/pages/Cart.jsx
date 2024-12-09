@@ -51,8 +51,8 @@ const Cart = () => {
 
                 <div className="flex items-center justify-between">
                   <p className="text-base sm:text-lg font-medium text-gray-600">
-                    {currency}
                     {productData.price}
+                    {currency}
                   </p>
 
                   <p className="px-3 py-1 text-sm sm:text-base bg-gray-100 text-gray-700 rounded-full border border-gray-300">
