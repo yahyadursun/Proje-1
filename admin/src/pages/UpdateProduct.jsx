@@ -2,49 +2,111 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { backendUrl } from "../App";
 import { toast } from "react-toastify";
+import { assets } from "../assets/assets";
 
 const UpdateProduct = ({ token, product }) => {
+  const [image1, setimage1] = useState(false);
+  const [image2, setimage2] = useState(false);
+  const [image3, setimage3] = useState(false);
+  const [image4, setimage4] = useState(false);
+
   const [name, setName] = useState(product?.name || "");
   const [description, setDescription] = useState(product?.description || "");
+  const [brand, setBrand] = useState(product?.brand || "");
   const [price, setPrice] = useState(product?.price || "");
-  const [stock, setStock] = useState(product?.stock || "");
-  const [sizes, setSizes] = useState([]);
-
-  // Effect to parse sizes from the backend format
-  useEffect(() => {
-    if (product?.sizes) {
-      // Gelen boyutları direkt olarak state'e aktar
-      setSizes(product.sizes);
+  const [category, setCategory] = useState(product?.category || "Men");
+  const [subCategory, setsubCategory] = useState(
+    product?.subCategory || "Other"
+  );
+  const [sizes, setSizes] = useState(product?.sizes || []);
+  const [bestseller, setBestseller] = useState(product?.bestseller || false);
+  const [stock, setStock] = useState(() => {
+    // If product has stock, create a copy to avoid direct mutation
+    if (product?.stock) {
+      return { ...product.stock };
     }
-  }, [product]);
+    return {};
+  });
+
+  const availableSizes = Array.from({ length: 73 }, (_, i) =>
+    (19 + i * 0.5).toFixed(1).toString()
+  );
+
+  const handleStockChange = (size, value) => {
+    setStock((prevStock) => {
+      const newStock = { ...prevStock };
+      const numericValue = Number(value);
+  
+      if (!numericValue || numericValue < 1) {
+        delete newStock[size];
+      } else {
+        newStock[size] = numericValue;
+      }
+      return newStock;
+    });
+  };
   
 
   const handleSizeChange = (e) => {
-    const selectedSize = parseFloat(e.target.value);
-    setSizes((prevSizes) =>
-      prevSizes.includes(selectedSize)
-        ? prevSizes.filter((size) => size !== selectedSize)
-        : [...prevSizes, selectedSize]
-    );
+    const selectedSize = e.target.value;
+    if (sizes.includes(selectedSize)) {
+      // If size is deselected, remove its stock
+      setStock((prevStock) => {
+        const newStock = { ...prevStock };
+        delete newStock[selectedSize];
+        return newStock;
+      });
+      setSizes(sizes.filter((size) => size !== selectedSize));
+    } else {
+      // If size is selected, add it to sizes
+      setSizes([...sizes, selectedSize]);
+    }
   };
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     try {
       const formData = new FormData();
+
       formData.append("id", product._id);
       formData.append("name", name);
       formData.append("description", description);
+      formData.append("brand", brand);
       formData.append("price", price);
-      formData.append("stock", stock);
-  
-      // Float formatında boyutları backend'e gönder
-      formData.append("sizes", JSON.stringify(sizes));
-  
-      const response = await axios.post(`${backendUrl}/api/product/update`, formData, {
-        headers: { token },
+      formData.append("category", category);
+      formData.append("subCategory", subCategory);
+      formData.append("bestseller", bestseller);
+
+      // Ensure only selected sizes are in stock
+      const filteredStock = {};
+      sizes.forEach((size) => {
+        if (stock[size] > 0) {
+          filteredStock[size] = Number(stock[size]);
+        }
       });
-  
+
+      if (Object.keys(filteredStock).length === 0) {
+        toast.error("Lütfen en az bir beden için stok girin.");
+        return;
+      }
+
+      formData.append("sizes", JSON.stringify(sizes));
+      formData.append("stock", JSON.stringify(filteredStock));
+
+      // Image handling
+      image1 && formData.append("image1", image1);
+      image2 && formData.append("image2", image2);
+      image3 && formData.append("image3", image3);
+      image4 && formData.append("image4", image4);
+
+      const response = await axios.post(
+        `${backendUrl}/api/product/update`,
+        formData,
+        {
+          headers: { token },
+        }
+      );
+
       if (response.data.success) {
         toast.success(response.data.message);
       } else {
@@ -52,72 +114,187 @@ const UpdateProduct = ({ token, product }) => {
       }
     } catch (error) {
       console.error(error);
-      toast.error("An error occurred while updating the product.");
+      toast.error(error.message);
     }
   };
-  
 
   return (
-    <form onSubmit={onSubmitHandler} className="flex flex-col w-full items-start gap-3">
-      <div>
-        <p>Product Name</p>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Product Name"
-          required
-        />
-      </div>
-      <div>
-        <p>Description</p>
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Product Description"
-          required
-        />
-      </div>
-      <div>
-        <p>Price</p>
-        <input
-          type="number"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-          placeholder="Price"
-          required
-        />
-      </div>
-      <div>
-        <p>Stock</p>
-        <input
-          type="number"
-          value={stock}
-          onChange={(e) => setStock(e.target.value)}
-          placeholder="Stock Quantity"
-          required
-        />
-      </div>
-      <div>
-        <p>Sizes</p>
-        <div className="flex flex-wrap gap-2">
-          {Array.from({ length: 73 }, (_, i) => (19 + i * 0.5).toFixed(1)).map((size) => (
-            <label key={size} className="inline-flex items-center gap-1">
-              <input
-                type="checkbox"
-                value={size}
-                checked={sizes.includes(parseFloat(size))}
-                onChange={handleSizeChange}
-              />
-              {size}
-            </label>
-          ))}
+    <div className="max-h-[90vh] overflow-y-auto">
+      <form
+        onSubmit={onSubmitHandler}
+        className="flex flex-col w-full items-start gap-3 p-4"
+      >
+        <div>
+          <p className="mb-2">Upload Image</p>
+          <div className="flex gap-2 overflow-x-auto pb-2">
+            {[1, 2, 3, 4].map((num) => {
+              const imageState = eval(`image${num}`);
+              const setImageState = eval(`setimage${num}`);
+              return (
+                <label
+                  key={num}
+                  htmlFor={`image${num}`}
+                  className="flex-shrink-0"
+                >
+                  <img
+                    className="w-20 h-20 object-cover"
+                    src={
+                      imageState
+                        ? URL.createObjectURL(imageState)
+                        : product?.[`image${num}`] || assets.upload_area
+                    }
+                    alt=""
+                  />
+                  <input
+                    onChange={(e) => setImageState(e.target.files[0])}
+                    type="file"
+                    id={`image${num}`}
+                    hidden
+                  />
+                </label>
+              );
+            })}
+          </div>
         </div>
-      </div>
-      <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-        Update Product
-      </button>
-    </form>
+
+        <div className="w-full">
+          <p className="mb-2">Product name</p>
+          <input
+            onChange={(e) => setName(e.target.value)}
+            value={name}
+            className="w-full px-3 py-2"
+            type="text"
+            placeholder="Type here"
+            required
+          />
+        </div>
+        <div className="w-full">
+          <p className="mb-2">Product description</p>
+          <textarea
+            onChange={(e) => setDescription(e.target.value)}
+            value={description}
+            className="w-full px-3 py-2 h-24"
+            placeholder="Write content here"
+            required
+          />
+        </div>
+
+        <div className="grid grid-cols-2 gap-2 w-full">
+          <div>
+            <p className="mb-2">Product Brand</p>
+            <select
+              value={brand}
+              onChange={(e) => setBrand(e.target.value)}
+              className="w-full px-3 py-2"
+            >
+              <option value="adidas">Adidas</option>
+              <option value="Nike">Nike</option>
+              <option value="Other">Other</option>
+              {/* Reduced brand list for brevity */}
+            </select>
+          </div>
+
+          <div>
+            <p className="mb-2">Product category</p>
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="w-full px-3 py-2"
+            >
+              <option value="Men">Men</option>
+              <option value="Women">Women</option>
+              <option value="Kids">Kids</option>
+              <option value="Unisex">Unisex</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div>
+            <p className="mb-2">Price</p>
+            <input
+              onChange={(e) => setPrice(e.target.value)}
+              value={price}
+              className="w-full px-3 py-2"
+              type="number"
+              placeholder="25"
+              required
+            />
+          </div>
+
+          <div>
+            <p className="mb-2">Sub category</p>
+            <select
+              value={subCategory}
+              onChange={(e) => setsubCategory(e.target.value)}
+              className="w-full px-3 py-2"
+            >
+              <option value="Athletic Shoes">Athletic Shoes</option>
+              <option value="Casual Shoes">Casual Shoes</option>
+              <option value="Other">Other</option>
+              {/* Reduced sub-category list for brevity */}
+            </select>
+          </div>
+        </div>
+
+        <div className="w-full">
+          <p>Product Sizes</p>
+          <div className="max-h-40 overflow-y-auto border rounded p-2">
+            <div className="flex flex-wrap gap-1">
+              {availableSizes.map((size, index) => (
+                <label key={index} className="inline-flex items-center mr-2">
+                  <input
+                    type="checkbox"
+                    value={size}
+                    onChange={handleSizeChange}
+                    className="mr-1"
+                    checked={sizes.includes(size)}
+                  />
+                  {size}
+                </label>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="w-full">
+          <p>Stock for Selected Sizes</p>
+          <div className="max-h-40 overflow-y-auto border rounded p-2 flex flex-wrap gap-2">
+            {sizes.map((size, index) => (
+              <div key={index} className="flex items-center gap-1">
+                <span>{size}:</span>
+                <input
+                  type="number"
+                  placeholder="Stock"
+                  value={stock[size] || ""}
+                  onChange={(e) => handleStockChange(size, e.target.value)}
+                  className="w-20 px-1 py-1 border rounded"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 mt-2">
+          <input
+            onChange={() => setBestseller((prev) => !prev)}
+            checked={bestseller}
+            type="checkbox"
+            id="bestseller"
+            className="h-4 w-4"
+          />
+          <label htmlFor="bestseller" className="cursor-pointer">
+            Add to Bestseller
+          </label>
+        </div>
+
+        <button
+          type="submit"
+          className="w-full py-3 mt-4 bg-black text-white hover:bg-gray-800 transition-colors"
+        >
+          UPDATE PRODUCT
+        </button>
+      </form>
+    </div>
   );
 };
 

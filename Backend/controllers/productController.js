@@ -15,7 +15,7 @@ const addProduct = async (req, res) => {
       bestseller,
       stock,
     } = req.body;
-    // for an error about trying to read not existing image
+
     const image1 = req.files.image1 && req.files.image1[0];
     const image2 = req.files.image2 && req.files.image2[0];
     const image3 = req.files.image3 && req.files.image3[0];
@@ -24,7 +24,8 @@ const addProduct = async (req, res) => {
     const images = [image1, image2, image3, image4].filter(
       (item) => item !== undefined
     );
-    //taking url for images
+
+    // Cloudinary üzerinden resimlerin yüklenmesi
     let imagesUrl = await Promise.all(
       images.map(async (item) => {
         let result = await cloudinary.uploader.upload(item.path, {
@@ -34,6 +35,33 @@ const addProduct = async (req, res) => {
       })
     );
 
+    // Parse sizes and stock, with additional error handling
+    let parsedSizes, parsedStock;
+    try {
+      parsedSizes = JSON.parse(sizes);
+      parsedStock = JSON.parse(stock);
+    } catch (parseError) {
+      return res.json({ 
+        success: false, 
+        message: "Invalid sizes or stock format" 
+      });
+    }
+
+    // Validate that parsed data is an array and object respectively
+    if (!Array.isArray(parsedSizes) || typeof parsedStock !== 'object') {
+      return res.json({ 
+        success: false, 
+        message: "Sizes must be an array, stock must be an object" 
+      });
+    }
+
+    // Boyut ve stokların eşleşmesini kontrol edelim
+    const stockData = {};
+    parsedSizes.forEach((size) => {
+      // Ensure size is a string and convert stock to a number
+      stockData[size] = Number(parsedStock[size] || 0);
+    });
+
     const productData = {
       name,
       description,
@@ -41,23 +69,29 @@ const addProduct = async (req, res) => {
       price: Number(price),
       category,
       subCategory,
-      sizes: JSON.parse(sizes), // need to config for what we selling? // parsing for array
-      bestseller: bestseller === "true" ? true : false,
+      sizes: parsedSizes,
+      bestseller: bestseller === "true", // Simplified boolean conversion
       image: imagesUrl,
       date: Date.now(),
-      stock: Number(stock),
+      stock: stockData,
     };
-    console.log(productData);
 
     const product = new productModel(productData);
     await product.save();
 
     res.json({ success: true, message: "Product added successfully" });
   } catch (error) {
-    console.log(error);
-    res.json({ success: false, error: error.message });
+    console.error(error);
+    res.json({ 
+      success: false, 
+      message: "Error adding product", 
+      error: error.message 
+    });
   }
 };
+
+
+
 
 // function for add list product
 const listProduct = async (req, res) => {
@@ -84,15 +118,44 @@ const removeProduct = async (req, res) => {
 // function for updating product
 const updateProduct = async (req, res) => {
   try {
-    const { id, name, description, price, stock, sizes,} = req.body;
+    const { id, name, description, price, stock, sizes, brand, category, subCategory, bestseller } = req.body;
 
-    // Prepare the update object
+    // Parse JSON verileri
+    let parsedStock = {};
+    let parsedSizes = [];
+
+    try {
+      parsedStock = stock ? JSON.parse(stock) : {};
+      parsedSizes = sizes ? JSON.parse(sizes) : [];
+    } catch (parseError) {
+      return res.status(400).json({ success: false, message: "Invalid data format" });
+    }
+
+    // Resim yükleme işlemi
+    const imageFiles = ["image1", "image2", "image3", "image4"];
+    const images = [];
+
+    for (const key of imageFiles) {
+      if (req.files[key] && req.files[key][0]) {
+        const result = await cloudinary.uploader.upload(req.files[key][0].path, {
+          resource_type: "image",
+        });
+        images.push(result.secure_url);
+      }
+    }
+
+    // Güncelleme nesnesini oluştur
     const updateData = {
       ...(name && { name }),
       ...(description && { description }),
       ...(price && { price: Number(price) }),
-      ...(stock && { stock: Number(stock) }),
-      ...(sizes && { sizes: JSON.parse(sizes) }), // Parse sizes if provided
+      ...(sizes && { sizes: parsedSizes }),
+      ...(stock && { stock: parsedStock }),
+      ...(brand && { brand }),
+      ...(category && { category }),
+      ...(subCategory && { subCategory }),
+      ...(typeof bestseller !== "undefined" && { bestseller: bestseller === "true" }),
+      ...(images.length && { image: images }),
     };
 
     const updatedProduct = await productModel.findByIdAndUpdate(id, updateData, {
@@ -103,16 +166,21 @@ const updateProduct = async (req, res) => {
       return res.status(404).json({ success: false, message: "Product not found" });
     }
 
-    res.status(200).json({ 
-      success: true, 
-      message: "Product updated successfully", 
-      product: updatedProduct 
+    res.status(200).json({
+      success: true,
+      message: "Product updated successfully",
+      product: updatedProduct,
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ success: false, message: "Something went wrong", error: error.message });
+    res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+      error: error.message,
+    });
   }
 };
+
 
 
 // function for add single product info
