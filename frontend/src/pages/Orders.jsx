@@ -7,20 +7,20 @@ import { toast } from 'react-toastify';
 const Orders = () => {
   const { backendUrl, token, currency } = useContext(ShopContext);
 
-  const [orderData,setorderData] = useState([])
+  const [orderData, setorderData] = useState([]);
 
   const loadOrderData = async () => {
     try {
       if (!token) {
         return;
       }
-  
+
       const response = await axios.post(
         backendUrl + '/api/order/userorders',
         {},
         { headers: { token } }
       );
-  
+
       if (response.data.success) {
         let allOrdersItem = [];
         
@@ -35,7 +35,7 @@ const Orders = () => {
             allOrdersItem.push(formattedItem);  // Her bir item'ı diziye ekle
           });
         });
-  
+
         setorderData(allOrdersItem.reverse());  // Ters çevir ve state'e ata
       } else {
         toast.error(response.data.message || "Siparişler alınamadı.");
@@ -45,15 +45,30 @@ const Orders = () => {
       toast.error("Siparişler yüklenemedi. Lütfen daha sonra tekrar deneyin.");
     }
   };
-  
 
-  useEffect(()=>{
-    loadOrderData()
-  },[token])
+  useEffect(() => {
+    loadOrderData();
+  }, [token]);
+
+  // Status'e göre renk döndüren fonksiyon
+  const getStatusColor = (status) => {
+    switch (status.toLowerCase()) {
+      case 'order placed':
+      case 'packing':
+        return 'bg-yellow-500'; // Sarı
+      case 'shipped':
+      case 'out for delivery':
+        return 'bg-green-500'; // Yeşil
+      case 'delivered':
+        return 'bg-red-500'; // Kırmızı
+      default:
+        return 'bg-gray-400'; // Varsayılan renk
+    }
+  };
 
   return (
     <div className="border-t pt-16">
-      <div className="text-2x1">
+      <div className="text-2xl">
         <Title text1={"Siparişlerim"} />
       </div>
 
@@ -72,11 +87,11 @@ const Orders = () => {
                     {item.price}
                     {currency}
                   </p>
-                  <p>quantity: {item.quantity}</p>
-                  <p>size: {item.size}</p>
+                  <p>Adet: {item.quantity}</p>
+                  <p>Beden: {item.size}</p>
                 </div>
                 <p className="mt-1">
-                  Date: <span className="text-gray-400">{new  Date(item.date).toDateString()}</span>
+                  Date: <span className="text-gray-400">{new Date(item.date).toDateString()}</span>
                 </p>
                 <p className="mt-1">
                   Payment: <span className="text-gray-400">{item.paymentMethod}</span>
@@ -84,8 +99,8 @@ const Orders = () => {
               </div>
             </div>
             <div className="md:w-1/2 flex justify-between">
-              <div className=" flex items-center gap-2">
-                <p className="min-w-2 h-2 rounded-full bg-green-500"></p>
+              <div className="flex items-center gap-2">
+                <p className={`min-w-2 h-2 rounded-full ${getStatusColor(item.status)}`}></p>
                 <p className="text-sm md:text-base">{item.status}</p>
               </div>
               <button onClick={loadOrderData} className="border px-4 py-2 text-sm font-medium rounded-sm">Kargo Takip</button>
