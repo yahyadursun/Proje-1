@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
-
 import RelatedProduct from "../components/relatedProduct";
 
 const Product = () => {
@@ -64,9 +63,10 @@ const Product = () => {
         </div>
         {/*product info */}
         <div className="flex-1">
-          <h1 className="font-medium montserrat text-3x1 mt-2">
+          <h1 className="font-medium funnel-sans prompt-bold text-3x1 mt-2">
             {productData.name}
           </h1>
+          <div className="flex items-center "><p className="mt-5 text-gray-500">{productData.description}</p></div>
           <div className="flex items-center gap-1 mt-2">
             <img src={assets.star_icon} alt="" className="w-3 5" />
             <img src={assets.star_icon} alt="" className="w-3 5" />
@@ -75,11 +75,11 @@ const Product = () => {
             <img src={assets.star_dull_icon} alt="" className="w-3 5" />
             <p className="pl-2">(122)</p>
           </div>
-          <p className="mt-5 text-3x1 prompt-bold font-medium">
+          <p className="mt-5 text-3x1 funnel-sans font-medium">
             {productData.price}
             {currency}
           </p>
-          <p className="mt-5 text-gray-500">{productData.description}</p>
+          
           <div className="flex flex-col gap-4 my-8">
             <p>Select Size</p>
             <div className="flex gap-2">
