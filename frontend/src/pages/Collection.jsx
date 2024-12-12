@@ -28,17 +28,17 @@ const Collection = () => {
     {
       id: "sizes",
       label: "Beden",
-      options: [0, 37, 38, 39, 40],
+      options: ["19", "20", "20.5", "21", "21.5", "22", "22.5", "51", 208],
     },
     {
       id: "brand",
       label: "Marka",
-      options: ["New Balance", "Adidas", "Puma", "Nike","Reebok","The North Face","Timberland","Tommy Hilfiger","Vans","Jack Wolfskin","U.S. Polo Assn."],
+      options: ["New Balance", "Adidas", "Puma", "Nike","Reebok","Skechers","The North Face","Timberland","Tommy Hilfiger","Vans","Jack Wolfskin","U.S. Polo Assn."],
     },
     {
       id: "color",
       label: "Renk",
-      options: ["Kırmızı", "Mavi", "Siyah", "Beyaz"],
+      options: ["Kırmızı", "Mavi", "Siyah","Gri", "Beyaz","Pembe","Krem","Lacivert","Haki"],
     },
   ];
 
@@ -61,12 +61,17 @@ const Collection = () => {
       );
     }
 
-    // Apply category-based filters
     categories.forEach((cat) => {
       if (filters[cat.id]?.length > 0) {
-        filtered = filtered.filter((item) =>
-          filters[cat.id].includes(item[cat.id])
-        );
+        filtered = filtered.filter((item) => {
+          if (cat.id === "sizes") {
+            // Normalize both filter and product sizes to strings
+            const productSizes = item[cat.id].map((size) => size.toString());
+            const filterSizes = filters[cat.id].map((size) => size.toString());
+            return filterSizes.some((filterSize) => productSizes.includes(filterSize));
+          }
+          return filters[cat.id].includes(item[cat.id]);
+        });
       }
     });
 
