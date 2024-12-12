@@ -66,7 +66,7 @@ const Product = () => {
           <h1 className="font-medium funnel-sans prompt-bold text-3x1 mt-2">
             {productData.name}
           </h1>
-          <div className="flex items-center "><p className="mt-5 text-gray-500">{productData.description}</p></div>
+          <div className="flex items-center "><p className="mt-5 funnel-sans font-small text-gray-400">{productData.description}</p></div>
           <div className="flex items-center gap-1 mt-2">
             <img src={assets.star_icon} alt="" className="w-3 5" />
             <img src={assets.star_icon} alt="" className="w-3 5" />
@@ -81,7 +81,7 @@ const Product = () => {
           </p>
           
           <div className="flex flex-col gap-4 my-8">
-            <p>Select Size</p>
+            <p className="prompt-bold funnel-sans">Select Size</p>
             <div className="flex gap-2">
               {productData.sizes.map((item, index) => (
                 <button
