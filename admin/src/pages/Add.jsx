@@ -18,6 +18,9 @@ const Add = ({ token }) => {
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("Men");
   const [subCategory, setsubCategory] = useState("Other");
+
+  const [color, setColor] = useState("");
+
   const [sizes, setSizes] = useState([]);
   const [bestseller, setBestseller] = useState(false);
   const [stock, setStock] = useState({});
@@ -51,6 +54,7 @@ const Add = ({ token }) => {
       formData.append("name", name);
       formData.append("description", description);
       formData.append("brand", brand);
+      formData.append("color", color);
       formData.append("price", price);
       formData.append("category", category);
       formData.append("subCategory", subCategory);
@@ -80,6 +84,7 @@ const Add = ({ token }) => {
         setPrice("");
         setCategory("Men");
         setsubCategory("Other");
+        setColor("");
         setSizes([]);
         setStock({});
         setBestseller(false);
@@ -215,16 +220,33 @@ const Add = ({ token }) => {
         </div>
 
         <div>
+          <p className="mb-2">Product Color</p>
+          <select
+            onChange={(e) => setColor(e.target.value)}
+            className="w-full px-3 py-2"
+          >
+            <option value="Kırmızı">Kırmızı</option>
+            <option value="Mavi">Mavi</option>
+            <option value="Siyah">Siyah</option>
+            <option value="Gri">Gri</option>
+            <option value="Beyaz">Beyaz</option>
+            <option value="Pembe">Pembe</option>
+            <option value="Krem">Krem</option>
+            <option value="Lacivert">Lacivert</option>
+            <option value="Haki">Haki</option>
+          </select>
+        </div>
+
+        <div>
           <p className="mb-2">Product category</p>
           <select
             onChange={(e) => setCategory(e.target.value)}
             className="w-full px-3 py-2"
           >
-            <option value="Men">Men</option>
-            <option value="Women">Women</option>
-            <option value="Kids">Kids</option>
+            <option value="Erkek">Erkek</option>
+            <option value="Kadın">Kadın</option>
+            <option value="Çocuk">Çocuk</option>
             <option value="Unisex">Unisex</option>
-            <option value="Other">Other</option>
           </select>
         </div>
 
@@ -234,14 +256,12 @@ const Add = ({ token }) => {
             onChange={(e) => setsubCategory(e.target.value)}
             className="w-full px-3 py-2"
           >
-            <option value="Athletic Shoes">Athletic Shoes</option>
-            <option value="Casual Shoes">Casual Shoes</option>
-            <option value="Formal Shoes">Formal Shoes</option>
-            <option value="Boots">Boots</option>
-            <option value="Heels">Heels</option>
-            <option value="Sandals and Slippers">Sandals and Slippers</option>
-            <option value="House Shoes">House Shoes</option>
-            <option value="Other">Other</option>
+            <option value="Bot">Bot</option>
+            <option value="Koşu Ayakkabısı">Koşu Ayakkabısı</option>
+            <option value="Outdoor">Outdoor</option>
+            <option value="Sneaker">Sneaker</option>
+            <option value="Sandalet">Sandalet</option>
+            <option value="Terlik">Terlik</option>
           </select>
         </div>
 

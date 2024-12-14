@@ -11,6 +11,7 @@ const addProduct = async (req, res) => {
       price,
       category,
       subCategory,
+      color,
       sizes,
       bestseller,
       stock,
@@ -69,6 +70,7 @@ const addProduct = async (req, res) => {
       price: Number(price),
       category,
       subCategory,
+      color,
       sizes: parsedSizes,
       bestseller: bestseller === "true", // Simplified boolean conversion
       image: imagesUrl,
@@ -118,7 +120,7 @@ const removeProduct = async (req, res) => {
 // function for updating product
 const updateProduct = async (req, res) => {
   try {
-    const { id, name, description, price, stock, sizes, brand, category, subCategory, bestseller } = req.body;
+    const { id, name, description, price, stock, sizes, brand, category, subCategory, color, bestseller } = req.body;
 
     // Parse JSON verileri
     let parsedStock = {};
@@ -154,6 +156,7 @@ const updateProduct = async (req, res) => {
       ...(brand && { brand }),
       ...(category && { category }),
       ...(subCategory && { subCategory }),
+      ...(color && { color }),
       ...(typeof bestseller !== "undefined" && { bestseller: bestseller === "true" }),
       ...(images.length && { image: images }),
     };

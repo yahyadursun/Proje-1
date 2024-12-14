@@ -14,10 +14,11 @@ const UpdateProduct = ({ token, product }) => {
   const [description, setDescription] = useState(product?.description || "");
   const [brand, setBrand] = useState(product?.brand || "");
   const [price, setPrice] = useState(product?.price || "");
-  const [category, setCategory] = useState(product?.category || "Men");
+  const [category, setCategory] = useState(product?.category || "Erkek");
   const [subCategory, setsubCategory] = useState(
-    product?.subCategory || "Other"
+    product?.subCategory || "Sneaker"
   );
+  const [color, setColor] = useState(product?.color || "");
   const [sizes, setSizes] = useState(product?.sizes || []);
   const [bestseller, setBestseller] = useState(product?.bestseller || false);
   const [stock, setStock] = useState(() => {
@@ -36,7 +37,7 @@ const UpdateProduct = ({ token, product }) => {
     setStock((prevStock) => {
       const newStock = { ...prevStock };
       const numericValue = Number(value);
-  
+
       if (!numericValue || numericValue < 1) {
         delete newStock[size];
       } else {
@@ -45,7 +46,6 @@ const UpdateProduct = ({ token, product }) => {
       return newStock;
     });
   };
-  
 
   const handleSizeChange = (e) => {
     const selectedSize = e.target.value;
@@ -75,6 +75,7 @@ const UpdateProduct = ({ token, product }) => {
       formData.append("price", price);
       formData.append("category", category);
       formData.append("subCategory", subCategory);
+      formData.append("color", color);
       formData.append("bestseller", bestseller);
 
       // Ensure only selected sizes are in stock
@@ -188,9 +189,46 @@ const UpdateProduct = ({ token, product }) => {
               className="w-full px-3 py-2"
             >
               <option value="adidas">Adidas</option>
+              <option value="Converse">Converse</option>
+              <option value="Greyder">Greyder</option>
+              <option value="Hummel">Hummel</option>
+              <option value="Kinetix">Kinetix</option>
+              <option value="Lacoste">Lacoste</option>
+              <option value="Lescon">Lescon</option>
+              <option value="Lumberjack">Lumberjack</option>
+              <option value="New Balance">New Balance</option>
               <option value="Nike">Nike</option>
+              <option value="North Face">North Face</option>
+              <option value="Polaris">Polaris</option>
+              <option value="Puma">Puma</option>
+              <option value="Reebok">Reebok</option>
+              <option value="Skechers">Skechers</option>
+              <option value="Timberland">Timberland</option>
+              <option value="Tommy Hilfiger">Tommy Hilfiger</option>
+              <option value="U.S. Polo Assn.">U.S. Polo Assn.</option>
+              <option value="Under Armour">Under Armour</option>
+              <option value="Vans">Vans</option>
               <option value="Other">Other</option>
               {/* Reduced brand list for brevity */}
+            </select>
+          </div>
+
+          <div>
+            <p className="mb-2">Product Color</p>
+            <select
+              value={color}
+              onChange={(e) => setColor(e.target.value)}
+              className="w-full px-3 py-2"
+            >
+              <option value="Kırmızı">Kırmızı</option>
+              <option value="Mavi">Mavi</option>
+              <option value="Siyah">Siyah</option>
+              <option value="Gri">Gri</option>
+              <option value="Beyaz">Beyaz</option>
+              <option value="Pembe">Pembe</option>
+              <option value="Krem">Krem</option>
+              <option value="Lacivert">Lacivert</option>
+              <option value="Haki">Haki</option>
             </select>
           </div>
 
@@ -201,11 +239,10 @@ const UpdateProduct = ({ token, product }) => {
               onChange={(e) => setCategory(e.target.value)}
               className="w-full px-3 py-2"
             >
-              <option value="Men">Men</option>
-              <option value="Women">Women</option>
-              <option value="Kids">Kids</option>
+              <option value="Erkek">Erkek</option>
+              <option value="Kadın">Kadın</option>
+              <option value="Çocuk">Çocuk</option>
               <option value="Unisex">Unisex</option>
-              <option value="Other">Other</option>
             </select>
           </div>
 
@@ -228,9 +265,12 @@ const UpdateProduct = ({ token, product }) => {
               onChange={(e) => setsubCategory(e.target.value)}
               className="w-full px-3 py-2"
             >
-              <option value="Athletic Shoes">Athletic Shoes</option>
-              <option value="Casual Shoes">Casual Shoes</option>
-              <option value="Other">Other</option>
+              <option value="Bot">Bot</option>
+              <option value="Koşu Ayakkabısı">Koşu Ayakkabısı</option>
+              <option value="Outdoor">Outdoor</option>
+              <option value="Sneaker">Sneaker</option>
+              <option value="Sandalet">Sandalet</option>
+              <option value="Terlik">Terlik</option>
               {/* Reduced sub-category list for brevity */}
             </select>
           </div>
