@@ -35,7 +35,7 @@ const loginUser = async (req, res) => {
 /// Route for user register
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, surname, email, password } = req.body;
 
     // checking user already exists or not
     const exists = await userModel.findOne({ email });
@@ -57,12 +57,13 @@ const registerUser = async (req, res) => {
       });
     }
 
-    // hashin user paswword
+    // hashing user paswword
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const newUser = new userModel({
       name,
+      surname,
       email,
       password: hashedPassword,
     });

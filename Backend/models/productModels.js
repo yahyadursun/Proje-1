@@ -1,20 +1,21 @@
 import mongoose from "mongoose";
 
 const productSchema = new mongoose.Schema({
-  name: { type: String, require: true },
-  description: { type: String, require: true },
-
-  brand: {type: String, require: true },
-
-  stock: { type: Number, required: true },
-  price: { type: Number, require: true },
-  image: { type: Array, require: true },
-  brand: { type: String, require: true },
-  category: { type: String, require: true },
-  subCategory: { type: String, require: true },
-  sizes: { type: Array, require: true },
-  bestseller: { type: Boolean },
-  date: { type: Number, require: true },
+  name: { type: String, required: true },
+  description: { type: String, required: true },
+  brand: { type: String, required: true },
+  price: { type: Number, required: true },
+  image: { type: Array, required: true },
+  category: { type: String, required: true },
+  subCategory: { type: String, required: true },
+  sizes: { type: Array, required: true },
+  color:{type: String,required:true},
+  stock: { 
+    type: mongoose.Schema.Types.Mixed, // Use Mixed type instead of Map
+    required: true
+  },
+  bestseller: { type: Boolean, default: false },
+  date: { type: Number, required: true },
 });
 
 const productModel =
