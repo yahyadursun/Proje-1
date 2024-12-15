@@ -1,7 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
 import { ShopContext } from "../context/ShopContext";
 import Title from "./Title";
 import ProductItem from "./ProductItem";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+
 
 const LatestCollection = () => {
   const { products } = useContext(ShopContext);
@@ -14,19 +20,33 @@ const LatestCollection = () => {
   return (
     <div className="my-10">
       <div className="text-center py-8 text-9x1">
-        <Title text1={"LATEST"} text2={"COLLECTIONS"}></Title>
+        <Title text1={"LATEST"} text2={"COLLECTIONS"} />
         <p className="w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-700">
-          Dummy mummy
+          Discover our latest collection of trendy and stylish products!
         </p>
       </div>
-      {/* render products*/}
-      <div className=" grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6">
-        {
-          latestProducts.map((item,index)=>(
-            <ProductItem key={index}id={item._id} image={item.image} name={item.name} price={item.price}/>
-          ))
-        }
-      </div>
+      {/* Swiper Slider */}
+      <Swiper
+        modules={[Navigation, Pagination, Scrollbar, A11y]}
+        spaceBetween={20} // Aralık
+        slidesPerView={2} // Görünen ürün sayısı
+        breakpoints={{
+          640: { slidesPerView: 2 },
+          768: { slidesPerView: 3 },
+          1024: { slidesPerView: 4 },
+        }}
+      >
+        {latestProducts.map((item, index) => (
+          <SwiperSlide key={index}>
+            <ProductItem
+              id={item._id}
+              image={item.image}
+              name={item.name}
+              price={item.price}
+            />
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </div>
   );
 };

@@ -5,6 +5,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "swiper/swiper-bundle.min.css";
+
 
 a.active hr{
     display: block;
@@ -41,3 +43,34 @@ a.active hr{
       color: whitesmoke;
     }
   }
+  .funnel-sans {
+    font-family: "Funnel Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+  }
+
+  .icon-checkbox {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .icon-checkbox input {
+    display: none; /* Varsayılan checkbox'ı gizle */
+  }
+  
+  .icon-checkbox .checked {
+    display: none;
+    color: #3498db;
+  }
+  
+  .icon-checkbox input:checked ~ .unchecked {
+    display: none;
+  }
+  
+  .icon-checkbox input:checked ~ .checked {
+    display: inline;
+  }
+  
+
+

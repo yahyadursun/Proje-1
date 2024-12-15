@@ -127,7 +127,7 @@ export const products =[
     },
     {
         _id : "aaaf",
-        name:'Nike shoe',
+        name:'Nike',
         description:'best shoe ever',
         price:100,
         image:[p_img1],

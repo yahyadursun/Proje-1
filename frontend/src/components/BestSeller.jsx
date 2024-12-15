@@ -1,14 +1,24 @@
 import React, { useContext, useEffect, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Scrollbar, A11y } from "swiper/modules";
 import { ShopContext } from "../context/ShopContext";
 import Title from "./Title";
 import ProductItem from "./ProductItem";
+
+// Swiper CSS
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/scrollbar";
+
 const BestSeller = () => {
   const { products } = useContext(ShopContext);
   const [bestSeller, setBestSeller] = useState([]);
+
   useEffect(() => {
     const bestProduct = products.filter((item) => item.bestseller);
-    setBestSeller(bestProduct.slice(0, 5));
+    setBestSeller(bestProduct.slice(0, 7));
   }, [products]);
+
   return (
     <div className="my-10">
       <div className="text-center text-3x1 py-8">
@@ -17,11 +27,35 @@ const BestSeller = () => {
           Dummy mummy
         </p>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6">
-        {bestSeller.map((item,index)=>(
-            <ProductItem key={index} id={item._id} name={item.name} image={item.image} price={item.price}/>
+      {/* Swiper Slider */}
+      <Swiper
+        modules={[Navigation, Scrollbar, A11y]}
+        spaceBetween={30}
+        slidesPerView={3} // Ekranda 3 ürün görünecek
+
+        breakpoints={{
+          640: {
+            slidesPerView: 1,
+          },
+          768: {
+            slidesPerView: 2,
+          },
+          1024: {
+            slidesPerView: 3,
+          },
+        }}
+      >
+        {bestSeller.map((item, index) => (
+          <SwiperSlide key={index}>
+            <ProductItem
+              id={item._id}
+              name={item.name}
+              image={item.image}
+              price={item.price}
+            />
+          </SwiperSlide>
         ))}
-      </div>
+      </Swiper>
     </div>
   );
 };
