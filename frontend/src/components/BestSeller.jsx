@@ -4,8 +4,6 @@ import { Navigation, Scrollbar, A11y } from "swiper/modules";
 import { ShopContext } from "../context/ShopContext";
 import Title from "./Title";
 import ProductItem from "./ProductItem";
-
-// Swiper CSS
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/scrollbar";
