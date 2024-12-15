@@ -24,6 +24,8 @@ import support_icon from './support.png'
 import about_icon from './about_icon.png'
 import stripe_icon from './stripe_icon.png'
 import kredikart_icon from './kredikart_icon.png'
+import hero_img2 from "./hero_img2.jpg"
+import hero_img3 from "./hero_img3.jpg"
 
 export const assets ={
     logo,
@@ -47,7 +49,9 @@ export const assets ={
     p2_img3,
     p2_img4,
     stripe_icon,
-    kredikart_icon
+    kredikart_icon,
+    hero_img2,
+    hero_img3
    
 
 }

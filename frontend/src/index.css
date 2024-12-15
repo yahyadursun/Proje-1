@@ -6,6 +6,9 @@
 @tailwind components;
 @tailwind utilities;
 @import "swiper/swiper-bundle.min.css";
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/autoplay";
 
 
 a.active hr{
