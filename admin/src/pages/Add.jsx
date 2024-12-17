@@ -23,6 +23,7 @@ const Add = ({ token }) => {
 
   const [sizes, setSizes] = useState([]);
   const [bestseller, setBestseller] = useState(false);
+  const [newSeason, setNewSeason] = useState(false);
   const [stock, setStock] = useState({});
 
   const availableSizes = Array.from({ length: 73 }, (_, i) =>
@@ -59,6 +60,7 @@ const Add = ({ token }) => {
       formData.append("category", category);
       formData.append("subCategory", subCategory);
       formData.append("bestseller", bestseller);
+      formData.append("newSeason", newSeason);
       formData.append("sizes", JSON.stringify(sizes)); // This will now be an array of strings
       formData.append("stock", JSON.stringify(stock)); // Stock object remains the samesi
 
@@ -88,6 +90,7 @@ const Add = ({ token }) => {
         setSizes([]);
         setStock({});
         setBestseller(false);
+        setNewSeason(false);
         setimage1(false);
         setimage2(false);
         setimage3(false);
@@ -330,6 +333,17 @@ const Add = ({ token }) => {
         />
         <label className="curs-pointer -" htmlFor="bestseller">
           Add to Bestseller
+        </label>
+      </div>
+      <div className="flex gap-2 mt-2 ">
+        <input
+          onChange={() => setNewSeason((prev) => !prev)}
+          checked={newSeason}
+          type="checkbox"
+          id="newSeason"
+        />
+        <label className="curs-pointer -" htmlFor="newSeason">
+          Add to New Season
         </label>
       </div>
 

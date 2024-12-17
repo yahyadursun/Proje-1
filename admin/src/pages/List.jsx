@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { backendUrl, currency } from "../App";
 import { toast } from "react-toastify";
-import UpdateProduct from "./UpdateProduct"; // UpdateProduct bileşenini içe aktar
+import UpdateProduct from "./UpdateProduct";
 
 const List = ({ token }) => {
   const [list, setList] = useState([]);
-  const [editingProduct, setEditingProduct] = useState(null); // Düzenlenen ürün
+  const [editingProduct, setEditingProduct] = useState(null);
+  const [productToDelete, setProductToDelete] = useState(null);
 
   const fetchList = async () => {
     try {
@@ -22,16 +23,19 @@ const List = ({ token }) => {
     }
   };
 
-  const removeProduct = async (id) => {
+  const removeProduct = async () => {
+    if (!productToDelete) return;
+
     try {
       const response = await axios.post(
         backendUrl + "/api/product/remove",
-        { id },
+        { id: productToDelete._id },
         { headers: { token } }
       );
       if (response.data.success) {
         toast.success(response.data.message);
         await fetchList();
+        setProductToDelete(null);
       } else {
         toast.error(response.data.message);
       }
@@ -42,7 +46,6 @@ const List = ({ token }) => {
   };
 
   const handleUpdateSuccess = () => {
-    // Güncelleme başarılı olduğunda listeyi yenile
     fetchList();
     setEditingProduct(null);
   };
@@ -61,7 +64,7 @@ const List = ({ token }) => {
           <b>Name</b>
           <b>Category</b>
           <b>Price</b>
-          <b className="text-center">Action</b>
+          <b >Action</b>
         </div>
         {/* List items */}
         {list.map((item, index) => (
@@ -85,15 +88,16 @@ const List = ({ token }) => {
                 Edit
               </p>
               <p
-                onClick={() => removeProduct(item._id)}
+                onClick={() => setProductToDelete(item)}
                 className="text-right md:text-center cursor-pointer text-red-500"
               >
-                X
+                Delete
               </p>
             </div>
           </div>
         ))}
       </div>
+      
       {/* Update Modal */}
       {editingProduct && (
         <div className="modal fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
@@ -110,6 +114,32 @@ const List = ({ token }) => {
             >
               Close
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {productToDelete && (
+        <div className="modal fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-lg w-full max-w-md">
+            <h2 className="text-xl font-bold mb-4">Confirm Deletion</h2>
+            <p className="mb-4">
+              Are you sure you want to delete the product "{productToDelete.name}"?
+            </p>
+            <div className="flex justify-end gap-4">
+              <button
+                onClick={() => setProductToDelete(null)}
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={removeProduct}
+                className="bg-red-500 text-white px-4 py-2 rounded"
+              >
+                Delete
+              </button>
+            </div>
           </div>
         </div>
       )}

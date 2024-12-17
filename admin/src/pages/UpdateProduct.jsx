@@ -21,6 +21,7 @@ const UpdateProduct = ({ token, product }) => {
   const [color, setColor] = useState(product?.color || "");
   const [sizes, setSizes] = useState(product?.sizes || []);
   const [bestseller, setBestseller] = useState(product?.bestseller || false);
+  const [newSeason, setNewSeason] = useState(product?.newSeason || false);
   const [stock, setStock] = useState(() => {
     // If product has stock, create a copy to avoid direct mutation
     if (product?.stock) {
@@ -77,6 +78,7 @@ const UpdateProduct = ({ token, product }) => {
       formData.append("subCategory", subCategory);
       formData.append("color", color);
       formData.append("bestseller", bestseller);
+      formData.append("newSeason", newSeason);
 
       // Ensure only selected sizes are in stock
       const filteredStock = {};
@@ -324,6 +326,19 @@ const UpdateProduct = ({ token, product }) => {
           />
           <label htmlFor="bestseller" className="cursor-pointer">
             Add to Bestseller
+          </label>
+        </div>
+
+        <div className="flex items-center gap-2 mt-2">
+          <input
+            onChange={() => setNewSeason((prev) => !prev)}
+            checked={newSeason}
+            type="checkbox"
+            id="newSeason"
+            className="h-4 w-4"
+          />
+          <label htmlFor="newSeason" className="cursor-pointer">
+            Add to New Season
           </label>
         </div>
 
