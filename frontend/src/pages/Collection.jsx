@@ -19,7 +19,7 @@ const Collection = () => {
   const modalRef = useRef(null);
 
   const categories = [
-    { id: "category", label: "Cinsiyet", options: ["Erkek", "Kadın", "Unisex","Kids"] },
+    { id: "category", label: "Cinsiyet", options: ["Erkek", "Kadın", "Unisex","Çocuk"] },
     {
       id: "subCategory",
       label: "Kategori",
@@ -82,6 +82,8 @@ const Collection = () => {
       filtered.sort((a, b) => b.price - a.price);
     } else if (sortType === "bestseller") {
       filtered.sort((a, b) => (b.bestseller ? 1 : 0) - (a.bestseller ? 1 : 0));
+    }else if ( sortType==="newSeason"){
+      filtered.sort((a,b)=>(b.newSeason ? 1 : 0)-(a.newSeason ? 1 : 0 ));
     }
 
     setFilterProducts(filtered);
@@ -140,6 +142,7 @@ const Collection = () => {
             <option value="price-asc">Fiyat: Azdan Çoğa</option>
             <option value="price-desc">Fiyat: Çoktan Aza</option>
             <option value="bestseller">Best Seller</option>
+            <option value="newSeason">New Season</option>
           </select>
         </div>
       </div>
@@ -154,6 +157,7 @@ const Collection = () => {
             price={item.price}
             image={item.image}
             bestseller={item.bestseller}
+            newSeason={item.newSeason}
           />
         ))}
       </div>

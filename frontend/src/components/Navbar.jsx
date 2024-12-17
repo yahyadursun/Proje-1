@@ -5,7 +5,14 @@ import { ShopContext } from "../context/ShopContext";
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
-  const { setShowSearch, getCartCount, navigate, token, setToken, setCartItems } = useContext(ShopContext);
+  const {
+    setShowSearch,
+    getCartCount,
+    navigate,
+    token,
+    setToken,
+    setCartItems,
+  } = useContext(ShopContext);
 
   const logout = () => {
     navigate("/login");
@@ -21,7 +28,10 @@ const Navbar = () => {
   return (
     <div className="flex items-center justify-between py-5 px-4 font-medium ">
       {/* Logo */}
-      <Link to="/" className="funnel-sans text-xl text-gray-900 hover:text-gray-700 transition-colors">
+      <Link
+        to="/"
+        className="funnel-sans text-xl text-gray-900 hover:text-gray-700 transition-colors"
+      >
         <img src={assets.logo} className="w-36" alt="logo" />
       </Link>
 
@@ -30,7 +40,9 @@ const Navbar = () => {
         <NavLink
           to="/"
           className={({ isActive }) =>
-            `hover:text-gray-900 transition-all ${isActive ? "text-gray-900 font-bold" : ""}`
+            `hover:text-gray-900 transition-all ${
+              isActive ? "text-gray-900 font-bold" : ""
+            }`
           }
         >
           HOME
@@ -38,23 +50,20 @@ const Navbar = () => {
         <NavLink
           to="/collection"
           className={({ isActive }) =>
-            `hover:text-gray-900 transition-all ${isActive ? "text-gray-900 font-bold" : ""}`
+            `hover:text-gray-900 transition-all ${
+              isActive ? "text-gray-900 font-bold" : ""
+            }`
           }
         >
           COLLECTION
         </NavLink>
-        <NavLink
-          to="/about"
-          className={({ isActive }) =>
-            `hover:text-gray-900 transition-all ${isActive ? "text-gray-900 font-bold" : ""}`
-          }
-        >
-          ABOUT
-        </NavLink>
+        
         <NavLink
           to="/contact"
           className={({ isActive }) =>
-            `hover:text-gray-900 transition-all ${isActive ? "text-gray-900 font-bold" : ""}`
+            `hover:text-gray-900 transition-all ${
+              isActive ? "text-gray-900 font-bold" : ""
+            }`
           }
         >
           CONTACT
@@ -77,10 +86,21 @@ const Navbar = () => {
             alt=""
           />
           {token && (
-            <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4">
+            <div
+              className="group-hover:block hidden absolute dropdown-menu right-0 pt-4"
+              style={{ zIndex: 2 }}
+            >
               <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-gray-100 text-gray-500 rounded shadow-lg">
-                <p className="cursor-pointer hover:text-black">My Profile</p>
-                <p onClick={() => navigate("/orders")} className="cursor-pointer hover:text-black">
+                <p
+                  onClick={() => navigate("/profile")}
+                  className="cursor-pointer hover:text-black"
+                >
+                  My Profile
+                </p>
+                <p
+                  onClick={() => navigate("/orders")}
+                  className="cursor-pointer hover:text-black"
+                >
                   Orders
                 </p>
                 <p onClick={logout} className="cursor-pointer hover:text-black">
@@ -90,6 +110,7 @@ const Navbar = () => {
             </div>
           )}
         </div>
+
         <Link to="/cart" className="relative">
           <img src={assets.cart_icon} className="w-6 min-w-5" alt="Cart" />
           <p
@@ -135,13 +156,7 @@ const Navbar = () => {
           >
             COLLECTION
           </NavLink>
-          <NavLink
-            onClick={() => setVisible(false)}
-            className="py-4 pl-6 border-t text-gray-700 hover:text-black"
-            to="/about"
-          >
-            ABOUT
-          </NavLink>
+          
           <NavLink
             onClick={() => setVisible(false)}
             className="py-4 pl-6 border-t text-gray-700 hover:text-black"

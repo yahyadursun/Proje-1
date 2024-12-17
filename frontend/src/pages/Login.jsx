@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast } from "react-toastify"; // Toast importu
 
 const Login = () => {
   const [currentState, setCurrentState] = useState("Login");
@@ -11,10 +11,19 @@ const Login = () => {
   const [surname, setSurname] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+
   const onSubmitHandler = async (event) => {
     event.preventDefault();
+
+    // Boş alanları kontrol et
+    if (!email || !password) {
+      toast.error("Email ve şifre gerekli. Lütfen her iki alanı da doldurun.");
+      return;
+    }
+
     try {
       if (currentState === "Sign Up") {
+        // Kayıt işlemi
         const response = await axios.post(backendUrl + "/api/user/register", {
           name,
           surname,
@@ -24,10 +33,17 @@ const Login = () => {
         if (response.data.success) {
           setToken(response.data.token);
           localStorage.setItem("token", response.data.token);
+          toast.success("Başarıyla kaydoldunuz. Giriş yapabilirsiniz.");
         } else {
-          toast.error(response.data.message);
+          // Eğer email zaten veritabanında varsa
+          if (response.data.message === "User already exists") {
+            toast.error("Böyle bir kullanıcı zaten mevcut.");
+          } else {
+            toast.error(response.data.message); // Diğer hatalar
+          }
         }
       } else {
+        // Giriş işlemi
         const response = await axios.post(backendUrl + "/api/user/login", {
           email,
           password,
@@ -35,26 +51,35 @@ const Login = () => {
         if (response.data.success) {
           setToken(response.data.token);
           localStorage.setItem("token", response.data.token);
+          toast.success("Giriş başarılı!");
         } else {
-          toast.error(response.data.message);
+          // Hatalı giriş durumlarını kontrol et
+          if (response.data.message === "User not found") {
+            toast.error("Böyle bir kullanıcı bulunamadı.");
+          } else if (response.data.message === "Incorrect password") {
+            toast.error("Hatalı şifre. Lütfen tekrar deneyin.");
+          } else {
+            // Diğer hatalar
+            toast.error("Hatalı email veya şifre.");
+          }
         }
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.message);
+      toast.error("Bir hata oluştu. Lütfen tekrar deneyin.");
     }
   };
 
   useEffect(() => {
     if (token) {
-      navigate("/");
+      navigate("/"); // Token varsa, ana sayfaya yönlendir
     }
   }, [token]);
 
   return (
     <form
       onSubmit={onSubmitHandler}
-      className=" flex flex-col items-center w-[90%] sm:max-w-96 m-auto gap-4 mt-14 text-black"
+      className="flex flex-col items-center w-[90%] sm:max-w-96 m-auto gap-4 mt-14 text-black"
     >
       <div className="inline-flex items-center gap-2 mb-2 mt-10">
         <p className="prata-regular text-3xl">{currentState}</p>
@@ -112,11 +137,11 @@ const Login = () => {
             onClick={() => setCurrentState("Login")}
             className="cursor-pointer"
           >
-            Giriş Yap{" "}
+            Giriş Yap
           </p>
         )}
       </div>
-      <button className="bg-black text-white font-light px-8 py-2 mt-4 ">
+      <button className="bg-black text-white font-light px-8 py-2 mt-4">
         {currentState === "Login" ? "Giriş Yap" : "Hesap Oluştur"}
       </button>
     </form>

@@ -22,7 +22,7 @@ const BestSeller = () => {
       <div className="text-center text-3x1 py-8">
         <Title text1={"BEST"} text2={"SELLER"} />
         <p className="poppins-regular w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-600">
-          Dummy mummy
+        En çok tercih edilen ürünlerimizle tarzınızı zirveye taşıyın – Sneakster'da bestseller koleksiyonuyla her adımda fark yaratın!
         </p>
       </div>
       {/* Swiper Slider */}

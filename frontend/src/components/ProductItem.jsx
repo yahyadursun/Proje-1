@@ -2,15 +2,21 @@ import React, { useContext } from 'react';
 import { ShopContext } from '../context/ShopContext';
 import { Link } from 'react-router-dom';
 
-const ProductItem = ({ id, image, name, price, bestseller }) => {
+const ProductItem = ({ id, image, name, price, bestseller, newSeason }) => {
   const { currency } = useContext(ShopContext);
 
   return (
     <Link className="text-gray-700 cursor-pointer relative" to={`/product/${id}`}>
-      {/* Ateş simgesi */}
+      {/* Ateş simgesi - Best Seller */}
       {bestseller && (
         <div className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold py-1 px-2 rounded-full flex items-center gap-1">
           🔥 <span>Best Seller</span>
+        </div>
+      )}
+      {/* Çiçek simgesi - New Season */}
+      {newSeason && (
+        <div className="absolute top-2 right-2 bg-purple-600 text-white text-xs font-bold py-1 px-2 rounded-full flex items-center gap-1">
+          🌸 <span>New Season</span>
         </div>
       )}
       {/* Ürün Görseli */}
