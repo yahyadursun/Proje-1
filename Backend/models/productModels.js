@@ -15,6 +15,7 @@ const productSchema = new mongoose.Schema({
     required: true
   },
   bestseller: { type: Boolean, default: false },
+  newSeason: { type: Boolean, default: false },
   date: { type: Number, required: true },
 });
 
