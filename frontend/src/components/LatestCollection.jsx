@@ -22,7 +22,7 @@ const LatestCollection = () => {
       <div className="text-center py-8 text-9x1">
         <Title text1={"LATEST"} text2={"COLLECTIONS"} />
         <p className="w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-700">
-          Discover our latest collection of trendy and stylish products!
+        En yeni koleksiyonumuzla modanın nabzını tutun – Sneakster'da stilinizi yansıtan son trendleri keşfedin!
         </p>
       </div>
       {/* Swiper Slider */}
