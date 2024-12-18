@@ -98,12 +98,16 @@ const Product = () => {
               className="custom-select" // Custom select class
               value={size} // Pre-select the size if already chosen
             >
-              <option value="" hidden disabled>Size Seçin</option>
-              {productData.sizes.map((item, index) => (
-                <option key={index} value={item}>
-                  {item}
-                </option>
-              ))}
+              <option value="" hidden disabled>
+                Size Seçin
+              </option>
+              {productData.sizes
+                .filter((item) => productData.stock[item] > 0) // Stok kontrolü
+                .map((item, index) => (
+                  <option key={index} value={item}>
+                    {item}
+                  </option>
+                ))}
             </select>
           </div>
 
@@ -165,9 +169,13 @@ const Product = () => {
                     Sneakster.com’da siparişler 1-2 gün içinde, hafta sonu ve
                     resmi tatillerde verdiğin siparişler ise takip eden ilk iş
                     gününde hazırlanmaya başlar. Siparişler ortalama 1-3 iş günü
-                    içerisinde kargoya teslim edilir.</p>
-                    <p>Siparişleri Türkiye’nin her bölgesinde adresine teslim ediyoruz ancak yurt dışı ve
-                    Kıbrıs’a şuan için ne yazık ki teslimat yapamıyoruz.</p>
+                    içerisinde kargoya teslim edilir.
+                  </p>
+                  <p>
+                    Siparişleri Türkiye’nin her bölgesinde adresine teslim
+                    ediyoruz ancak yurt dışı ve Kıbrıs’a şuan için ne yazık ki
+                    teslimat yapamıyoruz.
+                  </p>
                 </div>
               )}
             </div>
