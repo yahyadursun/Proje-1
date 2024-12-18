@@ -45,7 +45,7 @@ const Profile = () => {
 
     try {
       const response = await axios.put(
-        `${backendUrl}/api/user/update-profile`,
+        `${backendUrl}/api/user/profile`,
         editForm,
         { headers: { token: token } }
       );

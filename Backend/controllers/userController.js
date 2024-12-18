@@ -123,22 +123,35 @@ const getUserProfile = async (req, res) => {
 
 const updateUserProfile = async (req, res) => {
   try {
-    const {userId} = req.body; // auth middleware'den gelen user id
+    // auth middleware'den gelen userId
+    const { userId } = req.body; 
     const { name, surname, email } = req.body;
 
+    // Eksik alan kontrolü
+    if (!name || !surname || !email) {
+      return res.status(400).json({
+        success: false,
+        message: "Tüm alanlar doldurulmalıdır.",
+      });
+    }
+
+    // Kullanıcıyı güncelle
     const updatedUser = await userModel.findByIdAndUpdate(
       userId,
       { name, surname, email },
-      { new: true, runValidators: true } // `new` updated user'ı döner, `runValidators` doğrulamayı etkinleştirir
+      { new: true, runValidators: true } // `new` güncellenmiş kullanıcıyı döndürür
     );
 
     if (!updatedUser) {
-      return res.status(404).json({ success: false, message: "Kullanıcı bulunamadı." });
+      return res.status(404).json({
+        success: false,
+        message: "Kullanıcı bulunamadı.",
+      });
     }
 
     res.status(200).json({
       success: true,
-      message: "Profil güncellendi.",
+      message: "Profil başarıyla güncellendi.",
       user: {
         name: updatedUser.name,
         surname: updatedUser.surname,
@@ -146,10 +159,14 @@ const updateUserProfile = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: "Sunucu hatası." });
+    console.error("Profil güncellenirken bir hata oluştu:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Sunucu hatası. Lütfen daha sonra tekrar deneyin.",
+    });
   }
 };
+
 
 
 

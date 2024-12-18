@@ -17,6 +17,7 @@ userRouter.post('/login',loginUser)
 userRouter.post('/admin',adminLogin)
 
 userRouter.get('/profile',authUser,getUserProfile)
+
 userRouter.put('/profile',authUser,updateUserProfile)
 
 export default userRouter;
