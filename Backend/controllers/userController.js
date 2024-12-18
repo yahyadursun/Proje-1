@@ -22,13 +22,12 @@ const loginUser = async (req, res) => {
     if (isMatch) {
       const token = CreateToken(user._id);
       res.json({ success: true, token });
-    }
-    else{
-        res.json({ success: false, message: "Invalid password" });
+    } else {
+      res.json({ success: false, message: "Invalid password" });
     }
   } catch (error) {
     console.log(error);
-    res.json({ success: false,message:error.message });
+    res.json({ success: false, message: error.message });
   }
 };
 
@@ -83,17 +82,75 @@ const registerUser = async (req, res) => {
 // Route for admin login
 
 const adminLogin = async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        if(email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD){
-            const token = CreateToken(email+password)
-            res.json({success:true,token})
-        }else{
-            res.json({success:false,message:"Invalid credentials"})
-        }
-    } catch (error) {
-        res.json({success:false,message:error.message})
+  try {
+    const { email, password } = req.body;
+    if (
+      email === process.env.ADMIN_EMAIL &&
+      password === process.env.ADMIN_PASSWORD
+    ) {
+      const token = CreateToken(email + password);
+      res.json({ success: true, token });
+    } else {
+      res.json({ success: false, message: "Invalid credentials" });
     }
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
 };
 
-export { loginUser, registerUser, adminLogin };
+const getUserProfile = async (req, res) => {
+  try {
+    const {userId} = req.body; // authUser middleware'den gelen kullanıcı ID'si
+    const user = await userModel.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found.' });
+    }
+
+    res.status(200).json({
+      success: true,
+      user: {
+        name: user.name,
+        surname: user.surname,
+        email: user.email,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Server error.' });
+  }
+};
+
+const updateUserProfile = async (req, res) => {
+  try {
+    const {userId} = req.body; // auth middleware'den gelen user id
+    const { name, surname, email } = req.body;
+
+    const updatedUser = await userModel.findByIdAndUpdate(
+      userId,
+      { name, surname, email },
+      { new: true, runValidators: true } // `new` updated user'ı döner, `runValidators` doğrulamayı etkinleştirir
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ success: false, message: "Kullanıcı bulunamadı." });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Profil güncellendi.",
+      user: {
+        name: updatedUser.name,
+        surname: updatedUser.surname,
+        email: updatedUser.email,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Sunucu hatası." });
+  }
+};
+
+
+
+export { loginUser, registerUser, adminLogin, getUserProfile, updateUserProfile};
