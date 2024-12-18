@@ -34,7 +34,8 @@ const loginUser = async (req, res) => {
 /// Route for user register
 const registerUser = async (req, res) => {
   try {
-    const { name, surname, email, password } = req.body;
+    const { name, surname, email, password, phoneNo, identityNo, gender } =
+      req.body;
 
     // checking user already exists or not
     const exists = await userModel.findOne({ email });
@@ -65,6 +66,9 @@ const registerUser = async (req, res) => {
       surname,
       email,
       password: hashedPassword,
+      phoneNo,
+      identityNo,
+      gender,
     });
 
     // Creating token
@@ -100,11 +104,13 @@ const adminLogin = async (req, res) => {
 
 const getUserProfile = async (req, res) => {
   try {
-    const {userId} = req.body; // authUser middleware'den gelen kullanıcı ID'si
+    const { userId } = req.body; // authUser middleware'den gelen kullanıcı ID'si
     const user = await userModel.findById(userId);
 
     if (!user) {
-      return res.status(404).json({ success: false, message: 'User not found.' });
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found." });
     }
 
     res.status(200).json({
@@ -113,22 +119,25 @@ const getUserProfile = async (req, res) => {
         name: user.name,
         surname: user.surname,
         email: user.email,
+        phoneNo: user.phoneNo,
+        identityNo: user.identityNo,
+        gender: user.gender,
       },
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ success: false, message: 'Server error.' });
+    res.status(500).json({ success: false, message: "Server error." });
   }
 };
 
 const updateUserProfile = async (req, res) => {
   try {
     // auth middleware'den gelen userId
-    const { userId } = req.body; 
-    const { name, surname, email } = req.body;
+    const { userId } = req.body;
+    const { name, surname, email, phoneNo, identityNo, gender } = req.body;
 
     // Eksik alan kontrolü
-    if (!name || !surname || !email) {
+    if (!name || !surname || !email || !phoneNo || !identityNo || !gender) {
       return res.status(400).json({
         success: false,
         message: "Tüm alanlar doldurulmalıdır.",
@@ -138,7 +147,7 @@ const updateUserProfile = async (req, res) => {
     // Kullanıcıyı güncelle
     const updatedUser = await userModel.findByIdAndUpdate(
       userId,
-      { name, surname, email },
+      { name, surname, email, phoneNo, identityNo, gender },
       { new: true, runValidators: true } // `new` güncellenmiş kullanıcıyı döndürür
     );
 
@@ -156,6 +165,9 @@ const updateUserProfile = async (req, res) => {
         name: updatedUser.name,
         surname: updatedUser.surname,
         email: updatedUser.email,
+        phoneNo: updatedUser.phoneNo,
+        identityNo: updatedUser.identityNo,
+        gender: updatedUser.gender,
       },
     });
   } catch (error) {
@@ -167,7 +179,10 @@ const updateUserProfile = async (req, res) => {
   }
 };
 
-
-
-
-export { loginUser, registerUser, adminLogin, getUserProfile, updateUserProfile};
+export {
+  loginUser,
+  registerUser,
+  adminLogin,
+  getUserProfile,
+  updateUserProfile,
+};
