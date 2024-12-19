@@ -3,6 +3,7 @@ import { ShopContext } from "../context/ShopContext";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { User, Edit, Save, X, List, Plus } from "lucide-react";
+import AddressForm from "../components/AddressForm";
 
 const Profile = () => {
   const { token, backendUrl } = useContext(ShopContext);
@@ -22,6 +23,7 @@ const Profile = () => {
   const [editAddress, setEditAddress] = useState({
     address: "",
     city: "",
+    state: "",
     country: "",
   });
 
@@ -99,10 +101,26 @@ const Profile = () => {
       return;
     }
 
+    // Validasyon
+    if (
+      !editAddress.label ||
+      !editAddress.street ||
+      !editAddress.city ||
+      !editAddress.state ||
+      !editAddress.postalCode ||
+      !editAddress.country
+    ) {
+      toast.error("Lütfen tüm adres alanlarını doldurun.");
+      return;
+    }
+
     try {
       const response = await axios.post(
         `${backendUrl}/api/user/address`,
-        editAddress,
+        {
+          ...editAddress,
+          userId: user._id,
+        },
         { headers: { token: token } }
       );
 
@@ -110,6 +128,55 @@ const Profile = () => {
         toast.success("Adres başarıyla kaydedildi.");
         setAddresses(response.data.addresses);
         setIsAddressEditing(false);
+        setEditAddress({
+          label: "",
+          street: "",
+          city: "",
+          state: "",
+          postalCode: "",
+          country: "",
+        });
+        // Profil bilgilerini yenile
+        getUserProfile();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Bir hata oluştu. Lütfen tekrar deneyin.");
+    }
+  };
+
+  const deleteAddress = async (label) => {
+    if (!token) {
+      toast.error("Lütfen giriş yapın.");
+      return;
+    }
+
+    try {
+      const response = await axios.delete(`${backendUrl}/api/user/address`, {
+        data: {
+          // axios delete metodunda data bu şekilde gönderilmeli
+          userId: user._id,
+          label: label,
+        },
+        headers: { token: token },
+      });
+
+      if (response.data.success) {
+        toast.success("Adres başarıyla silindi.");
+        setAddresses(response.data.addresses);
+        setIsAddressEditing(false);
+        setEditAddress({
+          label: "",
+          street: "",
+          city: "",
+          state: "",
+          postalCode: "",
+          country: "",
+        });
+        // Profil bilgilerini yenile
+        getUserProfile();
       } else {
         toast.error(response.data.message);
       }
@@ -261,30 +328,47 @@ const Profile = () => {
 
         {/* Addresses Section */}
         <div className="bg-white shadow-lg rounded-2xl overflow-hidden border border-gray-300 p-6">
-          <h2 className="text-xl font-semibold text-gray-700 mb-4">
-            Adreslerim
-          </h2>
-          <div className="space-y-4">
-            {addresses.length === 0 ? (
-              <p className="text-gray-500">Adresiniz bulunmamaktadır.</p>
-            ) : (
-              addresses.map((address, index) => (
+          <div className="bg-gray-200 text-gray-800 p-6 flex items-center justify-between border-b border-gray-300">
+            <h2 className="text-xl font-semibold text-gray-700">Adreslerim</h2>
+            <button
+              onClick={() => {
+                setEditAddress({
+                  label: "",
+                  street: "",
+                  city: "",
+                  state: "",
+                  postalCode: "",
+                  country: "",
+                });
+                setIsAddressEditing(true);
+              }}
+              className="bg-gray-100 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-300 flex items-center justify-center"
+            >
+              <Plus size={20} className="mr-2" /> Yeni Adres
+            </button>
+          </div>
+
+          <div className="space-y-4 mt-4">
+            {user.addresses && user.addresses.length > 0 ? (
+              user.addresses.map((address, index) => (
                 <div
                   key={index}
                   className="bg-gray-100 p-4 rounded-lg flex justify-between items-center"
                 >
-                  <div>
-                    <p>{address.address}</p>
-                    <p>
-                      {address.city}, {address.country}
-                    </p>
+                  <div className="space-y-1">
+                    <div className="font-semibold text-gray-700">
+                      {address.label}
+                    </div>
+                    <div className="text-gray-600">{address.street}</div>
+                    <div className="text-gray-600">
+                      {address.city}, {address.state}, {address.postalCode}
+                    </div>
+                    <div className="text-gray-600">{address.country}</div>
                   </div>
-
-                  {/* Edit Button for each address */}
                   <button
                     onClick={() => {
                       setEditAddress(address);
-                      setIsAddressEditing(true); // Open the address edit form
+                      setIsAddressEditing(true);
                     }}
                     className="bg-gray-200 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-300 flex items-center justify-center"
                   >
@@ -292,19 +376,32 @@ const Profile = () => {
                   </button>
                 </div>
               ))
+            ) : (
+              <p className="text-gray-500 text-center py-4">
+                Kayıtlı adres bulunmamaktadır.
+              </p>
             )}
           </div>
-
-          <div className="flex justify-between mt-6 space-x-4">
-            {/* Add Address Button */}
-            <button
-              onClick={() => setIsAddressEditing(true)}
-              className="flex-1 bg-gray-100 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors duration-300 flex items-center justify-center"
-            >
-              <Plus size={20} className="mr-2" /> Adres Ekle
-            </button>
-          </div>
         </div>
+        {/* Address Form Modal */}
+        <AddressForm
+          isOpen={isAddressEditing}
+          onClose={() => {
+            setIsAddressEditing(false);
+            setEditAddress({
+              label: "",
+              street: "",
+              city: "",
+              state: "",
+              postalCode: "",
+              country: "",
+            });
+          }}
+          editAddress={editAddress}
+          setEditAddress={setEditAddress}
+          onSave={saveAddress}
+          onDelete={deleteAddress}
+        />
       </div>
     </div>
   );
