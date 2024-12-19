@@ -6,6 +6,8 @@ import UpdateProduct from "./UpdateProduct";
 
 const List = ({ token }) => {
   const [list, setList] = useState([]);
+  const [filteredList, setFilteredList] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [editingProduct, setEditingProduct] = useState(null);
   const [productToDelete, setProductToDelete] = useState(null);
 
@@ -14,6 +16,7 @@ const List = ({ token }) => {
       const response = await axios.get(backendUrl + "/api/product/list");
       if (response.data.success) {
         setList(response.data.products);
+        setFilteredList(response.data.products);
       } else {
         toast.error(response.data.message);
       }
@@ -21,6 +24,16 @@ const List = ({ token }) => {
       console.log(error);
       toast.error(error.message);
     }
+  };
+
+  const handleSearch = (e) => {
+    const term = e.target.value;
+    setSearchTerm(term);
+    
+    const filtered = list.filter(item => 
+      item.name.toLowerCase().includes(term.toLowerCase())
+    );
+    setFilteredList(filtered);
   };
 
   const removeProduct = async () => {
@@ -56,6 +69,17 @@ const List = ({ token }) => {
 
   return (
     <>
+      {/* Search Input */}
+      <div className="mb-4">
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={handleSearch}
+          placeholder="Ürün adına göre ara..."
+          className="w-full md:w-64 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
       <p className="mb-2">All products</p>
       <div className="flex flex-col gap-2">
         {/* List table title */}
@@ -64,10 +88,10 @@ const List = ({ token }) => {
           <b>Name</b>
           <b>Category</b>
           <b>Price</b>
-          <b >Action</b>
+          <b>Action</b>
         </div>
         {/* List items */}
-        {list.map((item, index) => (
+        {filteredList.map((item, index) => (
           <div
             className="grid grid-cols-[1fr_3fr_1fr] md:grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center gap-2 py-1 px-2 border bg-gray-100 text-sm"
             data-testid="item"
