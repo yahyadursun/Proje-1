@@ -21,22 +21,22 @@ const RelatedProduct = ({ category, subCategory }) => {
   }, [products, category, subCategory]);
 
   return (
-    <div className="my-24">
-      <div className="text-center text-3xl py-2">
-        <Title text1="Related " text2="Product" />
+    <div className="my-16">
+      <div className="text-center text-xl py-2">
+        <Title text1="Related " text2="Products" />
       </div>
       <Swiper
         modules={[Pagination]}
-        spaceBetween={30}
-        slidesPerView={4}
+        spaceBetween={20}
+        slidesPerView={2}
         breakpoints={{
           480: { slidesPerView: 1 },
           640: { slidesPerView: 2 },
-          720: { slidesPerView: 3 },
+          1024: { slidesPerView: 4 },
         }}
       >
         {related.map((item, index) => (
-          <SwiperSlide key={index}>
+          <SwiperSlide key={index} className="p-2">
             <ProductItem
               id={item._id}
               name={item.name}

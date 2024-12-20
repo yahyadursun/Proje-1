@@ -1,33 +1,56 @@
 import orderModel from "../models/orderModel.js";
 import userModel from "../models/userModel.js";
+import productModel from "../models/productModels.js";
 
 
-
-const placeOrder = async (req,res) =>{
+const placeOrder = async (req, res) => {
     try {
-        const {userId, items, amount, address} = req.body;
-        
-        const orderData ={
+        const { userId, items, amount, address } = req.body;
+
+        for (const item of items) {
+            const product = await productModel.findById(item._id);
+
+            if (!product) {
+                return res.status(404).json({ success: false, message: `Ürün bulunamadı: ${item._id}` });
+            }
+
+            const currentStock = product.stock[item.size];
+            if (currentStock === undefined || currentStock < item.quantity) {
+                return res.status(400).json({
+                    success: false,
+                    message: `Yeterli stok yok: ${product.name} (${item.size})`,
+                });
+            }
+
+            // Stok güncellemesi
+            product.stock[item.size] -= item.quantity;
+            product.markModified('stock');
+            await product.save();
+
+        }
+
+        // Siparişi oluştur
+        const newOrder = new orderModel({
             userId,
             items,
             address,
             amount,
-            paymentMethod:"COD",
-            payment:false,
-            date: Date.now()
-        }
+            paymentMethod: "COD",
+            payment: false,
+            date: Date.now(),
+        });
 
-        const newOrder = new orderModel(orderData)
-        await newOrder.save()
+        await newOrder.save();
 
-        await userModel.findByIdAndUpdate(userId,{cartData:{}})
+        // Kullanıcının sepetini sıfırla
+        await userModel.findByIdAndUpdate(userId, { cartData: {} });
 
-        res.json({success:true, message:"Order Placed"})
+        res.json({ success: true, message: "Sipariş başarıyla oluşturuldu" });
     } catch (error) {
-        console.log(error)
-        res.json({success:false, message:error.message})
+        console.error("Hata:", error);
+        res.status(500).json({ success: false, message: error.message });
     }
-}
+};
 
 const placeOrderStripe = async (req,res) =>{
     

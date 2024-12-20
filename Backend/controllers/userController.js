@@ -15,7 +15,7 @@ const loginUser = async (req, res) => {
     const user = await userModel.findOne({ email });
 
     if (!user) {
-      return res.json({ success: false, massage: "User doesn't exists" });
+      return res.json({ success: false, message: "User doesn't exist" });
     }
     const isMatch = await bcrypt.compare(password, user.password);
 
@@ -31,32 +31,33 @@ const loginUser = async (req, res) => {
   }
 };
 
-/// Route for user register
+// Route for user registration
 const registerUser = async (req, res) => {
   try {
-    const { name, surname, email, password } = req.body;
+    const { name, surname, email, password, phoneNo, identityNo, gender } =
+      req.body;
 
-    // checking user already exists or not
+    // Check if user already exists
     const exists = await userModel.findOne({ email });
     if (exists) {
-      return res.json({ success: false, massage: "user already exists" });
+      return res.json({ success: false, message: "User already exists" });
     }
 
-    // validating email format & storng password
+    // Validate email format and strong password
     if (!validator.isEmail(email)) {
       return res.json({
         success: false,
-        massage: "Please enter a valid email",
+        message: "Please enter a valid email",
       });
     }
     if (password.length < 8) {
       return res.json({
         success: false,
-        massage: "Please enter a strong password",
+        message: "Please enter a strong password",
       });
     }
 
-    // hashing user paswword
+    // Hash the user's password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -65,12 +66,16 @@ const registerUser = async (req, res) => {
       surname,
       email,
       password: hashedPassword,
+      phoneNo,
+      identityNo,
+      gender,
     });
 
-    // Creating token
-    const user = await newUser.save(); // for store database
+    // Save the new user to the database
+    const user = await newUser.save();
 
-    const token = CreateToken(user._id); // _id is auto genereted value in mongodb
+    // Create a token for the new user
+    const token = CreateToken(user._id);
 
     res.json({ success: true, token });
   } catch (error) {
@@ -79,8 +84,88 @@ const registerUser = async (req, res) => {
   }
 };
 
-// Route for admin login
+// Route for adding or updating user addresses
+const addOrUpdateAddress = async (req, res) => {
+  try {
+    const { userId, label, street, city, state, postalCode, country } =
+      req.body;
 
+    // Validate required fields
+    if (!label || !street || !city || !state || !postalCode || !country) {
+      return res.status(400).json({
+        success: false,
+        message: "All address fields are required.",
+      });
+    }
+
+    const user = await userModel.findById(userId);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found." });
+    }
+
+    // Update or add the address
+    const existingAddressIndex = user.addresses.findIndex(
+      (addr) => addr.label === label
+    );
+
+    if (existingAddressIndex >= 0) {
+      // Update existing address
+      user.addresses[existingAddressIndex] = {
+        label,
+        street,
+        city,
+        state,
+        postalCode,
+        country,
+      };
+    } else {
+      // Add new address
+      user.addresses.push({ label, street, city, state, postalCode, country });
+    }
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Address added/updated successfully.",
+      addresses: user.addresses,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+const deleteAddress = async (req, res) => {
+  try {
+    const { userId, label } = req.body;
+
+    const user = await userModel.findById(userId);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found." });
+    }
+
+    // Remove the address with matching label
+    user.addresses = user.addresses.filter((addr) => addr.label !== label);
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Address deleted successfully.",
+      addresses: user.addresses,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Route for admin login
 const adminLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -98,13 +183,16 @@ const adminLogin = async (req, res) => {
   }
 };
 
+// Route for fetching user profile
 const getUserProfile = async (req, res) => {
   try {
-    const {userId} = req.body; // authUser middleware'den gelen kullanıcı ID'si
+    const { userId } = req.body; // Auth middleware'den gelen kullanıcı ID'si
     const user = await userModel.findById(userId);
 
     if (!user) {
-      return res.status(404).json({ success: false, message: 'User not found.' });
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found." });
     }
 
     res.status(200).json({
@@ -113,44 +201,72 @@ const getUserProfile = async (req, res) => {
         name: user.name,
         surname: user.surname,
         email: user.email,
+        phoneNo: user.phoneNo,
+        identityNo: user.identityNo,
+        gender: user.gender,
+        addresses: user.addresses, // Adres bilgilerini ekledik
       },
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ success: false, message: 'Server error.' });
+    res.status(500).json({ success: false, message: "Server error." });
   }
 };
 
+// Route for updating user profile
 const updateUserProfile = async (req, res) => {
   try {
-    const {userId} = req.body; // auth middleware'den gelen user id
-    const { name, surname, email } = req.body;
+    const { userId, name, surname, email, phoneNo, identityNo, gender } =
+      req.body;
+
+    // Check for missing fields
+    if (!name || !surname || !email || !phoneNo || !identityNo || !gender) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required.",
+      });
+    }
 
     const updatedUser = await userModel.findByIdAndUpdate(
       userId,
-      { name, surname, email },
-      { new: true, runValidators: true } // `new` updated user'ı döner, `runValidators` doğrulamayı etkinleştirir
+      { name, surname, email, phoneNo, identityNo, gender },
+      { new: true, runValidators: true }
     );
 
     if (!updatedUser) {
-      return res.status(404).json({ success: false, message: "Kullanıcı bulunamadı." });
+      return res.status(404).json({
+        success: false,
+        message: "User not found.",
+      });
     }
 
     res.status(200).json({
       success: true,
-      message: "Profil güncellendi.",
+      message: "Profile updated successfully.",
       user: {
         name: updatedUser.name,
         surname: updatedUser.surname,
         email: updatedUser.email,
+        phoneNo: updatedUser.phoneNo,
+        identityNo: updatedUser.identityNo,
+        gender: updatedUser.gender,
       },
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: "Sunucu hatası." });
+    console.error("Error updating profile:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Server error. Please try again later.",
+    });
   }
 };
 
-
-
-export { loginUser, registerUser, adminLogin, getUserProfile, updateUserProfile};
+export {
+  loginUser,
+  registerUser,
+  addOrUpdateAddress,
+  adminLogin,
+  getUserProfile,
+  updateUserProfile,
+  deleteAddress,
+};

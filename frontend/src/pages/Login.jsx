@@ -9,8 +9,11 @@ const Login = () => {
 
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
-  const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [phoneNo, setPhoneNo] = useState("");
+  const [identityNo, setIdentityNo] = useState("");
+  const [gender, setGender] = useState("");
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
@@ -29,6 +32,9 @@ const Login = () => {
           surname,
           email,
           password,
+          phoneNo,
+          identityNo,
+          gender,
         });
         if (response.data.success) {
           setToken(response.data.token);
@@ -36,7 +42,7 @@ const Login = () => {
           toast.success("Başarıyla kaydoldunuz. Giriş yapabilirsiniz.");
         } else {
           // Eğer email zaten veritabanında varsa
-          if (response.data.message === "User already exists") {
+          if (response.data.message === "user already exists") {
             toast.error("Böyle bir kullanıcı zaten mevcut.");
           } else {
             toast.error(response.data.message); // Diğer hatalar
@@ -104,6 +110,32 @@ const Login = () => {
               placeholder="Soyad"
               required
             />
+            <input
+              onChange={(e) => setPhoneNo(e.target.value)}
+              value={phoneNo}
+              type="text"
+              className="w-full px-3 py-2 border border-gray-800"
+              placeholder="Telefon Numarası"
+              required
+            />
+            <input
+              onChange={(e) => setIdentityNo(e.target.value)}
+              value={identityNo}
+              type="text"
+              className="w-full px-3 py-2 border border-gray-800"
+              placeholder="TC Kimlik Numarası"
+              required
+            />
+            <select
+              onChange={(e) => setGender(e.target.value)}
+              value={gender}
+              className="w-full px-3 py-2 border border-gray-800"
+              required
+            >
+              <option value="">Cinsiyet</option>
+              <option value="Erkek">Erkek</option>
+              <option value="Kadın">Kadın</option>
+            </select>
           </>
         )}
       </div>

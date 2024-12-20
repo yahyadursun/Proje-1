@@ -122,7 +122,7 @@ const Collection = () => {
   }, [showFilterModal]);
 
   return (
-    <div className="flex flex-col pt-10 border-t">
+    <div className="flex flex-col pt-10 border-t ">
       {/* Title and Sort Options */}
       <div className="flex justify-between items-center mb-4">
         <Title text1="All" text2=" Collections" />
