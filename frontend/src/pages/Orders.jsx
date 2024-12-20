@@ -186,6 +186,7 @@ const Orders = () => {
                     <p className="text-base font-medium text-gray-800">
                       {item.name}
                     </p>
+<<<<<<< Updated upstream
                     <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
                       <p>
                         <span className="font-medium text-gray-700">
@@ -232,6 +233,21 @@ const Orders = () => {
                   >
                     Kargo Takip
                   </button>
+=======
+                    <p>Adet: {item.quantity}</p>
+                    <p>Beden: {item.size}</p>
+                  </div>
+                  <p className="mt-1">
+                    Satın Alma Tarihi:{" "}
+                    <span className="text-gray-400">
+                      {new Date(item.date).toDateString()}
+                    </span>
+                  </p>
+                  <p className="mt-1">
+                    Ödeme Türü:{" "}
+                    <span className="text-gray-400">{item.paymentMethod}</span>
+                  </p>
+>>>>>>> Stashed changes
                 </div>
               </div>
             ))
