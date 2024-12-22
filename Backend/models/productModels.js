@@ -9,10 +9,10 @@ const productSchema = new mongoose.Schema({
   category: { type: String, required: true },
   subCategory: { type: String, required: true },
   sizes: { type: Array, required: true },
-  color:{type: String,required:true},
-  stock: { 
+  color: { type: String, required: true },
+  stock: {
     type: mongoose.Schema.Types.Mixed, // Use Mixed type instead of Map
-    required: true
+    required: true,
   },
   bestseller: { type: Boolean, default: false },
   newSeason: { type: Boolean, default: false },

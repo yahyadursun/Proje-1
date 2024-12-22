@@ -198,6 +198,7 @@ const Add = ({ token }) => {
             onChange={(e) => setBrand(e.target.value)}
             className="w-full px-3 py-2"
           >
+            <option value="Other">Other</option>
             <option value="adidas">Adidas</option>
             <option value="Converse">Converse</option>
             <option value="Greyder">Greyder</option>
@@ -228,6 +229,7 @@ const Add = ({ token }) => {
             onChange={(e) => setColor(e.target.value)}
             className="w-full px-3 py-2"
           >
+            <option value="Other">Other</option>
             <option value="Kırmızı">Kırmızı</option>
             <option value="Mavi">Mavi</option>
             <option value="Siyah">Siyah</option>
@@ -245,7 +247,8 @@ const Add = ({ token }) => {
           <select
             onChange={(e) => setCategory(e.target.value)}
             className="w-full px-3 py-2"
-          >
+          > 
+            <option value="Other">Other</option>
             <option value="Erkek">Erkek</option>
             <option value="Kadın">Kadın</option>
             <option value="Çocuk">Çocuk</option>
@@ -259,6 +262,7 @@ const Add = ({ token }) => {
             onChange={(e) => setsubCategory(e.target.value)}
             className="w-full px-3 py-2"
           >
+            <option value="Other">Other</option>
             <option value="Bot">Bot</option>
             <option value="Koşu Ayakkabısı">Koşu Ayakkabısı</option>
             <option value="Outdoor">Outdoor</option>
