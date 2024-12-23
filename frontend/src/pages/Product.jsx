@@ -12,6 +12,7 @@ const Product = () => {
   const [image, setImage] = useState("");
   const [size, setSize] = useState("");
   const [activeTab, setActiveTab] = useState("details");
+
   const fetchProductData = async () => {
     const product = products.find((item) => item._id === productId);
     if (product) {
@@ -45,9 +46,9 @@ const Product = () => {
     <div className="border-t-2 pt-10 transition-opacity ease-in duration-500 opacity-100">
       <ToastContainer autoClose={3000} />
       
-      {/* product data */}
+      {/* Product Data */}
       <div className="flex gap-12 sm:gap-12 flex-col sm:flex-row">
-        {/* product images */}
+        {/* Product Images */}
         <div className="flex-1 flex flex-col-reverse gap-3 sm:flex-row scrollbar-hidden">
           <div className="flex sm:flex-col overflow-x-auto sm:overflow-y-scroll justify-between sm:justify-normal sm:w-[18.7%] w-full">
             {productData.image && productData.image.length > 0 ? (
@@ -73,11 +74,25 @@ const Product = () => {
           </div>
         </div>
 
-        {/* product info */}
+        {/* Product Info */}
         <div className="flex-1">
-          <h1 className="font-medium funnel-sans prompt-bold text-3x1 mt-2">
-            {productData.name}
-          </h1>
+          {/* Product Name and Tags */}
+          <div className="flex items-center gap-2 mt-2">
+            <h1 className="font-medium funnel-sans prompt-bold text-3x1">
+              {productData.name}
+            </h1>
+            {productData.bestseller && (
+              <span className="text-sm text-white bg-red-600 px-3 py-1 rounded-full">
+                🔥 Bestseller 
+              </span>
+            )}
+            {productData.newSeason && (
+              <span className="text-sm text-white bg-blue-300 px-3 py-1 rounded-full">
+               ⛄ New Season
+              </span>
+            )}
+          </div>
+
           <div className="flex items-center">
             <p className="mt-5 funnel-sans font-small text-gray-400">
               {productData.description}
@@ -101,17 +116,21 @@ const Product = () => {
                 Size Seçin
               </option>
               {productData.sizes
-              .sort((a, b) => a - b)
-              .map((item, index) => (
-                <option
-                  key={index}
-                  value={item}
-                  disabled={productData.stock[item] < 1}
-                  className={productData.stock[item] < 1 ? 'text-gray-400 cursor-not-allowed' : ''}
-                >
-                  {item} {productData.stock[item] < 1 ? '(Stokta Yok)' : ''}
-                </option>
-              ))}
+                .sort((a, b) => a - b)
+                .map((item, index) => (
+                  <option
+                    key={index}
+                    value={item}
+                    disabled={productData.stock[item] < 1}
+                    className={
+                      productData.stock[item] < 1
+                        ? "text-gray-400 cursor-not-allowed"
+                        : ""
+                    }
+                  >
+                    {item} {productData.stock[item] < 1 ? "(Stokta Yok)" : ""}
+                  </option>
+                ))}
             </select>
           </div>
 
@@ -187,7 +206,7 @@ const Product = () => {
         </div>
       </div>
 
-      {/* display related products */}
+      {/* Related Products */}
       <RelatedProduct
         category={productData.category}
         subCategory={productData.subCategory}
