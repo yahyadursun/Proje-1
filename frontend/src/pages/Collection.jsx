@@ -6,7 +6,7 @@ import ProductItem from "../components/ProductItem";
 const Collection = () => {
   const { products, search, showSearch } = useContext(ShopContext);
   const [showFilterModal, setShowFilterModal] = useState(false);
-  const [filterProducts, setFilterProducts] = useState(products || []);
+  const [filteredProducts, setFilteredProducts] = useState(products || []);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [filters, setFilters] = useState({
     category: [],
@@ -19,75 +19,92 @@ const Collection = () => {
   const modalRef = useRef(null);
 
   const categories = [
-    { id: "category", label: "Cinsiyet", options: ["Erkek", "Kadın", "Unisex","Çocuk"] },
+    { id: "category", label: "Cinsiyet", options: ["Erkek", "Kadın", "Unisex", "Çocuk"] },
     {
       id: "subCategory",
       label: "Kategori",
-      options: ["Bot","Koşu Ayakkabısı", "Outdoor", "Sneaker","Sandalet","Terlik"],
+      options: ["Bot", "Koşu Ayakkabısı", "Outdoor", "Sneaker", "Sandalet", "Terlik"],
     },
     {
       id: "sizes",
       label: "Beden",
-      options: ["19", "20", "20.5", "21", "21.5", "22", "22.5", "51", 208],
+      options: [
+        "30.0", "30.5", "31.0", "31.5", "32.0", "32.5", "33.0", "33.5", "34.0", "34.5",
+        "35.0", "35.5", "36.0", "36.5", "37.0", "37.5", "38.0", "38.5", "39.0", "39.5",
+        "40.0", "40.5", "41.0", "41.5", "42.0", "42.5", "43.0", "43.5", "44.0", "44.5",
+        "45.0", "45.5", "46.0", "46.5", "47.0", "47.5", "48.0", "48.5", "49.0", "49.5", "50.0"
+      ]
+      ,
     },
     {
       id: "brand",
       label: "Marka",
-      options: ["New Balance", "Adidas", "Puma", "Nike","Reebok","Skechers","The North Face","Timberland","Tommy Hilfiger","Vans","Jack Wolfskin","U.S. Polo Assn."],
+      options: ["New Balance", "Adidas", "Puma", "Nike", "Reebok", "Skechers", "The North Face", "Timberland", "Tommy Hilfiger", "Vans", "Jack Wolfskin", "U.S. Polo Assn."],
     },
     {
       id: "color",
       label: "Renk",
-      options: ["Kırmızı", "Mavi", "Siyah","Gri", "Beyaz","Pembe","Krem","Lacivert","Haki"],
+      options: ["Kırmızı", "Mavi", "Siyah", "Gri", "Beyaz", "Pembe", "Krem", "Lacivert", "Haki"],
     },
   ];
 
   const toggleFilter = (category, option) => {
-    setFilters((prev) => ({
+    setFilters(prev => ({
       ...prev,
       [category]: prev[category].includes(option)
-        ? prev[category].filter((item) => item !== option)
+        ? prev[category].filter(item => item !== option)
         : [...prev[category], option],
     }));
   };
 
-  const applyFilter = useCallback(() => {
-    let filtered = [...products];
+  const filterProducts = useCallback((productsToFilter) => {
+    let filtered = [...productsToFilter];
 
-    // Apply search filter
     if (showSearch && search) {
-      filtered = filtered.filter((item) =>
+      filtered = filtered.filter(item =>
         item.name.toLowerCase().includes(search.toLowerCase())
       );
     }
 
-    categories.forEach((cat) => {
+    categories.forEach(cat => {
       if (filters[cat.id]?.length > 0) {
-        filtered = filtered.filter((item) => {
+        filtered = filtered.filter(item => {
           if (cat.id === "sizes") {
-            // Normalize both filter and product sizes to strings
-            const productSizes = item[cat.id].map((size) => size.toString());
-            const filterSizes = filters[cat.id].map((size) => size.toString());
-            return filterSizes.some((filterSize) => productSizes.includes(filterSize));
+            const productSizes = item[cat.id].map(size => size.toString());
+            const filterSizes = filters[cat.id].map(size => size.toString());
+            return filterSizes.some(filterSize => productSizes.includes(filterSize));
           }
           return filters[cat.id].includes(item[cat.id]);
         });
       }
     });
 
-    // Apply sorting
-    if (sortType === "price-asc") {
-      filtered.sort((a, b) => a.price - b.price);
-    } else if (sortType === "price-desc") {
-      filtered.sort((a, b) => b.price - a.price);
-    } else if (sortType === "bestseller") {
-      filtered.sort((a, b) => (b.bestseller ? 1 : 0) - (a.bestseller ? 1 : 0));
-    }else if ( sortType==="newSeason"){
-      filtered.sort((a,b)=>(b.newSeason ? 1 : 0)-(a.newSeason ? 1 : 0 ));
+    switch (sortType) {
+      case "price-asc":
+        filtered.sort((a, b) => a.price - b.price);
+        break;
+      case "price-desc":
+        filtered.sort((a, b) => b.price - a.price);
+        break;
+      case "bestseller":
+        filtered.sort((a, b) => (b.bestseller ? 1 : 0) - (a.bestseller ? 1 : 0));
+        break;
+      case "newSeason":
+        filtered.sort((a, b) => (b.newSeason ? 1 : 0) - (a.newSeason ? 1 : 0));
+        break;
+      default:
+        break;
     }
 
-    setFilterProducts(filtered);
-  }, [filters, search, showSearch, products, sortType, categories]);
+    return filtered;
+  }, [filters, search, showSearch, sortType]);
+
+  useEffect(() => {
+    if (products) {
+      const filtered = filterProducts(products);
+      setFilteredProducts(filtered);
+    }
+  }, [products, filterProducts]);
 
   const clearFilters = () => {
     setFilters({
@@ -100,10 +117,6 @@ const Collection = () => {
   };
 
   useEffect(() => {
-    applyFilter();
-  }, [filters, search, showSearch, products, sortType, applyFilter]);
-
-  useEffect(() => {
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
         setShowFilterModal(false);
@@ -112,8 +125,6 @@ const Collection = () => {
 
     if (showFilterModal) {
       document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
@@ -122,8 +133,7 @@ const Collection = () => {
   }, [showFilterModal]);
 
   return (
-    <div className="flex flex-col pt-10 border-t ">
-      {/* Title and Sort Options */}
+    <div className="flex flex-col pt-10 border-t">
       <div className="flex justify-between items-center mb-4">
         <Title text1="All" text2=" Collections" />
         <div className="flex items-center gap-4">
@@ -147,9 +157,8 @@ const Collection = () => {
         </div>
       </div>
 
-      {/* Products */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-6">
-        {filterProducts.map((item, index) => (
+        {filteredProducts.map((item, index) => (
           <ProductItem
             key={index}
             name={item.name}
@@ -162,12 +171,11 @@ const Collection = () => {
         ))}
       </div>
 
-      {/* Filter Modal */}
       {showFilterModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-end z-50">
           <div
             ref={modalRef}
-            className="bg-white w-full  funnel-sans max-w-lg h-full p-6 flex flex-col divide-y divide-gray-200"
+            className="bg-white w-full funnel-sans max-w-lg h-full p-6 flex flex-col divide-y divide-gray-200"
           >
             <div className="flex funnel-sans justify-between items-center py-4">
               <h2 className="text-2xl funnel-sans text-gray-900">FİLTRELER</h2>
@@ -186,7 +194,7 @@ const Collection = () => {
                 </button>
               </div>
             </div>
-            <div className="flex funnel-sans flex-grow">
+            <div className="flex funnel-sans flex-grow overflow-hidden">
               <div className="w-2/4 funnel-sans border-r border-gray-200 p-4">
                 {categories.map((cat) => (
                   <button
@@ -202,7 +210,7 @@ const Collection = () => {
                   </button>
                 ))}
               </div>
-              <div className="w-2/3 p-4">
+              <div className="w-2/3 p-4 overflow-y-auto custom-scrollbar">
                 {selectedCategory &&
                   selectedCategory.options.map((option) => (
                     <label key={option} className="funnel-sans flex items-center gap-3 py-3">
@@ -210,7 +218,7 @@ const Collection = () => {
                         type="checkbox"
                         checked={filters[selectedCategory.id]?.includes(option)}
                         onChange={() => toggleFilter(selectedCategory.id, option)}
-                        className="w-4 h-4 "
+                        className="w-4 h-4"
                       />
                       {option}
                     </label>
@@ -218,10 +226,7 @@ const Collection = () => {
               </div>
             </div>
             <button
-              onClick={() => {
-                applyFilter();
-                setShowFilterModal(false);
-              }}
+              onClick={() => setShowFilterModal(false)}
               className="w-full funnel-sans py-3 bg-black text-white text-xl rounded-md"
             >
               Filtreleri Uygula

@@ -2,17 +2,16 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import RelatedProduct from "../components/relatedProduct";
-import { ToastContainer, toast } from "react-toastify"; // Toastify importu
-import "react-toastify/dist/ReactToastify.css"; // Toastify CSS
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Product = () => {
   const { productId } = useParams();
   const { products, currency, addToCart } = useContext(ShopContext);
   const [productData, setProductData] = useState(null);
   const [image, setImage] = useState("");
-  const [size, setSize] = useState(""); // Size state
+  const [size, setSize] = useState("");
   const [activeTab, setActiveTab] = useState("details");
-
   const fetchProductData = async () => {
     const product = products.find((item) => item._id === productId);
     if (product) {
@@ -40,17 +39,17 @@ const Product = () => {
     toast.success(`Beden: ${size} sepete eklendi!`, { position: "top-right" });
   };
 
-  // Eğer productData yoksa, hiç bir şey render etmeyelim
   if (!productData) return null;
 
   return (
     <div className="border-t-2 pt-10 transition-opacity ease-in duration-500 opacity-100">
-      <ToastContainer autoClose={3000} /> {/* Toastify Container */}
+      <ToastContainer autoClose={3000} />
+      
       {/* product data */}
       <div className="flex gap-12 sm:gap-12 flex-col sm:flex-row">
         {/* product images */}
-        <div className="flex-1 flex flex-col-reverse gap-3 sm:flex-row scrollbar-hidden ">
-          <div className="flex sm:flex-col overflow-x-auto sm:overflow-y-scroll justify-between sm:justify-normal sm:w-[18.7%] w-full ">
+        <div className="flex-1 flex flex-col-reverse gap-3 sm:flex-row scrollbar-hidden">
+          <div className="flex sm:flex-col overflow-x-auto sm:overflow-y-scroll justify-between sm:justify-normal sm:w-[18.7%] w-full">
             {productData.image && productData.image.length > 0 ? (
               productData.image.map((item, index) => (
                 <img
@@ -79,7 +78,7 @@ const Product = () => {
           <h1 className="font-medium funnel-sans prompt-bold text-3x1 mt-2">
             {productData.name}
           </h1>
-          <div className="flex items-center ">
+          <div className="flex items-center">
             <p className="mt-5 funnel-sans font-small text-gray-400">
               {productData.description}
             </p>
@@ -91,28 +90,33 @@ const Product = () => {
           </p>
 
           {/* Select Size Dropdown */}
-          <div className="flex flex-col gap-4 my-8">
+          <div className="flex flex-col gap-4 my-8 relative">
             <p className="prompt-bold funnel-sans">Select Size</p>
             <select
-              onChange={(e) => setSize(e.target.value)} // Select size on change
-              className="custom-select" // Custom select class
-              value={size} // Pre-select the size if already chosen
+              onChange={(e) => setSize(e.target.value)}
+              className="custom-select"
+              value={size}
             >
               <option value="" hidden disabled>
                 Size Seçin
               </option>
               {productData.sizes
-                .filter((item) => productData.stock[item] > 0) // Stok kontrolü
-                .map((item, index) => (
-                  <option key={index} value={item}>
-                    {item}
-                  </option>
-                ))}
+              .sort((a, b) => a - b)
+              .map((item, index) => (
+                <option
+                  key={index}
+                  value={item}
+                  disabled={productData.stock[item] < 1}
+                  className={productData.stock[item] < 1 ? 'text-gray-400 cursor-not-allowed' : ''}
+                >
+                  {item} {productData.stock[item] < 1 ? '(Stokta Yok)' : ''}
+                </option>
+              ))}
             </select>
           </div>
 
           <button
-            onClick={handleAddToCart} // Sepete ekle butonunda bildirim çağırma
+            onClick={handleAddToCart}
             className="montserrat bg-black text-white px-8 py-3 text-sm active:bg-gray-700"
           >
             SEPETE EKLE
@@ -127,8 +131,8 @@ const Product = () => {
                   onClick={() => setActiveTab("details")}
                   className={`font-semibold text-xs ${
                     activeTab === "details"
-                      ? "text-gray-700 border-b-2 border-gray-700" // Seçili sekme
-                      : "text-gray-400 border-b border-gray-300" // Seçili olmayan sekme
+                      ? "text-gray-700 border-b-2 border-gray-700"
+                      : "text-gray-400 border-b border-gray-300"
                   }`}
                 >
                   Ürün Detayları
@@ -137,8 +141,8 @@ const Product = () => {
                   onClick={() => setActiveTab("shipping")}
                   className={`font-semibold text-xs ${
                     activeTab === "shipping"
-                      ? "text-gray-700 border-b-2 border-gray-700" // Seçili sekme
-                      : "text-gray-400 border-b border-gray-300" // Seçili olmayan sekme
+                      ? "text-gray-700 border-b-2 border-gray-700"
+                      : "text-gray-400 border-b border-gray-300"
                   }`}
                 >
                   Teslimat ve Kargo
@@ -166,14 +170,14 @@ const Product = () => {
               {activeTab === "shipping" && (
                 <div className="flex flex-col gap-1 text-xs text-gray-500">
                   <p>
-                    Sneakster.com’da siparişler 1-2 gün içinde, hafta sonu ve
+                    Sneakster.com'da siparişler 1-2 gün içinde, hafta sonu ve
                     resmi tatillerde verdiğin siparişler ise takip eden ilk iş
                     gününde hazırlanmaya başlar. Siparişler ortalama 1-3 iş günü
                     içerisinde kargoya teslim edilir.
                   </p>
                   <p>
-                    Siparişleri Türkiye’nin her bölgesinde adresine teslim
-                    ediyoruz ancak yurt dışı ve Kıbrıs’a şuan için ne yazık ki
+                    Siparişleri Türkiye'nin her bölgesinde adresine teslim
+                    ediyoruz ancak yurt dışı ve Kıbrıs'a şuan için ne yazık ki
                     teslimat yapamıyoruz.
                   </p>
                 </div>
@@ -182,6 +186,7 @@ const Product = () => {
           </div>
         </div>
       </div>
+
       {/* display related products */}
       <RelatedProduct
         category={productData.category}
