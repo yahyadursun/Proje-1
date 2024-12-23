@@ -39,7 +39,7 @@ const Collection = () => {
     {
       id: "brand",
       label: "Marka",
-      options: ["New Balance", "Adidas", "Puma", "Nike", "Reebok", "Skechers", "The North Face", "Timberland", "Tommy Hilfiger", "Vans", "Jack Wolfskin", "U.S. Polo Assn."],
+      options: ["New Balance", "Adidas", "Converse", "Puma", "Nike", "Reebok", "Skechers", "The North Face", "Timberland", "Tommy Hilfiger", "Vans", "Jack Wolfskin", "U.S. Polo Assn."],
     },
     {
       id: "color",
