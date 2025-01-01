@@ -1,13 +1,5 @@
-import p_img1 from './p_img1.png'
-import p2_img1 from './p2_img1.png'
-import p2_img2 from './p2_img2.png'
-import p2_img3 from './p2_img3.png'
-import p2_img4 from './p2_img4.png'
-import hero_img from './hero_img.jpg'
 
-
-
-
+import hero_img from './hero_img.png'
 import logo from './logo.png'
 import cart_icon from './cart_icon.png'
 import bin_icon from './bin_icon.png'
@@ -24,8 +16,8 @@ import support_icon from './support.png'
 import about_icon from './about_icon.png'
 import stripe_icon from './stripe_icon.png'
 import kredikart_icon from './kredikart_icon.png'
-import hero_img2 from "./hero_img2.jpg"
-import hero_img3 from "./hero_img3.jpg"
+import hero_img2 from "./hero_img2.jpeg"
+import hero_img3 from "./hero_img3.png"
 import visible from "./visible.png"
 import visibleoff from "./visibleoff.png"
 import contact_img from "./contact_img.png"
@@ -45,11 +37,6 @@ export const assets ={
     menu_icon,
     about_icon,
     hero_img,
-    p_img1,
-    p2_img1,
-    p2_img2,
-    p2_img3,
-    p2_img4,
     stripe_icon,
     kredikart_icon,
     hero_img2,
