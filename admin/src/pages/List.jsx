@@ -23,7 +23,7 @@ const List = ({ token }) => {
   const [brandFilter, setBrandFilter] = useState("all");
   const brands = [
     "all",
-    "Adidas",
+    "adidas",
     "Converse",
     "Greyder",
     "Hummel",

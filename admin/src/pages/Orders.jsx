@@ -116,7 +116,7 @@ const Orders = ({ token }) => {
       new Date(order.date) >= sixtyDaysAgo && new Date(order.date) < thirtyDaysAgo
     );
 
-    const recentTrend = ((recentOrders.length - previousOrders.length) / previousOrders.length * 100) || 0;
+    
 
     setAnalytics({
       totalOrders,
@@ -124,7 +124,7 @@ const Orders = ({ token }) => {
       averageOrderValue,
       pendingOrders,
       deliveredOrders,
-      recentTrend
+      
     });
   };
 
@@ -227,10 +227,7 @@ const Orders = ({ token }) => {
         <div className="bg-white p-4 rounded-lg shadow">
           <h3 className="text-gray-500 text-sm">Total Orders</h3>
           <p className="text-2xl font-bold">{analytics.totalOrders}</p>
-          <p className="text-sm text-gray-600 mt-2">
-            {analytics.recentTrend > 0 ? '↑' : '↓'} 
-            {Math.abs(analytics.recentTrend).toFixed(1)}% from last month
-          </p>
+        
         </div>
         <div className="bg-white p-4 rounded-lg shadow">
           <h3 className="text-gray-500 text-sm">Total Revenue</h3>
