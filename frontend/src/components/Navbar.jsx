@@ -24,6 +24,13 @@ const Navbar = () => {
   const toggleSearch = () => {
     setShowSearch((prev) => !prev);
   };
+  const handleClick = (event) => {
+    event.preventDefault(); // Varsayılan davranışları engelle (gerekliyse)
+    navigate("/collection"); // İlk olarak "collection" sayfasına git
+    setTimeout(() => {
+      toggleSearch(); // Sonrasında `toggleSearch` fonksiyonunu çağır
+    }, 0); // Hemen ardından çalışması için 0 ms gecikme eklenir
+  };
 
   return (
     <div className="flex items-center justify-between py-5 px-4 font-medium ">
@@ -73,7 +80,8 @@ const Navbar = () => {
       {/* Icons */}
       <div className="flex items-center gap-6">
         <img
-          onClick={toggleSearch}
+          onClick={handleClick}
+          
           src={assets.search_icon}
           className="w-6 cursor-pointer hover:scale-110 transition-transform"
           alt="Search"
