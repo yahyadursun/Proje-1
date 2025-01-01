@@ -30,7 +30,7 @@ const Profile = () => {
   // Get user profile and addresses
   const getUserProfile = async () => {
     if (!token) {
-      toast.error("Lütfen giriş yapın.");
+      setLoading(false);
       return;
     }
 
@@ -42,7 +42,7 @@ const Profile = () => {
       if (response.data.success) {
         setUser(response.data.user);
         setEditForm(response.data.user);
-        setAddresses(response.data.user.addresses || []); // Assuming addresses is part of user profile
+        setAddresses(response.data.user.addresses || []);
       } else {
         toast.error(response.data.message);
       }
@@ -93,8 +93,14 @@ const Profile = () => {
       );
 
       if (response.data.success) {
+        // Update local state with the new user data while keeping existing addresses
+        const updatedUser = {
+          ...response.data.user,
+          addresses: user.addresses
+        };
+        setUser(updatedUser);
+        setEditForm(updatedUser);
         toast.success("Profil başarıyla güncellendi.");
-        setUser(response.data.user);
         setIsEditing(false);
       } else {
         toast.error(response.data.message);
@@ -104,7 +110,6 @@ const Profile = () => {
       toast.error("Bir hata oluştu. Lütfen tekrar deneyin.");
     }
   };
-
 
   // Add or Edit Address
   const saveAddress = async () => {
@@ -137,8 +142,14 @@ const Profile = () => {
       );
 
       if (response.data.success) {
-        toast.success("Adres başarıyla kaydedildi.");
+        // Update local state with new addresses
+        const updatedUser = {
+          ...user,
+          addresses: response.data.addresses
+        };
+        setUser(updatedUser);
         setAddresses(response.data.addresses);
+        toast.success("Adres başarıyla kaydedildi.");
         setIsAddressEditing(false);
         setEditAddress({
           label: "",
@@ -148,8 +159,6 @@ const Profile = () => {
           postalCode: "",
           country: "",
         });
-        // Profil bilgilerini yenile
-        getUserProfile();
       } else {
         toast.error(response.data.message);
       }
@@ -168,7 +177,6 @@ const Profile = () => {
     try {
       const response = await axios.delete(`${backendUrl}/api/user/address`, {
         data: {
-          // axios delete metodunda data bu şekilde gönderilmeli
           userId: user._id,
           label: label,
         },
@@ -176,8 +184,14 @@ const Profile = () => {
       });
 
       if (response.data.success) {
-        toast.success("Adres başarıyla silindi.");
+        // Update local state with new addresses
+        const updatedUser = {
+          ...user,
+          addresses: response.data.addresses
+        };
+        setUser(updatedUser);
         setAddresses(response.data.addresses);
+        toast.success("Adres başarıyla silindi.");
         setIsAddressEditing(false);
         setEditAddress({
           label: "",
@@ -187,8 +201,6 @@ const Profile = () => {
           postalCode: "",
           country: "",
         });
-        // Profil bilgilerini yenile
-        getUserProfile();
       } else {
         toast.error(response.data.message);
       }
