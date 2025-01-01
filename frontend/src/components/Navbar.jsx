@@ -179,13 +179,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-/*        <Link to="/cart" className="relative">
-          <img src={assets.cart_icon} className="w-6 min-w-5" alt="Cart" />
-          <p
-            className="absolute right-[5px] bottom-[5px] w-4 h-4 flex items-center justify-center leading-none 
-  bg-black text-white aspect-square rounded-full text-[10px] shadow-md z-10 transform translate-x-1/2 translate-y-1/2"
-          >
-            {getCartCount()}
-          </p>
-        </Link>*/
