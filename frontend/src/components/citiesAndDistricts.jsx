@@ -17,7 +17,6 @@ const citiesAndDistricts = {
     Balıkesir: ["Altıeylül", "Karesi", "Bandırma", "Edremit", "Gönen"],
     Manisa: ["Şehzadeler", "Yunusemre", "Salihli", "Akhisar", "Turgutlu"],
     Aydın: ["Efeler", "Söke", "Nazilli", "Kuşadası", "Bozdoğan"],
-    Tekirdağ: ["Süleymanpaşa", "Çorlu", "Kapaklı", "Saray", "Çerkezköy"],
     Diyarbakır: ["Sur", "Bağlar", "Yenişehir", "Kayapınar", "Eğil"],
     Şanlıurfa: ["Haliliye", "Eyyübiye", "Karaköprü", "Siverek", "Viranşehir"],
     Kocaeli: ["İzmit", "Gebze", "Derince", "Kartepe", "Dilovası"],
@@ -45,6 +44,7 @@ const citiesAndDistricts = {
     Yozgat: ["Merkez", "Sorgun", "Akdağmadeni", "Çayıralan", "Sarıkaya"],
     Karaman: ["Merkez", "Ermenek", "Kazımkarabekir", "Ayrancı", "Başyayla"],
     Mardin: ["Merkez", "Kızıltepe", "Nusaybin", "Artuklu", "Midyat"],
-    Mersin: ["Akdeniz", "Toroslar", "Mezitli", "Erdemli", "Silifke"]
+    
+
   };
   export default citiesAndDistricts;

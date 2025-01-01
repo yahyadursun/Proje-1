@@ -28,6 +28,7 @@ import hero_img2 from "./hero_img2.jpg"
 import hero_img3 from "./hero_img3.jpg"
 import visible from "./visible.png"
 import visibleoff from "./visibleoff.png"
+import contact_img from "./contact_img.png"
 export const assets ={
     logo,
     cart_icon,
@@ -54,7 +55,7 @@ export const assets ={
     hero_img2,
     hero_img3,
     visible,
-    visibleoff
+    visibleoff,contact_img
    
 }
 

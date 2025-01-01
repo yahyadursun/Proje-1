@@ -6,7 +6,7 @@ const NewsLetterBox = () => {
   };
   return (
     <div className="text-center">
-      <p className="text-4x1 prompt-bold text-gray-800">
+      <p className="text-4x1 montserrat-bold text-gray-800">
       Sneakster Ailesine Katıl, İlk Alışverişinde %20 İndirim Kazan!
       </p>
     
@@ -22,9 +22,9 @@ const NewsLetterBox = () => {
         ></input>
         <button
           type="submit"
-          className="bg-black prompt-bold text-white text-xs px-10 py-4"
+          className="bg-black montserrat-bold text-white text-xs px-10 py-4"
         >
-          CREATE
+          OLUŞTUR
         </button>
       </form>
     </div>

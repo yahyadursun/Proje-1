@@ -61,14 +61,25 @@ const Profile = () => {
       return;
     }
 
-    // Validation logic
-    if (editForm.phoneNo && !/^\d{10}$/.test(editForm.phoneNo)) {
-      toast.error(
-        "Telefon numarası geçerli bir formatta olmalıdır (10 rakam)."
-      );
+    // Telefon numarasının sadece rakamlardan oluşup oluşmadığını kontrol et
+    if (editForm.phoneNo && !/^\d+$/.test(editForm.phoneNo)) {
+      toast.error("Telefon numarası sadece rakamlardan oluşmalıdır.");
       return;
     }
 
+    // Telefon numarası validasyonu (Başlangıçta "05" ile başlamalı ve 10 rakam olmalı)
+    if (editForm.phoneNo && !/^(05\d{9})$/.test(editForm.phoneNo)) {
+      toast.error("Telefon numarası geçerli bir formatta olmalıdır (örn: 05366666689).");
+      return;
+    }
+
+    // TC Kimlik numarasının sadece rakamlardan oluşup oluşmadığını kontrol et
+    if (editForm.identityNo && !/^\d+$/.test(editForm.identityNo)) {
+      toast.error("TC Kimlik numarası sadece rakamlardan oluşmalıdır.");
+      return;
+    }
+
+    // TC Kimlik numarası validasyonu (11 haneli olmalı)
     if (editForm.identityNo && editForm.identityNo.length !== 11) {
       toast.error("TC Kimlik numarası 11 haneli olmalıdır.");
       return;
@@ -93,6 +104,7 @@ const Profile = () => {
       toast.error("Bir hata oluştu. Lütfen tekrar deneyin.");
     }
   };
+
 
   // Add or Edit Address
   const saveAddress = async () => {
@@ -224,19 +236,19 @@ const Profile = () => {
             <h1 className="text-2xl montserrat-bold text-gray-700">Profilim</h1>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-4 mt-2">
             {isEditing ? (
               <div>
                 <h2 className="text-xl montserrat font-semibold text-gray-700 mt-2 mb-2">
                   Profil Bilgilerini Düzenle
                 </h2>
-                <div className="space-y-4">
+                <div className="space-y-4 ">
                   {[
                     { label: "Ad", key: "name" },
                     { label: "Soyad", key: "surname" },
                     { label: "Email", key: "email", type: "email" },
                     { label: "Telefon Numarası", key: "phoneNo" },
-                    { label: "TC Kimlik", key: "identityNo" },
+                    { label: "TC Kimlik", key: "identityNo",},
                   ].map(({ label, key, type = "text" }) => (
                     <div key={key} className="relative">
                       <input
@@ -325,62 +337,69 @@ const Profile = () => {
         </div>
 
         {/* Addresses Section */}
-        <div className="bg-white shadow-lg rounded-2xl overflow-hidden border border-gray-300 p-6">
-          <div className="bg-gray-200 text-gray-800 p-6 flex items-center justify-between border-b border-gray-300">
-            <h2 className="text-xl montserrat font-semibold text-gray-700">Adreslerim</h2>
-            <button
-              onClick={() => {
-                setEditAddress({
-                  label: "",
-                  street: "",
-                  city: "",
-                  state: "",
-                  postalCode: "",
-                  country: "",
-                });
-                setIsAddressEditing(true);
-              }}
-              className="bg-gray-100 montserrat text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-300 flex items-center justify-center"
-            >
-              <Plus size={20} className="mr-2" /> Yeni Adres
-            </button>
-          </div>
+<div className="bg-white shadow-lg rounded-2xl border border-gray-300 p-6">
+  <div className="bg-gray-200 text-gray-800 p-6 flex items-center justify-between border-b border-gray-300">
+    <h2 className="text-xl montserrat font-semibold text-gray-700">Adreslerim</h2>
+    <button
+      onClick={() => {
+        setEditAddress({
+          label: "",
+          street: "",
+          city: "",
+          state: "",
+          postalCode: "",
+          country: "",
+        });
+        setIsAddressEditing(true);
+      }}
+      className="bg-gray-100 montserrat text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-300 flex items-center justify-center"
+    >
+      <Plus size={20} className="mr-2" /> Yeni Adres
+    </button>
+  </div>
 
-          <div className="space-y-4 mt-4">
-            {user.addresses && user.addresses.length > 0 ? (
-              user.addresses.map((address, index) => (
-                <div
-                  key={index}
-                  className="bg-gray-100 p-4 rounded-lg flex justify-between items-center"
-                >
-                  <div className="space-y-1">
-                    <div className="montserrat font-semibold text-gray-700">
-                      {address.label}
-                    </div>
-                    <div className="montserrat text-gray-600">{address.street}</div>
-                    <div className="montserrat text-gray-600">
-                      {address.city}, {address.state}, {address.postalCode}
-                    </div>
-                    <div className="montserrat text-gray-600">{address.country}</div>
-                  </div>
-                  <button
-                    onClick={() => {
-                      setEditAddress(address);
-                      setIsAddressEditing(true);
-                    }}
-                    className="bg-gray-200 montserrat text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-300 flex items-center justify-center"
-                  >
-                    <Edit size={20} className="mr-2" /> Düzenle
-                  </button>
-                </div>
-              ))
-            ) : (
-              <p className="text-gray-500 montserrat text-center py-4">
-                Kayıtlı adres bulunmamaktadır.
-              </p>
-            )}
+  {/* Address List with Scrollbar */}
+  <div
+    className="space-y-4 mt-4 overflow-y-auto max-h-96"
+    style={{
+      scrollbarWidth: "thin", // For Firefox
+      scrollbarColor: "gray lightgray", // For Firefox
+    }}
+  >
+    {user.addresses && user.addresses.length > 0 ? (
+      user.addresses.map((address, index) => (
+        <div
+          key={index}
+          className="bg-gray-100 p-4 rounded-lg flex justify-between items-center"
+        >
+          <div className="space-y-1">
+            <div className="montserrat font-semibold text-gray-700">
+              {address.label}
+            </div>
+            <div className="montserrat text-gray-600">{address.street}</div>
+            <div className="montserrat text-gray-600">
+              {address.city}, {address.state}, {address.postalCode}
+            </div>
+            <div className="montserrat text-gray-600">{address.country}</div>
           </div>
+          <button
+            onClick={() => {
+              setEditAddress(address);
+              setIsAddressEditing(true);
+            }}
+            className="bg-gray-200 montserrat text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-300 flex items-center justify-center"
+          >
+            <Edit size={20} className="mr-2" /> Düzenle
+          </button>
         </div>
+      ))
+    ) : (
+      <p className="text-gray-500 montserrat text-center py-4">
+        Kayıtlı adres bulunmamaktadır.
+      </p>
+    )}
+  </div>
+</div>
         {/* Address Form Modal */}
         <AddressForm
           isOpen={isAddressEditing}

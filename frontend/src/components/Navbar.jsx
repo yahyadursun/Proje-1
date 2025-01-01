@@ -170,7 +170,7 @@ const Navbar = () => {
             className="py-4 pl-6 border-t text-gray-700 hover:text-black"
             to="/contact"
           >
-            İletişim
+            CONTACT
           </NavLink>
         </div>
       </div>
