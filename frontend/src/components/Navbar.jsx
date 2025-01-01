@@ -40,8 +40,8 @@ const Navbar = () => {
         <NavLink
           to="/"
           className={({ isActive }) =>
-            `hover:text-gray-900 transition-all ${
-              isActive ? "text-gray-900 font-bold" : ""
+            `hover:text-gray-900 transition-all montserrat ${
+              isActive ? "text-gray-900 montserrat-bold" : ""
             }`
           }
         >
@@ -50,8 +50,8 @@ const Navbar = () => {
         <NavLink
           to="/collection"
           className={({ isActive }) =>
-            `hover:text-gray-900 transition-all ${
-              isActive ? "text-gray-900 font-bold" : ""
+            `hover:text-gray-900 transition-all montserrat ${
+              isActive ? "text-gray-900 montserrat-bold" : ""
             }`
           }
         >
@@ -61,8 +61,8 @@ const Navbar = () => {
         <NavLink
           to="/contact"
           className={({ isActive }) =>
-            `hover:text-gray-900 transition-all ${
-              isActive ? "text-gray-900 font-bold" : ""
+            `hover:text-gray-900 transition-all montserrat ${
+              isActive ? "text-gray-900 montserrat-bold" : ""
             }`
           }
         >
@@ -90,21 +90,21 @@ const Navbar = () => {
               className="group-hover:block hidden absolute dropdown-menu right-0 pt-4"
               style={{ zIndex: 2 }}
             >
-              <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-gray-100 text-gray-500 rounded shadow-lg">
+              <div className="flex flex-col montserrat gap-2 w-36 py-3 px-5 bg-gray-100 text-gray-500 rounded shadow-lg">
                 <p
                   onClick={() => navigate("/profile")}
-                  className="cursor-pointer hover:text-black"
+                  className="montserrat cursor-pointer hover:text-black"
                 >
-                  My Profile
+                  Profilim
                 </p>
                 <p
                   onClick={() => navigate("/orders")}
-                  className="cursor-pointer hover:text-black"
+                  className="montserrat cursor-pointer hover:text-black"
                 >
-                  Orders
+                  Siparişlerim
                 </p>
-                <p onClick={logout} className="cursor-pointer hover:text-black">
-                  Logout
+                <p onClick={logout} className="montserrat cursor-pointer hover:text-black">
+                  Çıkış
                 </p>
               </div>
             </div>
@@ -140,7 +140,7 @@ const Navbar = () => {
             className="flex items-center gap-1 p-4 cursor-pointer text-gray-700 hover:text-black"
           >
             <img className="h-4" src={assets.dropdown_icon} alt="Back" />
-            <p>Back</p>
+            <p>Geri Dön</p>
           </div>
           <NavLink
             onClick={() => setVisible(false)}
@@ -162,7 +162,7 @@ const Navbar = () => {
             className="py-4 pl-6 border-t text-gray-700 hover:text-black"
             to="/contact"
           >
-            CONTACT
+            İletişim
           </NavLink>
         </div>
       </div>

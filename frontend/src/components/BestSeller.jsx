@@ -21,7 +21,7 @@ const BestSeller = () => {
     <div className="my-10">
       <div className="text-center text-3x1 py-8">
         <Title text1={"BEST"} text2={"SELLER"} />
-        <p className="poppins-regular w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-600">
+        <p className="montserrat w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-700">
         En çok tercih edilen ürünlerimizle tarzınızı zirveye taşıyın – Sneakster'da bestseller koleksiyonuyla her adımda fark yaratın!
         </p>
       </div>

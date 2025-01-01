@@ -344,7 +344,7 @@ const PlaceOrder = () => {
                   method === "kapıda ödeme" ? "bg-green-400" : ""
                 }`}
               >
-                <p className="text-gray-500 text-sm font-medium mx-4">
+                <p className="montserrat text-gray-500 text-sm font-medium mx-4">
                   Kapıda Ödeme
                 </p>
               </div>
@@ -352,7 +352,7 @@ const PlaceOrder = () => {
             <div className="w-full text-end mt-8">
               <button
                 type="submit"
-                className="bg-black text-white px-16 py-3 text-sm"
+                className="montserrat bg-black text-white px-16 py-3 text-sm"
               >
                 Ödeme
               </button>
@@ -377,7 +377,7 @@ const PlaceOrder = () => {
               type="text"
               placeholder="Kart Numarası"
               maxLength={16}
-              className="border p-3 rounded w-full mb-3"
+              className="montserrat border p-3 rounded w-full mb-3"
             />
           </div>
           <div className="flex gap-3">
@@ -388,7 +388,7 @@ const PlaceOrder = () => {
               type="text"
               placeholder="MM/YY"
               maxLength={5}
-              className="border p-3 rounded w-full"
+              className="montserrat border p-3 rounded w-full"
             />
             <input
               name="cvc"
@@ -397,13 +397,13 @@ const PlaceOrder = () => {
               type="text"
               placeholder="CVC"
               maxLength={3}
-              className="border p-3 rounded w-full"
+              className="montserrat border p-3 rounded w-full"
             />
           </div>
           <div className="mt-6">
             <button
               onClick={handlePayment}
-              className="bg-black text-white px-16 py-3 text-sm"
+              className="montserrat bg-black text-white px-16 py-3 text-sm"
             >
               Onayla ve Öde
             </button>

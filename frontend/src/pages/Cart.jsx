@@ -38,7 +38,7 @@ const Cart = () => {
             (product) => product._id === item._id
           );
           return (
-            <div className="flex items-center gap-6 p-4 bg-white shadow-md rounded-lg border mb-4">
+            <div className="flex items-center gap-6 p-4 bg-white montserrat shadow-md rounded-lg border mb-4">
               <img
                 className="w-16 sm:w-20 rounded-lg object-cover"
                 src={productData.image[0]}
@@ -46,12 +46,12 @@ const Cart = () => {
               />
 
               <div className="flex flex-col gap-2 flex-grow">
-                <p className="text-sm sm:text-lg font-semibold text-gray-800">
+                <p className="text-sm sm:text-lg montserrat font-semibold text-gray-800">
                   {productData.name}
                 </p>
 
                 <div className="flex items-center justify-between">
-                  <p className="text-base sm:text-lg font-medium text-gray-600">
+                  <p className="text-base sm:text-lg montserrat font-medium text-gray-600">
                     {productData.price}
                     {currency}
                   </p>
@@ -61,7 +61,7 @@ const Cart = () => {
               </div>
 
               <div className="flex items-center gap-4">
-              <p className="px-3 py-1 text-sm sm:text-base bg-gray-100 text-gray-700 rounded-full border border-gray-300">
+              <p className="px-3 montserrat py-1 text-sm sm:text-base bg-gray-100 text-gray-700 rounded-full border border-gray-300">
                     Size: {item.size}
                   </p>
                 <input
@@ -93,7 +93,7 @@ const Cart = () => {
           <div className="w-full text-end">
             <button
               onClick={() => navigate('/place-order')}
-              className="bg-black text-white text-sm my-8 px-8 py-3"
+              className="bg-black montserrat text-white text-sm my-8 px-8 py-3"
             >
               SEPETİ ONAYLA
             </button>

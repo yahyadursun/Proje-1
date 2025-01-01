@@ -15,7 +15,7 @@ const NewsLetterBox = () => {
         className="w-full sm:w-1/2 flex items-center gap-3 mx-auto my-6 border pl-3"
       >
         <input
-          className="w-full sm:flex-1 outline-none"
+          className="w-full sm:flex-1 outline-none bg-gray-50"
           type="email"
           placeholder="Email"
           required

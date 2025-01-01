@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { X, Save, Trash2 } from "lucide-react";
+import citiesAndDistricts from "./citiesAndDistricts.jsx"; // citiesAndDistricts.js dosyasını import et
 
 const AddressForm = ({
   isOpen,
@@ -11,25 +12,16 @@ const AddressForm = ({
 }) => {
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
-  const citiesAndDistricts = {
-    İstanbul: ["Kadıköy", "Beşiktaş", "Üsküdar", "Fatih", "Şişli"],
-    Ankara: ["Çankaya", "Keçiören", "Yenimahalle", "Sincan", "Etimesgut"],
-    İzmir: ["Konak", "Karşıyaka", "Bornova", "Buca", "Bayraklı"],
-    Antalya: ["Muratpaşa", "Kepez", "Alanya", "Manavgat", "Kemer"],
-    Bursa: ["Osmangazi", "Nilüfer", "Yıldırım", "İnegöl", "Gemlik"],
-    Edirne:["Merkez","Erikli","İpsala","Enez","Havsa","Keşan","Lalapaşa","Uzunköprü"],
-    Tekirdağ:["Süleymanpaşa","Çorlu","Kapaklı","Saray","Çerkezköy"]
-  };
   const countries = ["Türkiye"];
 
-  const cities = Object.keys(citiesAndDistricts);
+  const cities = Object.keys(citiesAndDistricts); // Şehirler için citiesAndDistricts'ten alınan veriler
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md">
-        <h3 className="text-xl font-semibold text-gray-700 mb-4">
+        <h3 className="text-xl montserrat font-semibold text-gray-700 mb-4">
           {editAddress.id ? "Adresi Düzenle" : "Adresi Düzenle"}
         </h3>
 
@@ -42,7 +34,7 @@ const AddressForm = ({
                 setEditAddress({ ...editAddress, label: e.target.value })
               }
               placeholder="Adres Etiketi (Ev, İş, vb.)"
-              className="w-full bg-gray-100 text-gray-700 border-b-2 border-gray-300 focus:border-gray-500 px-2 py-2 transition-colors duration-300 outline-none"
+              className="w-full montserrat bg-gray-100 text-gray-700 border-b-2 border-gray-300 focus:border-gray-500 px-2 py-2 transition-colors duration-300 outline-none"
             />
           </div>
 
@@ -54,9 +46,11 @@ const AddressForm = ({
                 setEditAddress({ ...editAddress, street: e.target.value })
               }
               placeholder="Sokak Adresi"
-              className="w-full bg-gray-100 text-gray-700 border-b-2 border-gray-300 focus:border-gray-500 px-2 py-2 transition-colors duration-300 outline-none"
+              className="w-full montserrat  bg-gray-100 text-gray-700 border-b-2 border-gray-300 focus:border-gray-500 px-2 py-2 transition-colors duration-300 outline-none"
             />
           </div>
+          
+          {/* Şehir Seçimi */}
           <div>
             <select
               value={editAddress.city || ""}
@@ -65,10 +59,10 @@ const AddressForm = ({
                 setEditAddress({
                   ...editAddress,
                   city: selectedCity,
-                  state: "", // Şehir değişince ilçe sıfırlanır.
+                  state: "", // Şehir değişince ilçe sıfırlanır
                 });
               }}
-              className="w-full bg-gray-100 text-gray-700 border-b-2 border-gray-300 focus:border-gray-500 px-2 py-2 transition-colors duration-300 outline-none appearance-none"
+              className="w-full montserrat bg-gray-100 text-gray-700 border-b-2 border-gray-300 focus:border-gray-500 px-2 py-2 transition-colors duration-300 outline-none appearance-none"
             >
               <option value="" disabled>
                 Şehir Seçiniz
@@ -81,13 +75,14 @@ const AddressForm = ({
             </select>
           </div>
 
+          {/* İlçe Seçimi */}
           <div>
             <select
               value={editAddress.state || ""}
               onChange={(e) =>
                 setEditAddress({ ...editAddress, state: e.target.value })
               }
-              className="w-full bg-gray-100 text-gray-700 border-b-2 border-gray-300 focus:border-gray-500 px-2 py-2 transition-colors duration-300 outline-none appearance-none"
+              className="w-full montserrat bg-gray-100 text-gray-700 border-b-2 border-gray-300 focus:border-gray-500 px-2 py-2 transition-colors duration-300 outline-none appearance-none"
               disabled={!editAddress.city}
             >
               <option value="" disabled>
@@ -112,12 +107,13 @@ const AddressForm = ({
               className="w-full bg-gray-100 text-gray-700 border-b-2 border-gray-300 focus:border-gray-500 px-2 py-2 transition-colors duration-300 outline-none"
             />
 
+            {/* Ülke Seçimi */}
             <select
               value={editAddress.country || ""}
               onChange={(e) =>
                 setEditAddress({ ...editAddress, country: e.target.value })
               }
-              className="w-full bg-gray-100 text-gray-700 border-b-2 border-gray-300 focus:border-gray-500 px-2 py-2 transition-colors duration-300 outline-none appearance-none"
+              className="w-full montserrat bg-gray-100 text-gray-700 border-b-2 border-gray-300 focus:border-gray-500 px-2 py-2 transition-colors duration-300 outline-none appearance-none"
             >
               <option value="" disabled>
                 Ülke Seçiniz
@@ -135,16 +131,16 @@ const AddressForm = ({
           <div className="flex space-x-2">
             <button
               onClick={onClose}
-              className="bg-gray-100 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors duration-300 flex items-center justify-center"
+              className="montserrat bg-gray-100 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors duration-300 flex items-center justify-center"
             >
-              <X size={20} className="mr-2" /> İptal
+              <X size={20} className="montserrat mr-2" /> İptal
             </button>
             {editAddress.label && (
               <button
                 onClick={() => setIsDeleteConfirmOpen(true)}
-                className="bg-red-100 text-red-600 px-4 py-2 rounded-lg hover:bg-red-200 transition-colors duration-300 flex items-center justify-center"
+                className="bg-red-100 montserrat text-red-600 px-4 py-2 rounded-lg hover:bg-red-200 transition-colors duration-300 flex items-center justify-center"
               >
-                <Trash2 size={20} className="mr-2" /> Sil
+                <Trash2 size={20} className="montserrat mr-2" /> Sil
               </button>
             )}
           </div>
@@ -160,16 +156,16 @@ const AddressForm = ({
         {isDeleteConfirmOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-lg p-6 w-full max-w-sm">
-              <h4 className="text-lg font-semibold text-gray-700 mb-4">
+              <h4 className="montserrat text-lg font-semibold text-gray-700 mb-4">
                 Adresi Sil
               </h4>
-              <p className="text-gray-600 mb-6">
+              <p className="montserrat text-gray-600 mb-6">
                 Bu adresi silmek istediğinizden emin misiniz?
               </p>
               <div className="flex justify-end space-x-4">
                 <button
                   onClick={() => setIsDeleteConfirmOpen(false)}
-                  className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-300"
+                  className="montserrat px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-300"
                 >
                   İptal
                 </button>
@@ -178,7 +174,7 @@ const AddressForm = ({
                     onDelete(editAddress.label);
                     setIsDeleteConfirmOpen(false);
                   }}
-                  className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors duration-300"
+                  className="montserrat px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors duration-300"
                 >
                   Sil
                 </button>

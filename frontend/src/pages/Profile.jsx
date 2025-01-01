@@ -221,13 +221,13 @@ const Profile = () => {
         <div className="bg-white shadow-lg rounded-2xl overflow-hidden border border-gray-300 p-6">
           <div className="bg-gray-200 text-gray-800 p-6 flex items-center border-b border-gray-300">
             <User size={48} className="mr-4 text-gray-600" />
-            <h1 className="text-2xl font-bold text-gray-700">Profilim</h1>
+            <h1 className="text-2xl montserrat-bold text-gray-700">Profilim</h1>
           </div>
 
           <div className="space-y-4">
             {isEditing ? (
               <div>
-                <h2 className="text-xl font-semibold text-gray-700 mb-4">
+                <h2 className="text-xl montserrat font-semibold text-gray-700 mt-2 mb-2">
                   Profil Bilgilerini Düzenle
                 </h2>
                 <div className="space-y-4">
@@ -246,7 +246,7 @@ const Profile = () => {
                         onChange={(e) =>
                           setEditForm({ ...editForm, [key]: e.target.value })
                         }
-                        className="w-full bg-gray-100 text-gray-700 border-b-2 border-gray-300 focus:border-gray-500 px-2 py-2 transition-colors duration-300 outline-none"
+                        className="w-full montserrat bg-gray-100 text-gray-700 border-b-2 border-gray-300 focus:border-gray-500 px-2 py-2 transition-colors duration-300 outline-none"
                       />
                     </div>
                   ))}
@@ -258,7 +258,7 @@ const Profile = () => {
                       onChange={(e) =>
                         setEditForm({ ...editForm, gender: e.target.value })
                       }
-                      className="w-full bg-gray-100 text-gray-700 border-b-2 border-gray-300 focus:border-gray-500 px-2 py-2 transition-colors duration-300 outline-none"
+                      className="w-full montserrat bg-gray-100 text-gray-700 border-b-2 border-gray-300 focus:border-gray-500 px-2 py-2 transition-colors duration-300 outline-none"
                     >
                       <option value="" hidden disabled>
                         Cinsiyet Seçin
@@ -272,13 +272,13 @@ const Profile = () => {
                 <div className="flex justify-between mt-6 space-x-4">
                   <button
                     onClick={() => setIsEditing(false)}
-                    className="flex-1 bg-gray-100 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors duration-300 flex items-center justify-center"
+                    className="flex-1 montserrat bg-gray-100 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors duration-300 flex items-center justify-center"
                   >
                     <X size={20} className="mr-2" /> İptal
                   </button>
                   <button
                     onClick={updateUserProfile}
-                    className="flex-1 bg-gray-100 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors duration-300 flex items-center justify-center"
+                    className="flex-1 bg-gray-100 montserrat text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors duration-300 flex items-center justify-center"
                   >
                     <Save size={20} className="mr-2" /> Kaydet
                   </button>
@@ -297,10 +297,10 @@ const Profile = () => {
                     { label: "Cinsiyet", value: user.gender },
                   ].map(({ label, value }) => (
                     <div key={label} className="bg-gray-100 p-3 rounded-lg">
-                      <span className="text-gray-500 font-medium mr-2">
+                      <span className="montserrat text-gray-500 font-medium mr-2">
                         {label}:
                       </span>
-                      <span className="text-gray-800">{value}</span>
+                      <span className="montserrat text-gray-800">{value}</span>
                     </div>
                   ))}
                 </div>
@@ -308,13 +308,13 @@ const Profile = () => {
                 <div className="flex justify-between mt-6 space-x-4">
                   <button
                     onClick={() => (window.location.href = "/orders")}
-                    className="flex-1 bg-gray-100 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-300 flex items-center justify-center"
+                    className="flex-1 montserrat bg-gray-100 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-300 flex items-center justify-center"
                   >
                     <List size={20} className="mr-2" /> Siparişlerim
                   </button>
                   <button
                     onClick={() => setIsEditing(true)}
-                    className="flex-1 bg-gray-100 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-300 flex items-center justify-center"
+                    className="flex-1 montserrat bg-gray-100 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-300 flex items-center justify-center"
                   >
                     <Edit size={20} className="mr-2" /> Profil Düzenle
                   </button>
@@ -327,7 +327,7 @@ const Profile = () => {
         {/* Addresses Section */}
         <div className="bg-white shadow-lg rounded-2xl overflow-hidden border border-gray-300 p-6">
           <div className="bg-gray-200 text-gray-800 p-6 flex items-center justify-between border-b border-gray-300">
-            <h2 className="text-xl font-semibold text-gray-700">Adreslerim</h2>
+            <h2 className="text-xl montserrat font-semibold text-gray-700">Adreslerim</h2>
             <button
               onClick={() => {
                 setEditAddress({
@@ -340,7 +340,7 @@ const Profile = () => {
                 });
                 setIsAddressEditing(true);
               }}
-              className="bg-gray-100 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-300 flex items-center justify-center"
+              className="bg-gray-100 montserrat text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-300 flex items-center justify-center"
             >
               <Plus size={20} className="mr-2" /> Yeni Adres
             </button>
@@ -354,28 +354,28 @@ const Profile = () => {
                   className="bg-gray-100 p-4 rounded-lg flex justify-between items-center"
                 >
                   <div className="space-y-1">
-                    <div className="font-semibold text-gray-700">
+                    <div className="montserrat font-semibold text-gray-700">
                       {address.label}
                     </div>
-                    <div className="text-gray-600">{address.street}</div>
-                    <div className="text-gray-600">
+                    <div className="montserrat text-gray-600">{address.street}</div>
+                    <div className="montserrat text-gray-600">
                       {address.city}, {address.state}, {address.postalCode}
                     </div>
-                    <div className="text-gray-600">{address.country}</div>
+                    <div className="montserrat text-gray-600">{address.country}</div>
                   </div>
                   <button
                     onClick={() => {
                       setEditAddress(address);
                       setIsAddressEditing(true);
                     }}
-                    className="bg-gray-200 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-300 flex items-center justify-center"
+                    className="bg-gray-200 montserrat text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-300 flex items-center justify-center"
                   >
                     <Edit size={20} className="mr-2" /> Düzenle
                   </button>
                 </div>
               ))
             ) : (
-              <p className="text-gray-500 text-center py-4">
+              <p className="text-gray-500 montserrat text-center py-4">
                 Kayıtlı adres bulunmamaktadır.
               </p>
             )}

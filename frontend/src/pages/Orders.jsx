@@ -112,7 +112,7 @@ const Orders = () => {
   };
 
   return (
-    <div className="border-t pt-16 min-h-screen">
+    <div className="border-t pt-16 min-h-screen montserrat">
       <div className="text-2xl text-center mb-8">
         <Title text1={"Siparişlerim"} />
       </div>
@@ -123,13 +123,13 @@ const Orders = () => {
           placeholder="Sipariş ara (isim, durum, ödeme yöntemi)"
           value={searchQuery}
           onChange={handleSearch}
-          className="border p-3 w-full rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-6 text-gray-700"
+          className="border p-3 w-full rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-6 text-gray-700 montserrat"
         />
 
         <div className="flex justify-between gap-4 mb-6">
           <button
             onClick={() => handleFilterPeriod("all")}
-            className={`flex-1 py-2 text-sm font-medium rounded-lg transition-colors duration-200 shadow-md ${
+            className={`flex-1 py-2 text-sm font-medium rounded-lg transition-colors duration-200 shadow-md montserrat ${
               filterPeriod === "all"
                 ? "bg-indigo-600 text-white"
                 : "bg-white border border-gray-300 text-gray-700"
@@ -139,7 +139,7 @@ const Orders = () => {
           </button>
           <button
             onClick={() => handleFilterPeriod("30days")}
-            className={`flex-1 py-2 text-sm font-medium rounded-lg transition-colors duration-200 shadow-md ${
+            className={`flex-1 py-2 text-sm font-medium rounded-lg transition-colors duration-200 shadow-md montserrat ${
               filterPeriod === "30days"
                 ? "bg-indigo-600 text-white"
                 : "bg-white border border-gray-300 text-gray-700"
@@ -149,7 +149,7 @@ const Orders = () => {
           </button>
           <button
             onClick={() => handleFilterPeriod("3months")}
-            className={`flex-1 py-2 text-sm font-medium rounded-lg transition-colors duration-200 shadow-md ${
+            className={`flex-1 py-2 text-sm font-medium rounded-lg transition-colors duration-200 shadow-md montserrat ${
               filterPeriod === "3months"
                 ? "bg-indigo-600 text-white"
                 : "bg-white border border-gray-300 text-gray-700"
@@ -159,7 +159,7 @@ const Orders = () => {
           </button>
           <button
             onClick={() => handleFilterPeriod("1year")}
-            className={`flex-1 py-2 text-sm font-medium rounded-lg transition-colors duration-200 shadow-md ${
+            className={`flex-1 py-2 text-sm font-medium rounded-lg transition-colors duration-200 shadow-md montserrat ${
               filterPeriod === "1year"
                 ? "bg-indigo-600 text-white"
                 : "bg-white border border-gray-300 text-gray-700"
@@ -174,7 +174,7 @@ const Orders = () => {
             filteredOrders.map((item, index) => (
               <div
                 key={index}
-                className="p-6 bg-white rounded-lg shadow-lg flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-t-4 border-gray-200"
+                className="p-6 bg-white rounded-lg shadow-lg flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-t-4 border-gray-200 montserrat"
               >
                 <div className="flex items-start gap-4 text-sm">
                   <img
@@ -183,7 +183,7 @@ const Orders = () => {
                     alt={item.name}
                   />
                   <div>
-                    <p className="text-base font-medium text-gray-800">
+                    <p className="text-base font-medium text-gray-800 montserrat">
                       {item.name}
                     </p>
                     <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
@@ -222,13 +222,13 @@ const Orders = () => {
                         item.status
                       )}`}
                     ></p>
-                    <p className="text-sm font-medium text-gray-700">
+                    <p className="text-sm font-medium text-gray-700 montserrat">
                       {item.status}
                     </p>
                   </div>
                   <button
                     onClick={loadOrderData}
-                    className="border px-4 py-2 text-sm font-medium rounded-lg bg-indigo-500 text-white hover:bg-indigo-600 transition"
+                    className="border px-4 py-2 text-sm font-medium rounded-lg bg-indigo-500 text-white hover:bg-indigo-600 transition montserrat"
                   >
                     Kargo Takip
                   </button>
@@ -236,7 +236,7 @@ const Orders = () => {
               </div>
             ))
           ) : (
-            <p className="text-center text-gray-500 text-sm">
+            <p className="text-center text-gray-500 text-sm montserrat">
               Sipariş bulunamadı.
             </p>
           )}
