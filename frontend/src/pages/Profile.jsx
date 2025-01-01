@@ -278,7 +278,7 @@ const Profile = () => {
                   </button>
                   <button
                     onClick={updateUserProfile}
-                    className="flex-1 bg-gray-100 text-gray-600 px-4 py-2 rounded-lg bg-gray-200 transition-colors duration-300 flex items-center justify-center"
+                    className="flex-1 bg-gray-100 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors duration-300 flex items-center justify-center"
                   >
                     <Save size={20} className="mr-2" /> Kaydet
                   </button>
@@ -286,9 +286,7 @@ const Profile = () => {
               </div>
             ) : (
               <div>
-                <h2 className="text-xl font-semibold text-gray-700 mb-4">
-                  Kullanıcı Bilgileri
-                </h2>
+              
                 <div className="space-y-3">
                   {[
                     { label: "Ad", value: user.name },

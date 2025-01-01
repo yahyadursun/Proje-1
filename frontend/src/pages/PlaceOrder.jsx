@@ -9,7 +9,7 @@ import { Modal } from "antd";
 import { MapPin } from "lucide-react";
 
 const PlaceOrder = () => {
-  const [method, setMethod] = useState("cod");
+  const [method, setMethod] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cardData, setCardData] = useState({
     cardNumber: "",
@@ -114,7 +114,7 @@ const PlaceOrder = () => {
   const onSubmitHandler = async (event) => {
     event.preventDefault();
 
-    if (method === "stripe" || method === "kredikartı") {
+    if (method === "sanal ödeme" || method === "kredi kartı") {
       setIsModalOpen(true);
       return;
     }
@@ -144,6 +144,7 @@ const PlaceOrder = () => {
         address: formData,
         items: orderItems,
         amount: getCartAmount() + Number(delivery_fee || 0),
+        paymentMethod: method,
       };
 
       const response = await axios.post(
@@ -314,9 +315,9 @@ const PlaceOrder = () => {
             <Title text1={"Ödeme"} text2={"Seçenekleri"} />
             <div className="flex gap-3 flex-col lg:flex-row">
               <div
-                onClick={() => setMethod("stripe")}
+                onClick={() => setMethod("sanal ödeme")}
                 className={`flex items-center gap-3 border p-2 px-3 cursor-pointer ${
-                  method === "stripe" ? "bg-green-400" : ""
+                  method === "sanal ödeme" ? "bg-green-400" : ""
                 }`}
               >
                 <img
@@ -326,9 +327,9 @@ const PlaceOrder = () => {
                 />
               </div>
               <div
-                onClick={() => setMethod("kredikartı")}
+                onClick={() => setMethod("kredi kartı")}
                 className={`flex items-center gap-3 border p-2 px-3 cursor-pointer ${
-                  method === "kredikartı" ? "bg-green-400" : ""
+                  method === "kredi kartı" ? "bg-green-400" : ""
                 }`}
               >
                 <img
@@ -338,9 +339,9 @@ const PlaceOrder = () => {
                 />
               </div>
               <div
-                onClick={() => setMethod("cod")}
+                onClick={() => setMethod("kapıda ödeme")}
                 className={`flex items-center gap-3 border p-2 px-3 cursor-pointer ${
-                  method === "cod" ? "bg-green-400" : ""
+                  method === "kapıda ödeme" ? "bg-green-400" : ""
                 }`}
               >
                 <p className="text-gray-500 text-sm font-medium mx-4">

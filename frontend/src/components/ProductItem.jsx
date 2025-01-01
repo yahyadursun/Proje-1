@@ -15,8 +15,8 @@ const ProductItem = ({ id, image, name, price, bestseller, newSeason }) => {
       )}
       {/* Çiçek simgesi - New Season */}
       {newSeason && (
-        <div className="absolute top-2 right-2 bg-purple-600 text-white text-xs font-bold py-1 px-2 rounded-full flex items-center gap-1">
-          🌸 <span>New Season</span>
+        <div className="absolute top-2 right-2 bg-blue-300 text-white text-xs font-bold py-1 px-2 rounded-full flex items-center gap-1">
+          ⛄ <span>New Season</span>
         </div>
       )}
       {/* Ürün Görseli */}

@@ -5,7 +5,7 @@ import productModel from "../models/productModels.js";
 
 const placeOrder = async (req, res) => {
     try {
-        const { userId, items, amount, address } = req.body;
+        const { userId, items, amount, address ,paymentMethod} = req.body;
 
         for (const item of items) {
             const product = await productModel.findById(item._id);
@@ -35,8 +35,8 @@ const placeOrder = async (req, res) => {
             items,
             address,
             amount,
-            paymentMethod: "COD",
-            payment: false,
+            paymentMethod,
+            payment: true,
             date: Date.now(),
         });
 
