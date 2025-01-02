@@ -123,12 +123,14 @@ const handleCardChange = (event) => {
   if (name === "cardNumber" && value.length <= 16) {
     setCardData(prev => ({ ...prev, [name]: value }));
   } else if (name === "expiryMonth") {
-    if (value === '' || (parseInt(value) >= 0 && parseInt(value) <= 12)) {
+    if (value === '' || (parseInt(value) >= 1 && parseInt(value) <= 12)) {
       setCardData(prev => ({ ...prev, [name]: value }));
     }
   } else if (name === "expiryYear") {
+    if (value === '' || (parseInt(value) >= 2 && parseInt(value) <= 99)) {
+      setCardData(prev => ({ ...prev, [name]: value }));
+    }
     
-    setCardData(prev => ({ ...prev, [name]: value })); // Önce değeri güncelle
   
   } else if (name === "cvc" && value.length <= 3) {
     setCardData(prev => ({ ...prev, [name]: value }));
@@ -179,9 +181,10 @@ const handleCardChange = (event) => {
       );
 
       if (response.data.success) {
-        setCartItems({});
-        navigate("/orders");
+        
         toast.success("Ödeme yapıldı! Siparişiniz başarıyla oluşturuldu.");
+        setCartItems({});
+        navigate("/orders", { state: { fromPayment: true } });
       } else {
         toast.error(response.data.message);
       }
@@ -201,6 +204,7 @@ const handleCardChange = (event) => {
       toast.error("Lütfen tüm kart bilgilerini doldurun.");
       return;
     }
+    
     setIsModalOpen(false);
     await placeOrder();
   };
