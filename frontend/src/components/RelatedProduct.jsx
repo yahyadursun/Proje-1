@@ -23,7 +23,7 @@ const RelatedProduct = ({ category, subCategory }) => {
   return (
     <div className="my-16">
       <div className="text-center text-xl py-2">
-        <Title text1="Related " text2="Products" />
+        <Title text1="Benzer " text2="Ürünler" />
       </div>
       <Swiper
         modules={[Pagination]}

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import RelatedProduct from "../components/relatedProduct";
 import { ToastContainer, toast } from "react-toastify";
@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Product = () => {
   const { productId } = useParams();
+  const location = useLocation();
   const { products, currency, addToCart } = useContext(ShopContext);
   const [productData, setProductData] = useState(null);
   const [image, setImage] = useState("");
@@ -25,11 +26,16 @@ const Product = () => {
     }
   };
 
+  // Effect for initial data fetch and product changes
   useEffect(() => {
     if (products && products.length > 0) {
       fetchProductData();
+      // Scroll to top whenever productId changes
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // Reset size when product changes
+      setSize("");
     }
-  }, [productId, products]);
+  }, [productId, products, location.pathname]);
 
   const handleAddToCart = () => {
     if (!size) {
@@ -106,14 +112,14 @@ const Product = () => {
 
           {/* Select Size Dropdown */}
           <div className="flex flex-col gap-4 my-8 relative">
-            <p className="montserrat-bold funnel-sans">Select Size</p>
+            <p className="montserrat-bold funnel-sans">Beden Seçin</p>
             <select
               onChange={(e) => setSize(e.target.value)}
               className="custom-select"
               value={size}
             >
               <option value="" hidden disabled>
-                Size Seçin
+                Beden Seçin
               </option>
               {productData.sizes
                 .sort((a, b) => a - b)
