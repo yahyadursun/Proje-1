@@ -34,7 +34,7 @@ const Cart = () => {
     return (
       <div className="border-t pt-14">
         <div className="text-2xl mb-3">
-          <Title text1={"Your"} text2={"Cart"}></Title>
+          <Title text1={"Sepetinizdeki"} text2={" Ürünler"}></Title>
         </div>
         <div className="flex justify-center items-center h-40">
           <div className="animate-pulse text-gray-500">
@@ -49,10 +49,10 @@ const Cart = () => {
     return (
       <div className="border-t pt-14">
         <div className="text-2xl mb-3">
-          <Title text1={"Your"} text2={"Cart"}></Title>
+          <Title text1={"Sepetinizdeki"} text2={" Ürünler"}></Title>
         </div>
         <div className="flex justify-center items-center h-40">
-          <p className="text-gray-500 montserrat">Your cart is empty</p>
+          <p className="text-gray-500 montserrat">Sepetinizde ürün bulunmamaktadır.</p>
         </div>
       </div>
     );
@@ -61,7 +61,7 @@ const Cart = () => {
   return (
     <div className="border-t pt-14">
       <div className="text-2xl mb-3">
-        <Title text1={"Your"} text2={"Cart"}></Title>
+        <Title text1={"Sepetinizdeki"} text2={" Ürünler"}></Title>
       </div>
       <div>
         {cartData.map((item) => {
