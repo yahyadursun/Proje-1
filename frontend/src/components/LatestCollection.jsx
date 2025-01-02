@@ -21,7 +21,7 @@ const LatestCollection = () => {
     <div className="my-10">
       <div className="text-center py-8 text-9x1">
         <Title text1={"LATEST"} text2={"COLLECTIONS"} />
-        <p className="w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-700">
+        <p className="montserrat w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-700">
         En yeni koleksiyonumuzla modanın nabzını tutun – Sneakster'da stilinizi yansıtan son trendleri keşfedin!
         </p>
       </div>

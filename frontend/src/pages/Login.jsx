@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import axios from "axios";
-import { toast } from "react-toastify"; // Toast importu
+import { toast } from "react-toastify";
+import { assets } from "../assets/assets";
 
 const Login = () => {
   const [currentState, setCurrentState] = useState("Login");
@@ -14,11 +15,11 @@ const Login = () => {
   const [phoneNo, setPhoneNo] = useState("");
   const [identityNo, setIdentityNo] = useState("");
   const [gender, setGender] = useState("");
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false); // Şifre görünürlüğü
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
 
-    // Boş alanları kontrol et
     if (!email || !password) {
       toast.error("Email ve şifre gerekli. Lütfen her iki alanı da doldurun.");
       return;
@@ -26,7 +27,6 @@ const Login = () => {
 
     try {
       if (currentState === "Sign Up") {
-        // Kayıt işlemi
         const response = await axios.post(backendUrl + "/api/user/register", {
           name,
           surname,
@@ -39,17 +39,13 @@ const Login = () => {
         if (response.data.success) {
           setToken(response.data.token);
           localStorage.setItem("token", response.data.token);
-          toast.success("Başarıyla kaydoldunuz. Giriş yapabilirsiniz.");
+          toast.success("Başarıyla kaydoldunuz.");
+        } else if (response.data.message === "user already exists") {
+          toast.error("Böyle bir kullanıcı zaten mevcut.");
         } else {
-          // Eğer email zaten veritabanında varsa
-          if (response.data.message === "user already exists") {
-            toast.error("Böyle bir kullanıcı zaten mevcut.");
-          } else {
-            toast.error(response.data.message); // Diğer hatalar
-          }
+          toast.error(response.data.message);
         }
       } else {
-        // Giriş işlemi
         const response = await axios.post(backendUrl + "/api/user/login", {
           email,
           password,
@@ -58,16 +54,12 @@ const Login = () => {
           setToken(response.data.token);
           localStorage.setItem("token", response.data.token);
           toast.success("Giriş başarılı!");
+        } else if (response.data.message === "User not found") {
+          toast.error("Böyle bir kullanıcı bulunamadı.");
+        } else if (response.data.message === "Incorrect password") {
+          toast.error("Hatalı şifre. Lütfen tekrar deneyin.");
         } else {
-          // Hatalı giriş durumlarını kontrol et
-          if (response.data.message === "User not found") {
-            toast.error("Böyle bir kullanıcı bulunamadı.");
-          } else if (response.data.message === "Incorrect password") {
-            toast.error("Hatalı şifre. Lütfen tekrar deneyin.");
-          } else {
-            // Diğer hatalar
-            toast.error("Hatalı email veya şifre.");
-          }
+          toast.error("Hatalı email veya şifre.");
         }
       }
     } catch (error) {
@@ -78,102 +70,142 @@ const Login = () => {
 
   useEffect(() => {
     if (token) {
-      navigate("/"); // Token varsa, ana sayfaya yönlendir
+      navigate("/");
     }
   }, [token]);
+
+  // Form geçişinde alanları temizle
+  useEffect(() => {
+    if (currentState === "Sign Up") {
+      setEmail("");
+      setPassword("");
+    }
+  }, [currentState]);
 
   return (
     <form
       onSubmit={onSubmitHandler}
-      className="flex flex-col items-center w-[90%] sm:max-w-96 m-auto gap-4 mt-14 text-black"
+      className="flex flex-col items-center w-[90%] sm:max-w-md mx-auto gap-6 mt-14 text-black"
     >
-      <div className="inline-flex items-center gap-2 mb-2 mt-10">
-        <p className="prata-regular text-3xl">{currentState}</p>
-        <hr className="border-none h-[1.5px] w-8 bg-gray-800" />
+      <div className="inline-flex items-center gap-2 mb-6">
+        <p className="prata-regular text-3xl font-semibold">{currentState}</p>
+        <hr className="border-none h-[2px] w-10 bg-gray-800" />
       </div>
-      <div className="flex flex-row">
-        {currentState === "Sign Up" && (
-          <>
-            <input
-              onChange={(e) => setName(e.target.value)}
-              value={name}
-              type="text"
-              className="w-full px-3 py-2 border border-gray-800"
-              placeholder="Ad"
-              required
-            />
-            <input
-              onChange={(e) => setSurname(e.target.value)}
-              value={surname}
-              type="text"
-              className="w-full px-3 py-2 border border-gray-800"
-              placeholder="Soyad"
-              required
-            />
-            <input
-              onChange={(e) => setPhoneNo(e.target.value)}
-              value={phoneNo}
-              type="text"
-              className="w-full px-3 py-2 border border-gray-800"
-              placeholder="Telefon Numarası"
-              required
-            />
-            <input
-              onChange={(e) => setIdentityNo(e.target.value)}
-              value={identityNo}
-              type="text"
-              className="w-full px-3 py-2 border border-gray-800"
-              placeholder="TC Kimlik Numarası"
-              required
-            />
-            <select
-              onChange={(e) => setGender(e.target.value)}
-              value={gender}
-              className="w-full px-3 py-2 border border-gray-800"
-              required
-            >
-              <option value="">Cinsiyet</option>
-              <option value="Erkek">Erkek</option>
-              <option value="Kadın">Kadın</option>
-            </select>
-          </>
-        )}
-      </div>
+
+      {currentState === "Sign Up" && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+          <input
+            onChange={(e) => {
+              const value = e.target.value.replace(/[^a-zA-ZığüşöçİĞÜŞÖÇ\s]/g, "");
+              setName(value);
+            }}
+            value={name}
+            type="text"
+            className="input-field"
+            placeholder="Ad"
+            required
+          />
+          <input
+            onChange={(e) => {
+              const value = e.target.value.replace(/[^a-zA-ZığüşöçİĞÜŞÖÇ\s]/g, "");
+              setSurname(value);
+            }}
+            value={surname}
+            type="text"
+            className="input-field"
+            placeholder="Soyad"
+            required
+          />
+          <input
+            onChange={(e) => {
+              const value = e.target.value.replace(/[^0-9]/g, "");
+              setPhoneNo(value);
+            }}
+            value={phoneNo}
+            type="tel"
+            className="input-field"
+            placeholder="Telefon Numarası"
+            maxLength="11"
+            required
+          />
+          <input
+            onChange={(e) => {
+              const value = e.target.value.replace(/[^0-9]/g, "");
+              setIdentityNo(value);
+            }}
+            value={identityNo}
+            type="text"
+            className="input-field"
+            placeholder="TC Kimlik Numarası"
+            maxLength="11"
+            required
+          />
+          <select
+            onChange={(e) => setGender(e.target.value)}
+            value={gender}
+            className="input-field"
+            required
+          >
+            <option value="" disabled>
+              Cinsiyet
+            </option>
+            <option value="Erkek">Erkek</option>
+            <option value="Kadın">Kadın</option>
+          </select>
+        </div>
+      )}
+
       <input
         onChange={(e) => setEmail(e.target.value)}
         value={email}
         type="email"
-        className="w-full px-3 py-2 border border-gray-800"
+        className="input-field"
         placeholder="Email"
         required
       />
-      <input
-        onChange={(e) => setPassword(e.target.value)}
-        value={password}
-        type="password"
-        className="w-full px-3 py-2 border border-gray-800"
-        placeholder="Şifre"
-        required
-      />
-      <div className="w-full flex justify-between text-sm mt-[-8px]">
-        <p className="cursor-pointer">Şifremi unuttum</p>
+      <div className="relative w-full">
+        <input
+          onChange={(e) => setPassword(e.target.value)}
+          value={password}
+          type={isPasswordVisible ? "text" : "password"}
+          className="input-field pr-10"
+          placeholder="Şifre"
+          maxLength="30"
+          required
+        />
+        <button
+          type="button"
+          onClick={() => setIsPasswordVisible((prev) => !prev)}
+          className="absolute right-2 top-2"
+        >
+          <img
+            src={assets.visible}
+            alt={isPasswordVisible ? "Şifreyi Gizle" : "Şifreyi Göster"}
+            className="w-6 h-6"
+          />  
+        </button>
+      </div>
+
+      <div className="flex justify-between text-sm w-full mt-2">
+        <p className="cursor-pointer hover:underline">Şifremi unuttum</p>
         {currentState === "Login" ? (
           <p
             onClick={() => setCurrentState("Sign Up")}
-            className="cursor-pointer"
+            className="cursor-pointer hover:underline"
           >
             Hesap Oluştur
           </p>
         ) : (
           <p
             onClick={() => setCurrentState("Login")}
-            className="cursor-pointer"
+            className="cursor-pointer hover:underline"
           >
             Giriş Yap
           </p>
         )}
       </div>
-      <button className="bg-black text-white font-light px-8 py-2 mt-4">
+
+      <button className="bg-black text-white font-medium px-8 py-2 rounded-md hover:bg-gray-800 mt-4 transition">
         {currentState === "Login" ? "Giriş Yap" : "Hesap Oluştur"}
       </button>
     </form>

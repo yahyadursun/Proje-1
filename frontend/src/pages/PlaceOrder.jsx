@@ -7,17 +7,21 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { Modal } from "antd";
 import { MapPin } from "lucide-react";
+import citiesAndDistricts from "../components/citiesAndDistricts";
 
 const PlaceOrder = () => {
   const [method, setMethod] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cardData, setCardData] = useState({
     cardNumber: "",
-    expiry: "",
+    expiryMonth: "",
+    expiryYear: "",
     cvc: "",
   });
   const [userAddresses, setUserAddresses] = useState([]);
   const [selectedAddressId, setSelectedAddressId] = useState(null);
+  const [districts, setDistricts] = useState([]); // Şehir seçimine göre güncellenen ilçeler
+  const cities = Object.keys(citiesAndDistricts); // Şehirlerin listesi
 
   const {
     navigate,
@@ -82,39 +86,58 @@ const PlaceOrder = () => {
     setFormData((prevData) => ({
       ...prevData,
       street: address.street || "",
-      city: address.city || "",// il bilgisini state olarak da kullanıyoruz
-      state: address.state || "", // ilçe bilgisini state olarak da kullanıyoruz
+      city: address.city || "", // şehir bilgisini form'da tutuyoruz
+      state: address.state || "", // ilçe bilgisini de burada güncelliyoruz
       zipcode: address.postalCode || "",
       country: address.country || "",
     }));
+
+    // İlçeleri güncelle (şehir seçimine göre)
+    if (address.city) {
+      setDistricts(citiesAndDistricts[address.city] || []);
+    } else {
+      setDistricts([]); // Şehir seçilmemişse ilçeleri sıfırla
+    }
+  };
+
+  const handleCityChange = (e) => {
+    const selectedCity = e.target.value;
+
+    // Şehir seçildiğinde ilçeleri güncelle ve ilçe alanını sıfırla
+    setFormData((prev) => ({
+      ...prev,
+      city: selectedCity,
+      state: "", // İlçeyi sıfırla
+    }));
+    setDistricts(citiesAndDistricts[selectedCity] || []);
   };
 
   const onChangeHandler = (event) => {
     const { name, value } = event.target;
     setFormData((data) => ({ ...data, [name]: value }));
   };
-  const handleCardChange = (event) => {
-    const { name, value } = event.target;
+const handleCardChange = (event) => {
+  const { name, value } = event.target;
+  if (/[^0-9]/.test(value) && value !== '') return;
 
-    // Ensure card number is 16 digits, expiry is MM/YY format, CVC is 3 digits
-    if (name === "cardNumber" && value.length <= 16) {
-      setCardData((prev) => ({ ...prev, [name]: value }));
-    } else if (name === "expiry") {
-      const formattedValue = value.replace(/\D/g, ""); // Sadece rakamları al
-      if (formattedValue.length <= 4) {
-        // Format: MMYY -> MM/YY
-        const newExpiry = formattedValue.replace(/(\d{2})(\d{2})/, "$1/$2");
-        setCardData((prev) => ({ ...prev, [name]: newExpiry }));
-      }
-    } else if (name === "cvc" && value.length <= 3) {
-      setCardData((prev) => ({ ...prev, [name]: value }));
+  if (name === "cardNumber" && value.length <= 16) {
+    setCardData(prev => ({ ...prev, [name]: value }));
+  } else if (name === "expiryMonth") {
+    if (value === '' || (parseInt(value) >= 0 && parseInt(value) <= 12)) {
+      setCardData(prev => ({ ...prev, [name]: value }));
     }
-  };
-
+  } else if (name === "expiryYear") {
+    
+    setCardData(prev => ({ ...prev, [name]: value })); // Önce değeri güncelle
+  
+  } else if (name === "cvc" && value.length <= 3) {
+    setCardData(prev => ({ ...prev, [name]: value }));
+  }
+};
   const onSubmitHandler = async (event) => {
     event.preventDefault();
 
-    if (method === "sanal ödeme" || method === "kredi kartı") {
+    if (method === "Sanal Ödeme" || method === "Kredi Kartı") {
       setIsModalOpen(true);
       return;
     }
@@ -157,8 +180,8 @@ const PlaceOrder = () => {
 
       if (response.data.success) {
         setCartItems({});
-        toast.success("Ödeme yapıldı! Siparişiniz başarıyla oluşturuldu.");
         navigate("/orders");
+        toast.success("Ödeme yapıldı! Siparişiniz başarıyla oluşturuldu.");
       } else {
         toast.error(response.data.message);
       }
@@ -169,7 +192,12 @@ const PlaceOrder = () => {
   };
 
   const handlePayment = async () => {
-    if (!cardData.cardNumber || !cardData.expiry || !cardData.cvc) {
+    if (
+      !cardData.cardNumber ||
+      !cardData.expiryMonth ||
+      !cardData.expiryYear ||
+      !cardData.cvc
+    ) {
       toast.error("Lütfen tüm kart bilgilerini doldurun.");
       return;
     }
@@ -193,7 +221,13 @@ const PlaceOrder = () => {
           {userAddresses.length > 0 && (
             <div className="mb-6">
               <h3 className="text-lg font-medium mb-3">Kayıtlı Adresleriniz</h3>
-              <div className="grid gap-3">
+              <div
+                className="grid gap-3 overflow-y-auto max-h-60"
+                style={{
+                  scrollbarWidth: "thin", // Firefox için
+                  scrollbarColor: "gray lightgray", // Firefox için
+                }}
+              >
                 {userAddresses.map((address) => (
                   <div
                     key={address.label}
@@ -210,7 +244,7 @@ const PlaceOrder = () => {
                     </div>
                     <p className="text-gray-600 mt-1">{address.street}</p>
                     <p className="text-gray-600">
-                      {address.city},{address.state}, {address.postalCode}
+                      {address.city}, {address.state}, {address.postalCode}
                     </p>
                     <p className="text-gray-600">{address.country}</p>
                   </div>
@@ -259,25 +293,44 @@ const PlaceOrder = () => {
             placeholder="Sokak Adresi"
           />
           <div className="flex gap-3">
-            <input
-              required
-              onChange={onChangeHandler}
+            {/* Şehir Seçimi */}
+            <select
               name="city"
               value={formData.city}
-              type="text"
+              onChange={handleCityChange}
               className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
-              placeholder="İl"
-            />
-            <input
               required
-              onChange={onChangeHandler}
+            >
+              <option value="" disabled>
+                Şehir Seçiniz
+              </option>
+              {cities.map((city, index) => (
+                <option key={index} value={city}>
+                  {city}
+                </option>
+              ))}
+            </select>
+
+            {/* İlçe Seçimi */}
+            <select
               name="state"
               value={formData.state}
-              type="text"
+              onChange={onChangeHandler}
               className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
-              placeholder="İlçe"
-            />
+              required
+              disabled={districts.length === 0} // İlçe listesi yoksa seçim kapalı
+            >
+              <option value="" disabled>
+                İlçe Seçiniz
+              </option>
+              {districts.map((district, index) => (
+                <option key={index} value={district}>
+                  {district}
+                </option>
+              ))}
+            </select>
           </div>
+
           <div className="flex gap-3">
             <input
               required
@@ -315,9 +368,9 @@ const PlaceOrder = () => {
             <Title text1={"Ödeme"} text2={"Seçenekleri"} />
             <div className="flex gap-3 flex-col lg:flex-row">
               <div
-                onClick={() => setMethod("sanal ödeme")}
+                onClick={() => setMethod("Sanal Ödeme")}
                 className={`flex items-center gap-3 border p-2 px-3 cursor-pointer ${
-                  method === "sanal ödeme" ? "bg-green-400" : ""
+                  method === "Sanal Ödeme" ? "bg-green-400" : ""
                 }`}
               >
                 <img
@@ -327,9 +380,9 @@ const PlaceOrder = () => {
                 />
               </div>
               <div
-                onClick={() => setMethod("kredi kartı")}
+                onClick={() => setMethod("Kredi Kartı")}
                 className={`flex items-center gap-3 border p-2 px-3 cursor-pointer ${
-                  method === "kredi kartı" ? "bg-green-400" : ""
+                  method === "Kredi Kartı" ? "bg-green-400" : ""
                 }`}
               >
                 <img
@@ -339,12 +392,12 @@ const PlaceOrder = () => {
                 />
               </div>
               <div
-                onClick={() => setMethod("kapıda ödeme")}
+                onClick={() => setMethod("Kapıda Ödeme")}
                 className={`flex items-center gap-3 border p-2 px-3 cursor-pointer ${
-                  method === "kapıda ödeme" ? "bg-green-400" : ""
+                  method === "Kapıda Ödeme" ? "bg-green-400" : ""
                 }`}
               >
-                <p className="text-gray-500 text-sm font-medium mx-4">
+                <p className="montserrat text-gray-500 text-sm font-medium mx-4">
                   Kapıda Ödeme
                 </p>
               </div>
@@ -352,7 +405,7 @@ const PlaceOrder = () => {
             <div className="w-full text-end mt-8">
               <button
                 type="submit"
-                className="bg-black text-white px-16 py-3 text-sm"
+                className="montserrat bg-black text-white px-16 py-3 text-sm"
               >
                 Ödeme
               </button>
@@ -377,18 +430,27 @@ const PlaceOrder = () => {
               type="text"
               placeholder="Kart Numarası"
               maxLength={16}
-              className="border p-3 rounded w-full mb-3"
+              className="montserrat border p-3 rounded w-full mb-3"
             />
           </div>
           <div className="flex gap-3">
             <input
-              name="expiry"
-              value={cardData.expiry}
+              name="expiryMonth"
+              value={cardData.expiryMonth} 
               onChange={handleCardChange}
               type="text"
-              placeholder="MM/YY"
-              maxLength={5}
-              className="border p-3 rounded w-full"
+              placeholder="Ay"
+              maxLength={2}
+              className="montserrat border p-3 rounded w-full"
+            />
+            <input
+              name="expiryYear"
+              value={cardData.expiryYear} // Değer burada bağlanıyor
+              onChange={handleCardChange}
+              type="text"
+              placeholder="Yıl"
+              maxLength={2}
+              className="montserrat border p-3 rounded w-full"
             />
             <input
               name="cvc"
@@ -397,13 +459,13 @@ const PlaceOrder = () => {
               type="text"
               placeholder="CVC"
               maxLength={3}
-              className="border p-3 rounded w-full"
+              className="montserrat border p-3 rounded w-full"
             />
           </div>
           <div className="mt-6">
             <button
               onClick={handlePayment}
-              className="bg-black text-white px-16 py-3 text-sm"
+              className="montserrat bg-black text-white px-16 py-3 text-sm"
             >
               Onayla ve Öde
             </button>

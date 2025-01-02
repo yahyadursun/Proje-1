@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import RelatedProduct from "../components/relatedProduct";
 import { ToastContainer, toast } from "react-toastify";
@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Product = () => {
   const { productId } = useParams();
+  const location = useLocation();
   const { products, currency, addToCart } = useContext(ShopContext);
   const [productData, setProductData] = useState(null);
   const [image, setImage] = useState("");
@@ -25,11 +26,16 @@ const Product = () => {
     }
   };
 
+  // Effect for initial data fetch and product changes
   useEffect(() => {
     if (products && products.length > 0) {
       fetchProductData();
+      // Scroll to top whenever productId changes
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // Reset size when product changes
+      setSize("");
     }
-  }, [productId, products]);
+  }, [productId, products, location.pathname]);
 
   const handleAddToCart = () => {
     if (!size) {
@@ -78,42 +84,42 @@ const Product = () => {
         <div className="flex-1">
           {/* Product Name and Tags */}
           <div className="flex items-center gap-2 mt-2">
-            <h1 className="font-medium funnel-sans prompt-bold text-3x1">
+            <h1 className="font-medium montserrat prompt-bold text-3x1">
               {productData.name}
             </h1>
             {productData.bestseller && (
-              <span className="text-sm text-white bg-red-600 px-3 py-1 rounded-full">
+              <span className="montserrat text-sm text-white bg-red-600 px-3 py-1 rounded-full">
                 🔥 Bestseller 
               </span>
             )}
             {productData.newSeason && (
-              <span className="text-sm text-white bg-blue-300 px-3 py-1 rounded-full">
+              <span className="text-sm montserrat text-white bg-blue-300 px-3 py-1 rounded-full">
                ⛄ New Season
               </span>
             )}
           </div>
 
           <div className="flex items-center">
-            <p className="mt-5 funnel-sans font-small text-gray-400">
+            <p className="mt-5 montserrat font-small text-gray-400">
               {productData.description}
             </p>
           </div>
 
-          <p className="mt-5 text-3x1 funnel-sans font-medium">
+          <p className="mt-5 text-3x1 montserrat font-medium">
             {productData.price}
             {currency}
           </p>
 
           {/* Select Size Dropdown */}
           <div className="flex flex-col gap-4 my-8 relative">
-            <p className="prompt-bold funnel-sans">Select Size</p>
+            <p className="montserrat-bold funnel-sans">Beden Seçin</p>
             <select
               onChange={(e) => setSize(e.target.value)}
               className="custom-select"
               value={size}
             >
               <option value="" hidden disabled>
-                Size Seçin
+                Beden Seçin
               </option>
               {productData.sizes
                 .sort((a, b) => a - b)

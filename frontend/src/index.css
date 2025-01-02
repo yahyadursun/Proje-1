@@ -30,6 +30,11 @@ a.active hr{
     font-family: "Montserrat", sans-serif;
     font-optical-sizing: auto;
     font-style: normal;
+    
+  }
+  .montserrat-bold {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700; /* Bold ağırlık */
   }
   .prompt-bold {
     font-family: "Prompt", sans-serif;
@@ -43,17 +48,22 @@ a.active hr{
   width: 6px;
 }
 
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: #f1f1f1;
+.scrollbar-custom {
+  scrollbar-width: thin;
+  scrollbar-color: gray lightgray;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 3px;
+.scrollbar-custom::-webkit-scrollbar {
+  width: 8px;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #555;
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background: gray;
+  border-radius: 4px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb:hover {
+  background: darkgray;
 }
   @media(max-width:640px) {
     a.active{
@@ -140,4 +150,25 @@ a.active hr{
 select option:focus {
   background-color: transparent !important;
   color: inherit !important;
+}
+.input-field {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background-color: #f9fafb;
+  outline: none;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.input-field:focus {
+  border-color: #6366f1;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.input-field::placeholder {
+  color: #9ca3af;
+  font-size: 14px;
 }

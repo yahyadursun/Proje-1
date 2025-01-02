@@ -30,7 +30,7 @@ const Profile = () => {
   // Get user profile and addresses
   const getUserProfile = async () => {
     if (!token) {
-      toast.error("Lütfen giriş yapın.");
+      setLoading(false);
       return;
     }
 
@@ -42,7 +42,7 @@ const Profile = () => {
       if (response.data.success) {
         setUser(response.data.user);
         setEditForm(response.data.user);
-        setAddresses(response.data.user.addresses || []); // Assuming addresses is part of user profile
+        setAddresses(response.data.user.addresses || []);
       } else {
         toast.error(response.data.message);
       }
@@ -61,14 +61,25 @@ const Profile = () => {
       return;
     }
 
-    // Validation logic
-    if (editForm.phoneNo && !/^\d{10}$/.test(editForm.phoneNo)) {
-      toast.error(
-        "Telefon numarası geçerli bir formatta olmalıdır (10 rakam)."
-      );
+    // Telefon numarasının sadece rakamlardan oluşup oluşmadığını kontrol et
+    if (editForm.phoneNo && !/^\d+$/.test(editForm.phoneNo)) {
+      toast.error("Telefon numarası sadece rakamlardan oluşmalıdır.");
       return;
     }
 
+    // Telefon numarası validasyonu (Başlangıçta "05" ile başlamalı ve 10 rakam olmalı)
+    if (editForm.phoneNo && !/^(05\d{9})$/.test(editForm.phoneNo)) {
+      toast.error("Telefon numarası geçerli bir formatta olmalıdır (örn: 05366666689).");
+      return;
+    }
+
+    // TC Kimlik numarasının sadece rakamlardan oluşup oluşmadığını kontrol et
+    if (editForm.identityNo && !/^\d+$/.test(editForm.identityNo)) {
+      toast.error("TC Kimlik numarası sadece rakamlardan oluşmalıdır.");
+      return;
+    }
+
+    // TC Kimlik numarası validasyonu (11 haneli olmalı)
     if (editForm.identityNo && editForm.identityNo.length !== 11) {
       toast.error("TC Kimlik numarası 11 haneli olmalıdır.");
       return;
@@ -82,8 +93,14 @@ const Profile = () => {
       );
 
       if (response.data.success) {
+        // Update local state with the new user data while keeping existing addresses
+        const updatedUser = {
+          ...response.data.user,
+          addresses: user.addresses
+        };
+        setUser(updatedUser);
+        setEditForm(updatedUser);
         toast.success("Profil başarıyla güncellendi.");
-        setUser(response.data.user);
         setIsEditing(false);
       } else {
         toast.error(response.data.message);
@@ -125,8 +142,14 @@ const Profile = () => {
       );
 
       if (response.data.success) {
-        toast.success("Adres başarıyla kaydedildi.");
+        // Update local state with new addresses
+        const updatedUser = {
+          ...user,
+          addresses: response.data.addresses
+        };
+        setUser(updatedUser);
         setAddresses(response.data.addresses);
+        toast.success("Adres başarıyla kaydedildi.");
         setIsAddressEditing(false);
         setEditAddress({
           label: "",
@@ -136,8 +159,6 @@ const Profile = () => {
           postalCode: "",
           country: "",
         });
-        // Profil bilgilerini yenile
-        getUserProfile();
       } else {
         toast.error(response.data.message);
       }
@@ -156,7 +177,6 @@ const Profile = () => {
     try {
       const response = await axios.delete(`${backendUrl}/api/user/address`, {
         data: {
-          // axios delete metodunda data bu şekilde gönderilmeli
           userId: user._id,
           label: label,
         },
@@ -164,8 +184,14 @@ const Profile = () => {
       });
 
       if (response.data.success) {
-        toast.success("Adres başarıyla silindi.");
+        // Update local state with new addresses
+        const updatedUser = {
+          ...user,
+          addresses: response.data.addresses
+        };
+        setUser(updatedUser);
         setAddresses(response.data.addresses);
+        toast.success("Adres başarıyla silindi.");
         setIsAddressEditing(false);
         setEditAddress({
           label: "",
@@ -175,8 +201,6 @@ const Profile = () => {
           postalCode: "",
           country: "",
         });
-        // Profil bilgilerini yenile
-        getUserProfile();
       } else {
         toast.error(response.data.message);
       }
@@ -221,22 +245,22 @@ const Profile = () => {
         <div className="bg-white shadow-lg rounded-2xl overflow-hidden border border-gray-300 p-6">
           <div className="bg-gray-200 text-gray-800 p-6 flex items-center border-b border-gray-300">
             <User size={48} className="mr-4 text-gray-600" />
-            <h1 className="text-2xl font-bold text-gray-700">Profilim</h1>
+            <h1 className="text-2xl montserrat-bold text-gray-700">Profilim</h1>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-4 mt-2">
             {isEditing ? (
               <div>
-                <h2 className="text-xl font-semibold text-gray-700 mb-4">
+                <h2 className="text-xl montserrat font-semibold text-gray-700 mt-2 mb-2">
                   Profil Bilgilerini Düzenle
                 </h2>
-                <div className="space-y-4">
+                <div className="space-y-4 ">
                   {[
                     { label: "Ad", key: "name" },
                     { label: "Soyad", key: "surname" },
                     { label: "Email", key: "email", type: "email" },
                     { label: "Telefon Numarası", key: "phoneNo" },
-                    { label: "TC Kimlik", key: "identityNo" },
+                    { label: "TC Kimlik", key: "identityNo",},
                   ].map(({ label, key, type = "text" }) => (
                     <div key={key} className="relative">
                       <input
@@ -246,7 +270,7 @@ const Profile = () => {
                         onChange={(e) =>
                           setEditForm({ ...editForm, [key]: e.target.value })
                         }
-                        className="w-full bg-gray-100 text-gray-700 border-b-2 border-gray-300 focus:border-gray-500 px-2 py-2 transition-colors duration-300 outline-none"
+                        className="w-full montserrat bg-gray-100 text-gray-700 border-b-2 border-gray-300 focus:border-gray-500 px-2 py-2 transition-colors duration-300 outline-none"
                       />
                     </div>
                   ))}
@@ -258,7 +282,7 @@ const Profile = () => {
                       onChange={(e) =>
                         setEditForm({ ...editForm, gender: e.target.value })
                       }
-                      className="w-full bg-gray-100 text-gray-700 border-b-2 border-gray-300 focus:border-gray-500 px-2 py-2 transition-colors duration-300 outline-none"
+                      className="w-full montserrat bg-gray-100 text-gray-700 border-b-2 border-gray-300 focus:border-gray-500 px-2 py-2 transition-colors duration-300 outline-none"
                     >
                       <option value="" hidden disabled>
                         Cinsiyet Seçin
@@ -272,13 +296,13 @@ const Profile = () => {
                 <div className="flex justify-between mt-6 space-x-4">
                   <button
                     onClick={() => setIsEditing(false)}
-                    className="flex-1 bg-gray-100 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors duration-300 flex items-center justify-center"
+                    className="flex-1 montserrat bg-gray-100 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors duration-300 flex items-center justify-center"
                   >
                     <X size={20} className="mr-2" /> İptal
                   </button>
                   <button
                     onClick={updateUserProfile}
-                    className="flex-1 bg-gray-100 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors duration-300 flex items-center justify-center"
+                    className="flex-1 bg-gray-100 montserrat text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors duration-300 flex items-center justify-center"
                   >
                     <Save size={20} className="mr-2" /> Kaydet
                   </button>
@@ -297,10 +321,10 @@ const Profile = () => {
                     { label: "Cinsiyet", value: user.gender },
                   ].map(({ label, value }) => (
                     <div key={label} className="bg-gray-100 p-3 rounded-lg">
-                      <span className="text-gray-500 font-medium mr-2">
+                      <span className="montserrat text-gray-500 font-medium mr-2">
                         {label}:
                       </span>
-                      <span className="text-gray-800">{value}</span>
+                      <span className="montserrat text-gray-800">{value}</span>
                     </div>
                   ))}
                 </div>
@@ -308,13 +332,13 @@ const Profile = () => {
                 <div className="flex justify-between mt-6 space-x-4">
                   <button
                     onClick={() => (window.location.href = "/orders")}
-                    className="flex-1 bg-gray-100 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-300 flex items-center justify-center"
+                    className="flex-1 montserrat bg-gray-100 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-300 flex items-center justify-center"
                   >
                     <List size={20} className="mr-2" /> Siparişlerim
                   </button>
                   <button
                     onClick={() => setIsEditing(true)}
-                    className="flex-1 bg-gray-100 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-300 flex items-center justify-center"
+                    className="flex-1 montserrat bg-gray-100 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-300 flex items-center justify-center"
                   >
                     <Edit size={20} className="mr-2" /> Profil Düzenle
                   </button>
@@ -325,62 +349,69 @@ const Profile = () => {
         </div>
 
         {/* Addresses Section */}
-        <div className="bg-white shadow-lg rounded-2xl overflow-hidden border border-gray-300 p-6">
-          <div className="bg-gray-200 text-gray-800 p-6 flex items-center justify-between border-b border-gray-300">
-            <h2 className="text-xl font-semibold text-gray-700">Adreslerim</h2>
-            <button
-              onClick={() => {
-                setEditAddress({
-                  label: "",
-                  street: "",
-                  city: "",
-                  state: "",
-                  postalCode: "",
-                  country: "",
-                });
-                setIsAddressEditing(true);
-              }}
-              className="bg-gray-100 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-300 flex items-center justify-center"
-            >
-              <Plus size={20} className="mr-2" /> Yeni Adres
-            </button>
-          </div>
+<div className="bg-white shadow-lg rounded-2xl border border-gray-300 p-6">
+  <div className="bg-gray-200 text-gray-800 p-6 flex items-center justify-between border-b border-gray-300">
+    <h2 className="text-xl montserrat font-semibold text-gray-700">Adreslerim</h2>
+    <button
+      onClick={() => {
+        setEditAddress({
+          label: "",
+          street: "",
+          city: "",
+          state: "",
+          postalCode: "",
+          country: "",
+        });
+        setIsAddressEditing(true);
+      }}
+      className="bg-gray-100 montserrat text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-300 flex items-center justify-center"
+    >
+      <Plus size={20} className="mr-2" /> Yeni Adres
+    </button>
+  </div>
 
-          <div className="space-y-4 mt-4">
-            {user.addresses && user.addresses.length > 0 ? (
-              user.addresses.map((address, index) => (
-                <div
-                  key={index}
-                  className="bg-gray-100 p-4 rounded-lg flex justify-between items-center"
-                >
-                  <div className="space-y-1">
-                    <div className="font-semibold text-gray-700">
-                      {address.label}
-                    </div>
-                    <div className="text-gray-600">{address.street}</div>
-                    <div className="text-gray-600">
-                      {address.city}, {address.state}, {address.postalCode}
-                    </div>
-                    <div className="text-gray-600">{address.country}</div>
-                  </div>
-                  <button
-                    onClick={() => {
-                      setEditAddress(address);
-                      setIsAddressEditing(true);
-                    }}
-                    className="bg-gray-200 text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-300 flex items-center justify-center"
-                  >
-                    <Edit size={20} className="mr-2" /> Düzenle
-                  </button>
-                </div>
-              ))
-            ) : (
-              <p className="text-gray-500 text-center py-4">
-                Kayıtlı adres bulunmamaktadır.
-              </p>
-            )}
+  {/* Address List with Scrollbar */}
+  <div
+    className="space-y-4 mt-4 overflow-y-auto max-h-96"
+    style={{
+      scrollbarWidth: "thin", // For Firefox
+      scrollbarColor: "gray lightgray", // For Firefox
+    }}
+  >
+    {user.addresses && user.addresses.length > 0 ? (
+      user.addresses.map((address, index) => (
+        <div
+          key={index}
+          className="bg-gray-100 p-4 rounded-lg flex justify-between items-center"
+        >
+          <div className="space-y-1">
+            <div className="montserrat font-semibold text-gray-700">
+              {address.label}
+            </div>
+            <div className="montserrat text-gray-600">{address.street}</div>
+            <div className="montserrat text-gray-600">
+              {address.city}, {address.state}, {address.postalCode}
+            </div>
+            <div className="montserrat text-gray-600">{address.country}</div>
           </div>
+          <button
+            onClick={() => {
+              setEditAddress(address);
+              setIsAddressEditing(true);
+            }}
+            className="bg-gray-200 montserrat text-gray-600 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-300 flex items-center justify-center"
+          >
+            <Edit size={20} className="mr-2" /> Düzenle
+          </button>
         </div>
+      ))
+    ) : (
+      <p className="text-gray-500 montserrat text-center py-4">
+        Kayıtlı adres bulunmamaktadır.
+      </p>
+    )}
+  </div>
+</div>
         {/* Address Form Modal */}
         <AddressForm
           isOpen={isAddressEditing}

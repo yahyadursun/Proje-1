@@ -14,8 +14,8 @@ const CartTotal = () => {
       <div className="text-2xl">
         <Title text1={"SEPET"} text2={"TUTARI"} />
       </div>
-      <div className="flex flex-col gap-2 mt-2 text-sm">
-        <div className="flex justify-between">
+      <div className="montserrat flex flex-col gap-2 mt-2 text-sm">
+        <div className="montserrat flex justify-between">
           <p>Subtotal</p>
           <p>
             {currency}
@@ -23,14 +23,14 @@ const CartTotal = () => {
           </p>
         </div>
         <hr />
-        <div className="flex justify-between">
+        <div className=" montserrat flex justify-between">
           <p>Kargo ücreti</p>
           <p>
             {currency} {finalDeliveryFee.toFixed(2)}
           </p>
         </div>
         <hr />
-        <div className="flex justify-between">
+        <div className="montserrat flex justify-between">
           <b>Total</b>
           <b>
             {currency}
