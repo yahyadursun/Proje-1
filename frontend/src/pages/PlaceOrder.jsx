@@ -127,6 +127,7 @@ const handleCardChange = (event) => {
       setCardData(prev => ({ ...prev, [name]: value }));
     }
   } else if (name === "expiryYear") {
+    
     setCardData(prev => ({ ...prev, [name]: value })); // Önce değeri güncelle
   
   } else if (name === "cvc" && value.length <= 3) {
@@ -179,8 +180,8 @@ const handleCardChange = (event) => {
 
       if (response.data.success) {
         setCartItems({});
-        toast.success("Ödeme yapıldı! Siparişiniz başarıyla oluşturuldu.");
         navigate("/orders");
+        toast.success("Ödeme yapıldı! Siparişiniz başarıyla oluşturuldu.");
       } else {
         toast.error(response.data.message);
       }
@@ -391,7 +392,7 @@ const handleCardChange = (event) => {
                 />
               </div>
               <div
-                onClick={() => setMethod("kapıda ödeme")}
+                onClick={() => setMethod("Kapıda Ödeme")}
                 className={`flex items-center gap-3 border p-2 px-3 cursor-pointer ${
                   method === "Kapıda Ödeme" ? "bg-green-400" : ""
                 }`}
