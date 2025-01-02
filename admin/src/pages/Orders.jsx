@@ -103,8 +103,8 @@ const Orders = ({ token }) => {
     const totalOrders = ordersData.length;
     const totalRevenue = _.sumBy(ordersData, 'amount');
     const averageOrderValue = totalRevenue / totalOrders;
-    const pendingOrders = ordersData.filter(order => order.status !== 'Delivered').length;
-    const deliveredOrders = ordersData.filter(order => order.status === 'Delivered').length;
+    const pendingOrders = ordersData.filter(order => order.status !== 'Teslim Edildi').length;
+    const deliveredOrders = ordersData.filter(order => order.status === 'Teslim Edildi').length;
 
     // Calculate trend (compare last 30 days with previous 30 days)
     const today = new Date();
@@ -178,11 +178,11 @@ const Orders = ({ token }) => {
             className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="all">All Statuses</option>
-            <option value="Order Placed">Order Placed</option>
-            <option value="Packing">Packing</option>
-            <option value="Shipped">Shipped</option>
-            <option value="Out for delivery">Out for delivery</option>
-            <option value="Delivered">Delivered</option>
+            <option value="Sipariş Verildi">Sipariş Verildi</option>
+            <option value="Paketlemede">Paketlemede</option>
+            <option value="Kargoya Verildi">Kargoya Verildi</option>
+            <option value="Teslimat için yolda">Teslimat için yolda</option>
+            <option value="Teslim Edildi">Teslim Edildi</option>
           </select>
 
           {/* Payment Filter */}
@@ -302,11 +302,11 @@ const Orders = ({ token }) => {
                 value={order.status}
                 className="p-2 font-semibold rounded border border-gray-300"
               >
-                <option value="Order Placed">Order Placed</option>
-                <option value="Packing">Packing</option>
-                <option value="Shipped">Shipped</option>
-                <option value="Out for delivery">Out for delivery</option>
-                <option value="Delivered">Delivered</option>
+                <option value="Sipariş Verildi">Sipariş Verildi</option>
+                <option value="Paketlemede">Paketlemede</option>
+                <option value="Kargoya Verildi">Kargoya Verildi</option>
+                <option value="Teslimat için yolda">Teslimat için yolda</option>
+                <option value="Teslim Edildi">Teslim Edildi</option>
               </select>
             </div>
           ))}
