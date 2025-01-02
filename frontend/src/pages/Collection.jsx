@@ -23,7 +23,7 @@ const Collection = () => {
     {
       id: "subCategory",
       label: "Kategori",
-      options: ["Bot", "Koşu Ayakkabısı", "Outdoor", "Sneaker", "Sandalet", "Terlik"],
+      options: ["Bot",  "Outdoor", "Sneaker", "Sandalet", "Terlik"],
     },
     {
       id: "sizes",
