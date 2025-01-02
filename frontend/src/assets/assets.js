@@ -42,7 +42,7 @@ export const assets ={
     hero_img2,
     hero_img3,
     visible,
-    visibleoff,contact_img
+    visibleoff,contact_img  
    
 }
 
