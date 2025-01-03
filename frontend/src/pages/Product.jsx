@@ -118,7 +118,6 @@ const Product = () => {
               className="custom-select"
               value={size}
             >
-              console.log(productData.stock[item]);
               <option value="" hidden disabled>
                 Beden Seçin
               </option>
