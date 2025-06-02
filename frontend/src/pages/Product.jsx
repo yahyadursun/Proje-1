@@ -127,14 +127,14 @@ const Product = () => {
                   <option
                     key={index}
                     value={item}
-                    disabled={productData.stock[item] < 1}
+                    disabled={productData.stock[item] == 1}
                     className={
-                      productData.stock[item] < 1
+                      productData.stock[item] == 1
                         ? "text-gray-400 cursor-not-allowed"
                         : ""
                     }
                   >
-                    {item} {productData.stock[item] < 1 ? "(Stokta Yok)" : ""}
+                    {item} {productData.stock[item] == 1 ? "(Stokta Yok)" : ""}
                   </option>
                 ))}
             </select>

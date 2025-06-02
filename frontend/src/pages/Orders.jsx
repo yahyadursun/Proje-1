@@ -98,13 +98,13 @@ const Orders = () => {
 
   const getStatusColor = (status) => {
     switch (status.toLowerCase()) {
-      case "order placed":
-      case "packing":
+      case "sipariş verildi":
+      case "paketlemede":
         return "bg-yellow-500";
-      case "shipped":
-      case "out for delivery":
+      case "kargoya verildi":
+      case "teslimat için yolda":
         return "bg-green-500";
-      case "delivered":
+      case "teslim edildi":
         return "bg-red-500";
       default:
         return "bg-gray-400";
